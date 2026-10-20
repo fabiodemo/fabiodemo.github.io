@@ -1,0 +1,22 @@
+/* Currículo no estilo FAANG (resume.cls): usado na janela README, na impressão e no iframe de impressão */
+.resume { color: #000; font-family: 'Latin Modern Roman', 'CMU Serif', 'Computer Modern Serif', 'TeX Gyre Termes', 'Times New Roman', Georgia, serif; line-height: 1.28; }
+.resume a { color: #1a0dab; text-decoration: none; }
+.resume header { text-align: center; margin-bottom: 4px; }
+.resume h1 { margin: 0 0 4px; font-size: 2em; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.resume header p { margin: 1px 0; }
+.rs-sep { margin: 0 .45em; font-size: .8em; color: #333; }
+.resume section { margin-top: 9px; }
+.resume h2 { margin: 0 0 4px; padding-bottom: 2px; font-size: 1.05em; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; border-bottom: 1px solid #000; }
+.resume p { margin: 2px 0; text-align: justify; }
+.rs-row { display: flex; justify-content: space-between; gap: 12px; }
+.rs-row span:last-child { flex: none; text-align: right; }
+.rs-job { margin-bottom: 6px; }
+.resume ul { margin: 2px 0 0; padding-left: 16px; }
+.resume li { margin: 0 0 1px; }
+.resume .rs-job li::marker { content: '· '; font-weight: 700; }
+.rs-skills { border-collapse: collapse; width: 100%; }
+.rs-skills th { text-align: left; vertical-align: top; white-space: nowrap; padding: 0 14px 1px 0; font-weight: 700; }
+.rs-skills td { padding: 0 0 1px; }
+.rs-edu { margin-bottom: 4px; } .rs-edu p { font-style: italic; }
+.rs-pubs li, .rs-proj li { margin-bottom: 2px; }
+

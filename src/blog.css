@@ -1,0 +1,86 @@
+/* Blog: listagem, post em Markdown e a plaquinha de "em obras".
+   Reaproveita o cabeçalho, as caixas e os posts de tech.css. */
+
+/* ---------- plaquinha ---------- */
+.uc { position: relative; text-align: center; padding: 14px 8px 10px; }
+.uc.big { background: #fff; border: 2px solid #06202e; border-radius: 6px; box-shadow: 3px 3px 0 rgba(0,0,0,.35); padding: 26px 16px 22px; margin-bottom: 12px; }
+.uc-lights { display: flex; justify-content: center; gap: 120px; height: 0; position: relative; top: -4px; }
+.uc.big .uc-lights { gap: 220px; }
+.uc-lights i { width: 14px; height: 14px; border: 2px solid #06202e; border-radius: 50% 50% 2px 2px; background: #ff8c1a; box-shadow: 0 0 10px 3px rgba(255,140,26,.8); animation: beacon .9s steps(1) infinite; }
+.uc-lights i:last-child { animation-delay: .45s; }
+@keyframes beacon { 50% { background: #7a3b00; box-shadow: none; } }
+.uc-sign { width: 76px; height: 76px; margin: 10px auto 18px; transform: rotate(45deg); background: #ffd23f; border: 5px solid #111; border-radius: 6px; box-shadow: inset 0 0 0 3px #ffd23f, inset 0 0 0 5px #111, 3px 3px 0 rgba(0,0,0,.35); display: grid; place-items: center; }
+.uc-sign > div { transform: rotate(-45deg); }
+.uc-sign img { width: 48px; height: 48px; image-rendering: pixelated; display: block; }
+.uc.big .uc-sign { width: 130px; height: 130px; margin: 16px auto 34px; border-width: 7px; }
+.uc.big .uc-sign img { width: 80px; height: 80px; }
+.uc-tape { height: 22px; margin: 0 -8px; border-block: 2px solid #111;
+  background: repeating-linear-gradient(-45deg, #ffd23f 0 14px, #111 14px 28px) 0 0 / 40px 22px;
+  animation: tape 1.2s linear infinite; }
+.uc.big .uc-tape { margin: 0 -16px; height: 28px; }
+@keyframes tape { to { background-position: 40px 0; } }
+.uc-t { margin: 10px 0 4px; font: 700 20px/1.1 var(--pix); letter-spacing: 2px; color: #111; text-shadow: 2px 2px 0 #ffd23f; }
+.uc.big .uc-t { font-size: 34px; text-shadow: 3px 3px 0 #ffd23f; animation: blink 1.6s steps(1) infinite; }
+@keyframes blink { 85% { opacity: .15; } }
+.uc-p { margin: 4px auto 0; max-width: 46ch; font-size: 12px; color: #33444f; }
+.uc.big .uc-p { font-size: 14px; }
+.uc-small { margin: 10px 0 0; font-size: 12px; }
+@media (prefers-reduced-motion: reduce) { .uc-lights i, .uc-tape, .uc-t { animation: none !important; } }
+
+/* ---------- listagem ---------- */
+.bp-card { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; padding: 12px; }
+.bp-date { align-self: start; text-align: center; border: 2px solid #06202e; border-radius: 4px; overflow: hidden; background: #fff; box-shadow: 2px 2px 0 rgba(0,0,0,.25); }
+.bp-date small { display: block; background: #c62828; color: #fff; font: 700 11px var(--ui); text-transform: uppercase; padding: 1px 0; }
+.bp-date b { display: block; font: 700 26px/1.2 var(--pix); color: #0b3a55; order: 2; }
+.bp-date { display: flex; flex-direction: column; }
+.bp-date small { order: 1; }
+.bp-date i { order: 3; font: 11px var(--ui); color: #5a6b77; font-style: normal; padding-bottom: 2px; }
+.bp-t { margin: 0; font: 700 19px/1.25 var(--pix); }
+.bp-t a { color: #0b3a55; text-decoration: none; }
+.bp-t a:hover { text-decoration: underline; }
+.bp-meta { margin: 2px 0 6px; font-size: 11px; color: #5a6b77; }
+.bp-sum { margin: 0 0 6px; }
+.bp-foot { margin: 0; font-size: 12px; display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; }
+.more { margin-left: auto; font-weight: 700; }
+.tag { display: inline-block; padding: 0 6px; font-size: 11px; text-decoration: none; color: #0b3a55; background: #e3f1f8; border: 1px solid #9fc4d8; border-radius: 9px; }
+.tag:hover { background: #ffd23f; border-color: #6b4a00; }
+.lang { font: 700 10px var(--ui); color: #fff; background: #2f8a35; border-radius: 3px; padding: 0 4px; }
+.draft { font: 700 10px var(--ui); color: #fff; background: #c62828; border-radius: 3px; padding: 1px 5px; vertical-align: middle; }
+.bp-filter { background: #fff8d6; border: 2px solid #6b4a00; border-radius: 6px; padding: 6px 10px; margin-bottom: 12px; }
+.bp-empty { color: #cfe7f3; }
+.bp-pager { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.bp-pager a { color: #ffd23f; font-weight: 700; font-size: 12px; }
+
+/* ---------- post (Markdown) ---------- */
+.bp-cover { display: block; width: 100%; height: auto; border-radius: 4px; margin: 6px 0 10px; }
+.md { font-size: 14px; line-height: 1.65; overflow-wrap: anywhere; }
+.md h2, .md h3, .md h4 { font-family: var(--pix); color: #0b3a55; line-height: 1.25; scroll-margin-top: 10px; }
+.md h2 { font-size: 21px; margin: 22px 0 8px; padding-bottom: 3px; border-bottom: 2px dashed var(--line); }
+.md h3 { font-size: 17px; margin: 18px 0 6px; }
+.md p { margin: 0 0 12px; }
+.md img { max-width: 100%; height: auto; border: 2px solid #06202e; border-radius: 4px; }
+.md blockquote { margin: 0 0 12px; padding: 6px 12px; background: #fff8d6; border-left: 5px solid #ffd23f; color: #4a3300; }
+.md blockquote p:last-child { margin: 0; }
+.md code { font: 15px var(--mono); background: #eef3f6; border: 1px solid #d3dee5; border-radius: 3px; padding: 0 4px; }
+.md pre { position: relative; margin: 0 0 14px; padding: 12px 14px; overflow: auto; background: #0d1117; color: #c9d1d9; border: 2px solid #06202e; border-radius: 6px; box-shadow: 3px 3px 0 rgba(0,0,0,.25); }
+.md pre code { background: none; border: 0; padding: 0; font: 16px/1.35 var(--mono); color: inherit; }
+.md pre .copy { position: absolute; top: 6px; right: 6px; font: 700 10px var(--ui); color: #c9d1d9; background: #21262d; border: 1px solid #30363d; border-radius: 4px; padding: 2px 7px; cursor: pointer; opacity: .75; }
+.md pre .copy:hover { opacity: 1; }
+.md table { border-collapse: collapse; margin: 0 0 14px; font-size: 13px; display: block; overflow-x: auto; }
+.md th, .md td { border: 1px solid var(--line); padding: 4px 8px; text-align: left; }
+.md th { background: #e9f3f8; }
+.md hr { border: 0; border-top: 2px dashed var(--line); margin: 18px 0; }
+.md ul, .md ol { margin: 0 0 12px; padding-left: 24px; }
+
+.toc { list-style: none; margin: 0; padding: 0; }
+.toc li { padding: 2px 0; }
+.toc li.lvl3 { padding-left: 12px; font-size: 11px; }
+.toc a { text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+.archive { list-style: none; margin: 0; padding: 0; }
+
+@media (max-width: 760px) {
+  .bp-card { grid-template-columns: 52px minmax(0, 1fr); gap: 10px; }
+  .uc.big .uc-lights { gap: 150px; }
+  .uc.big .uc-t { font-size: 26px; }
+}

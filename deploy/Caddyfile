@@ -1,0 +1,8 @@
+# Caddy na VM (Oracle Free Tier ou qualquer VPS). HTTPS automático via Let's Encrypt.
+# Troque o domínio e copie o conteúdo de dist/ para /var/www/cv
+seudominio.com.br, www.seudominio.com.br {
+	root * /var/www/cv
+	encode zstd gzip
+	file_server
+	header /assets/* Cache-Control "public, max-age=31536000, immutable"
+}

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fábio Demo da Rosa · Senior Data Engineer</title>
+    <meta name="description" content="Fábio Demo da Rosa, Senior Data Engineer: Databricks, lakehouse, Terraform, data pipelines, governance and data quality. A CV shaped like a retro desktop." />
+    <meta property="og:title" content="Fábio Demo da Rosa · Senior Data Engineer" />
+    <meta property="og:description" content="Data Platform, Lakehouse and Databricks. A CV shaped like a retro desktop." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="%VITE_SITE_URL%/og.jpg" />
+    <meta property="og:url" content="%VITE_SITE_URL%/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#0f3f8c" />
+  </head>
+  <body>
+    <canvas id="bg" aria-hidden="true"></canvas>
+
+    <div id="boot" class="screen">
+      <div class="boot-inner">
+        <img id="boot-orb" alt="" />
+        <div class="boot-dots"><i></i><i></i><i></i><i></i></div>
+        <p class="boot-text">Starting DemOS 7</p>
+        <p class="boot-hint">click or press any key to skip</p>
+      </div>
+    </div>
+
+    <div id="login" class="screen hidden">
+      <div class="login-inner">
+        <button id="login-tile" class="login-tile" type="button" aria-label="Sign in as Fábio">
+          <span class="tile-frame"><img id="login-avatar" class="photo" alt="" /></span>
+          <span class="tile-name">Fábio</span>
+          <span class="tile-sub">Senior Data Engineer</span>
+        </button>
+        <p class="login-status" id="login-status">Click the picture to sign in</p>
+      </div>
+      <div class="login-brand">DemOS 7 <span>Professional</span></div>
+    </div>
+
+    <div id="desktop" class="hidden">
+      <div id="icons" class="icons"></div>
+      <div id="gadget" class="gadget"></div>
+      <div id="windows"></div>
+      <div id="snap-preview"></div>
+      <div id="select-box"></div>
+    </div>
+
+    <div id="startmenu" class="hidden" role="menu"></div>
+
+    <div id="taskbar" class="hidden">
+      <button id="start" class="start-orb" type="button" aria-label="Start"><img id="start-img" alt="" /></button>
+      <div id="tasks" class="tasks"></div>
+      <div class="tray">
+        <button id="tray-sound" class="tray-btn" type="button" aria-label="Sound"><img alt="" /></button>
+        <span class="tray-btn" title="Connected: Internet"><img id="tray-net" alt="" /></span>
+        <div id="clock" class="clock"></div>
+        <button id="show-desktop" class="show-desktop" type="button" aria-label="Show desktop"></button>
+      </div>
+    </div>
+
+    <div id="balloon" class="balloon hidden"></div>
+
+    <div id="shutdown" class="screen hidden">
+      <p>It is now safe to turn off your computer.</p>
+      <small>click to turn it back on</small>
+    </div>
+
+    <!-- Versão em texto puro do CV: usada na impressão e por quem não roda JS -->
+    <main id="print-cv"></main>
+    <noscript>
+      <style>#boot{display:none}</style>
+      <p style="color:#fff;padding:24px;font-family:sans-serif">This CV needs JavaScript. See my projects at <a style="color:#9cf" href="https://github.com/fabiodemo">github.com/fabiodemo</a>.</p>
+    </noscript>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
