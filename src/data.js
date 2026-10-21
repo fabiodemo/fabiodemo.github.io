@@ -27,6 +27,13 @@ export const LANGUAGES = [
   { n: T('Spanish', 'Espanhol'), lv: T('Elementary', 'Básico'), note: T('follows work meetings with Argentine colleagues', 'acompanha reuniões de trabalho com colegas argentinos'), p: 35 },
 ];
 
+// Sistemas internos, pelo que fazem (sem o nome dos bancos)
+export const SYS = {
+  pms: T('Portfolio Management System', 'Sistema de Consolidação de Carteiras'),
+  oms: T('Order Management & Commissions', 'Sistema de Boletagem e Comissionamento'),
+  fees: T('Fee Billing Engine', 'Sistema de Tarifação e Cobrança de Taxas'),
+};
+
 export const STATS = [
   { k: '8,302', kp: '8.302', v: T('commits across 5 repos', 'commits em 5 repos') },
   { k: '859', v: T('feature PRs', 'PRs de feature') },
@@ -54,12 +61,12 @@ export const EXPERIENCE = [
     ),
     stack: ['Databricks', 'PySpark', 'Delta Lake', 'Unity Catalog', 'AWS DMS', 'Terraform', 'OCI', 'dbt', 'DQX', 'Great Expectations', 'GitHub Actions'],
     bullets: [
-      T('Redesigned the core portfolio pipeline with AWS DMS and a D-1 processing queue: daily PortfolioReturns from 12-19h to ≤3h, Positions from 10-12h to 1-2h, and weekly loads became daily.',
-        'Redesenhou o pipeline core de portfólio com AWS DMS e fila de processamento D-1: PortfolioReturns diário de 12-19h para ≤3h, Positions de 10-12h para 1-2h, e cargas semanais viraram diárias.'),
+      T('Redesigned the core portfolio pipeline with AWS DMS and a D-1 processing queue: daily portfolio returns from 12-19h to ≤3h, positions from 10-12h to 1-2h, and weekly loads became daily.',
+        'Redesenhou o pipeline core de portfólio com AWS DMS e fila de processamento D-1: rentabilidade diária das carteiras de 12-19h para ≤3h, posições de 10-12h para 1-2h, e cargas semanais viraram diárias.'),
       T('Led the ingestion re-architecture for the AWS → OCI migration (OCI Data Integration) with zero pipeline downtime; Core pipelines went from 5-7h to ~1h45 with 40 tables moved.',
         'Liderou a re-arquitetura de ingestão na migração AWS → OCI (OCI Data Integration) sem downtime de pipeline; pipelines Core de 5-7h para ~1h45 e 40 tabelas migradas.'),
-      T('Was one of the drivers of the FinOps work that took the AWS bill from ~US$11k to ~US$3.4k a month (-69%, Sep 2025 to Sep 2026): broke up heavy pipelines on a DMS + single-node or serverless standard (Database-One: -67%, 6 workflows down to 1; Fees and Adroit: -78.5% in AWS + Databricks), moved 9 DynamoDB tables to on-demand (US$105 → ~US$5/mo), traced and stopped a data-sharing egress spike, and reviewed the storage cleanup (Glacier tiering, unused buckets).',
-        'Foi um dos responsáveis pelo FinOps que levou a fatura AWS de ~US$11k para ~US$3,4k por mês (-69%, set/2025 a set/2026): quebrou pipelines pesados num padrão DMS + single node ou serverless (Database-One: -67%, de 6 workflows para 1; Fees e Adroit: -78,5% em AWS + Databricks), passou 9 tabelas DynamoDB para on-demand (US$105 → ~US$5/mês), rastreou e cortou um pico de egress de data sharing, e revisou a limpeza de storage (Glacier, buckets sem uso).'),
+      T('Was one of the drivers of the FinOps work that took the AWS bill from ~US$11k to ~US$3.4k a month (-69%, Sep 2025 to Sep 2026): broke up heavy pipelines on a DMS + single-node or serverless standard (portfolio management system: -67%, 6 workflows down to 1; fee billing and order management systems: -78.5% in AWS + Databricks), moved 9 DynamoDB tables to on-demand (US$105 → ~US$5/mo), traced and stopped a data-sharing egress spike, and reviewed the storage cleanup (Glacier tiering, unused buckets).',
+        'Foi um dos responsáveis pelo FinOps que levou a fatura AWS de ~US$11k para ~US$3,4k por mês (-69%, set/2025 a set/2026): quebrou pipelines pesados num padrão DMS + single node ou serverless (sistema de consolidação de carteiras: -67%, de 6 workflows para 1; sistemas de tarifação e de boletagem: -78,5% em AWS + Databricks), passou 9 tabelas DynamoDB para on-demand (US$105 → ~US$5/mês), rastreou e cortou um pico de egress de data sharing, e revisou a limpeza de storage (Glacier, buckets sem uso).'),
       T('Moved pipelines and users off the legacy Datalake to Delta Lake + Unity Catalog (a UCX assessment found 9,574 legacy table uses) and shut the old workspace down in Jun 2026 with a Terraform backup.',
         'Migrou pipelines e usuários do Datalake legado para Delta Lake + Unity Catalog (assessment UCX com 9.574 usos de tabelas legadas) e desligou o workspace antigo em jun/2026 com backup em Terraform.'),
       T('Built the trading desks\' near-real-time cash-management feed (Projeto Ganesha): 6 sources (Sinacor, B3, TED/PIX, fixed income, funds, internal API) refreshed every 5 minutes behind a monitoring dashboard.',
@@ -418,8 +425,8 @@ export const FEATURED = [
     t: T('Core portfolio pipeline', 'Pipeline core de portfólio'),
     big: '12-19h → ≤3h',
     body: T(
-      'Portfolio returns and positions landed mid-afternoon and held up everything downstream. I split weekday and weekend runs, rebuilt ingestion on AWS DMS plus a processing queue and gave PortfolioReturns its own workflow. Later I moved parts to OCI Data Integration.',
-      'Rentabilidade e posições da plataforma de investimentos saíam no meio da tarde e travavam tudo que vinha depois. Separei execuções de dia útil e fim de semana, refiz a ingestão com AWS DMS + fila de processamento e dei workflow próprio ao PortfolioReturns. Depois movi partes para OCI Data Integration.',
+      'Portfolio returns and positions landed mid-afternoon and held up everything downstream. I split weekday and weekend runs, rebuilt ingestion on AWS DMS plus a processing queue and gave portfolio returns their own workflow. Later I moved parts to OCI Data Integration.',
+      'Rentabilidade e posições da plataforma de investimentos saíam no meio da tarde e travavam tudo que vinha depois. Separei execuções de dia útil e fim de semana, refiz a ingestão com AWS DMS + fila de processamento e dei workflow próprio à rentabilidade. Depois movi partes para OCI Data Integration.',
     ),
     stack: ['AWS DMS', 'JDBC', 'OCI Data Integration', 'Workflows', 'Serverless', 'Terraform'],
   },
@@ -445,8 +452,8 @@ export const FEATURED = [
     t: 'FinOps',
     big: T('~US$11k → ~US$3.4k/mo', '~US$11k → ~US$3,4k/mês'),
     body: T(
-      'AWS bill from about US$11k to US$3.4k a month between Sep 2025 and Sep 2026 (-69%, ~US$7.6k a month less). What I did: breaking up heavy pipelines (DMS + single node, serverless by default; Database-One went from US$317 to US$104 a month and from 6 workflows to 1, Fees and Adroit from US$199 to US$43), DynamoDB on-demand (US$105 → ≤US$5/mo), Nelogica from US$30 to US$6/day, an egress spike stopped, per-group budgets and a cost dashboard, plus reviewing and checking the storage cleanup (Glacier tiering and unused buckets).',
-      'Fatura AWS de cerca de US$11k para US$3,4k por mês entre set/2025 e set/2026 (-69%, ~US$7,6k a menos por mês). O que eu fiz: quebrar pipelines pesados (DMS + single node, serverless por padrão; o Database-One foi de US$317 para US$104 por mês e de 6 workflows para 1, Fees e Adroit de US$199 para US$43), DynamoDB on-demand (US$105 → ≤US$5/mês), Nelogica de US$30 para US$6/dia, um pico de egress cortado, budgets por grupo e dashboard de custo, além de revisar e conferir a limpeza de storage (Glacier e buckets sem uso).',
+      'AWS bill from about US$11k to US$3.4k a month between Sep 2025 and Sep 2026 (-69%, ~US$7.6k a month less). What I did: breaking up heavy pipelines (DMS + single node, serverless by default; the portfolio management system went from US$317 to US$104 a month and from 6 workflows to 1, fee billing plus order management from US$199 to US$43), DynamoDB on-demand (US$105 → ≤US$5/mo), Nelogica from US$30 to US$6/day, an egress spike stopped, per-group budgets and a cost dashboard, plus reviewing and checking the storage cleanup (Glacier tiering and unused buckets).',
+      'Fatura AWS de cerca de US$11k para US$3,4k por mês entre set/2025 e set/2026 (-69%, ~US$7,6k a menos por mês). O que eu fiz: quebrar pipelines pesados (DMS + single node, serverless por padrão; o sistema de consolidação de carteiras foi de US$317 para US$104 por mês e de 6 workflows para 1, tarifação e boletagem de US$199 para US$43), DynamoDB on-demand (US$105 → ≤US$5/mês), Nelogica de US$30 para US$6/dia, um pico de egress cortado, budgets por grupo e dashboard de custo, além de revisar e conferir a limpeza de storage (Glacier e buckets sem uso).',
     ),
     stack: ['System tables', 'Budgets', 'Serverless', 'DynamoDB', 'Terraform'],
   },
@@ -498,9 +505,9 @@ export const TRASH = [
   { n: T('unused_buckets/', 'buckets_sem_uso/'), d: T('Moved to Glacier or deleted. Part of taking the AWS bill from ~US$11k to ~US$3.4k a month.', 'Foram para o Glacier ou apagados. Parte de levar a fatura AWS de ~US$11k para ~US$3,4k por mês.') },
   { n: 'contacts.ctt', d: T('Old contact list export. Everyone shows as Away now.', 'Lista de contatos antiga. Todo mundo aparece como Ausente agora.') },
   { n: 'GTASAsf1.b', d: T('Save at 100%. Kept only the lessons.', 'Save em 100%. Fiquei só com as lições.') },
-  { n: 'giant_fees_cluster.json', d: T('Replaced by serverless: -87% AWS cost, -75% Databricks.', 'Trocado por serverless: -87% no custo AWS, -75% no Databricks.') },
-  { n: 'database_one_x6/', d: T('Six workflows (Backup, Incremental, Positions, Weekends...) turned into one: -92% AWS, -67% in total.', 'Seis workflows (Backup, Incremental, Positions, Weekends...) viraram um só: -92% na AWS, -67% no total.') },
-  { n: 'adroit_recreate_II.job', d: T('Merged with 3 other jobs into one. Adroit: -76% AWS from the peak.', 'Juntado com outros 3 jobs num só. Adroit: -76% na AWS desde o pico.') },
+  { n: 'giant_fee_billing_cluster.json', d: T('Fee billing engine moved to serverless: -87% AWS cost, -75% Databricks.', 'Sistema de tarifação passou para serverless: -87% no custo AWS, -75% no Databricks.') },
+  { n: T('portfolio_system_x6_workflows/', 'carteiras_x6_workflows/'), d: T('Portfolio management system: six workflows (backup, incremental, positions, weekends...) turned into one. -92% AWS, -67% in total.', 'Sistema de consolidação de carteiras: seis workflows (backup, incremental, posições, fim de semana...) viraram um só. -92% na AWS, -67% no total.') },
+  { n: 'order_mgmt_recreate_II.job', d: T('Order management and commissions: merged with 3 other jobs into one. -76% AWS from the peak.', 'Boletagem e comissionamento: juntado com outros 3 jobs num só. -76% na AWS desde o pico.') },
 ];
 
 // Bloco de skills do currículo formatado (curado, para caber numa página)

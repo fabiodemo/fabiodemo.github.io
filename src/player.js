@@ -14,14 +14,28 @@ const TRACKS = [
   ['Blow the Cartridge', 'PolyStation 9999-in-1', 175, 124],
   ['Exura Vita', 'Temple Choir', 228, 84],
 ];
-const MODES = ['bars', 'scope', 'ambience'];
+const MODES = ['bars', 'mist', 'fire', 'scope', 'ambience', 'spiral'];
+const MODE_NAMES = {
+  bars: T('Bars', 'Barras'),
+  mist: T('Ocean mist', 'Névoa do mar'),
+  fire: T('Fire storm', 'Tempestade de fogo'),
+  scope: T('Scope', 'Osciloscópio'),
+  ambience: T('Ambience', 'Ambiente'),
+  spiral: T('Spiral', 'Espiral'),
+};
+const readVis = () => { try { return localStorage.getItem('cv.vis') || 'auto'; } catch { return 'auto'; } };
+const saveVis = (v) => { try { localStorage.setItem('cv.vis', v); } catch { /* ok */ } };
 const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
 
 export function mountPlayer(parent) {
   const el = document.createElement('div');
   el.className = 'gadget gd-player';
   el.innerHTML = `
-    <div class="gp-top"><span>♪ ${T('Now playing', 'Tocando agora')}</span><small class="gp-modename"></small></div>
+    <div class="gp-top"><span>♪ ${T('Now playing', 'Tocando agora')}</span><button type="button" class="gp-modename" aria-haspopup="menu" title="${T('Visualizations', 'Visualizações')}"></button></div>
+    <div class="gp-menu" role="menu" hidden>
+      <button type="button" role="menuitemradio" data-vis="auto">${T('Auto (changes every track)', 'Automático (muda a cada faixa)')}</button>
+      ${MODES.map((m) => `<button type="button" role="menuitemradio" data-vis="${m}">${MODE_NAMES[m]}</button>`).join('')}
+    </div>
     <canvas class="gp-vis" width="206" height="46" title="${T('Click to change the visualization', 'Clique para trocar a visualização')}"></canvas>
     <div class="gp-track"><span class="gp-marq"></span></div>
     <div class="gp-time"><span class="gp-cur">0:00</span><div class="gp-seek"><i></i></div><span class="gp-len"></span></div>
@@ -38,7 +52,9 @@ export function mountPlayer(parent) {
   const W = cv.width;
   const H = cv.height;
   let ti = Math.floor(Math.random() * TRACKS.length);
-  let mode = ti % MODES.length;
+  let vis = readVis();
+  let mode = vis !== 'auto' && MODES.includes(vis) ? MODES.indexOf(vis) : ti % MODES.length;
+  const menu = el.querySelector('.gp-menu');
   let pos = 0;
   let playing = true;
   let last = performance.now();
@@ -55,9 +71,12 @@ export function mountPlayer(parent) {
   }
   function setMode(m) {
     mode = (m + MODES.length) % MODES.length;
-    el.querySelector('.gp-modename').textContent = { bars: T('Bars', 'Barras'), scope: T('Scope', 'Osciloscópio'), ambience: T('Ambience', 'Ambiente') }[MODES[mode]];
+    el.querySelector('.gp-modename').textContent = `${MODE_NAMES[MODES[mode]]} ▾`;
+    menu.querySelectorAll('[data-vis]').forEach((b) => b.classList.toggle('on', b.dataset.vis === (vis === 'auto' ? 'auto' : MODES[mode])));
     g.clearRect(0, 0, W, H);
   }
+  // troca de faixa só muda a visualização no modo automático
+  const nextTrack = (d) => { load(ti + d); if (vis === 'auto') setMode(mode + 1); };
 
   // "sinal" de mentira: soma de senos com batida no BPM da faixa
   function level(i, t) {
@@ -85,6 +104,50 @@ export function mountPlayer(parent) {
         g.fillStyle = '#d8d8d8';
         g.fillRect(i * bw + 1, H - Math.round(peaks[i]) - 3, bw - 2, 1);
       }
+    } else if (m === 'mist') {
+      g.fillStyle = 'rgba(0,10,25,.35)'; g.fillRect(0, 0, W, H);
+      for (let layer = 0; layer < 3; layer++) {
+        const grd = g.createLinearGradient(0, 0, 0, H);
+        grd.addColorStop(0, `hsla(${190 + layer * 15},90%,70%,.55)`);
+        grd.addColorStop(1, `hsla(${210 + layer * 15},90%,30%,.1)`);
+        g.fillStyle = grd;
+        g.beginPath(); g.moveTo(0, H);
+        for (let x = 0; x <= W; x += 4) {
+          const v = playing ? level(Math.floor((x / W) * 23), t + layer * 0.3) : 0.05;
+          g.lineTo(x, H - v * (H - 6) * (1 - layer * 0.22) - Math.sin(x / 18 + t * 2 + layer) * 2);
+        }
+        g.lineTo(W, H); g.closePath(); g.fill();
+      }
+    } else if (m === 'fire') {
+      g.fillStyle = 'rgba(0,0,0,.4)'; g.fillRect(0, 0, W, H);
+      const n = 34;
+      const bw = W / n;
+      for (let i = 0; i < n; i++) {
+        const v = playing ? level(i % 24, t) : 0.03;
+        const h = v * (H - 2) * (0.7 + Math.random() * 0.3);
+        const grd = g.createLinearGradient(0, H, 0, H - h);
+        grd.addColorStop(0, '#ffef9a'); grd.addColorStop(0.35, '#ff9a2a'); grd.addColorStop(0.75, '#d6261c'); grd.addColorStop(1, 'rgba(120,0,0,0)');
+        g.fillStyle = grd;
+        g.beginPath();
+        g.moveTo(i * bw, H);
+        g.quadraticCurveTo(i * bw + bw / 2 + (Math.random() - 0.5) * 4, H - h * 1.1, i * bw + bw, H);
+        g.fill();
+      }
+    } else if (m === 'spiral') {
+      g.fillStyle = 'rgba(0,0,0,.22)'; g.fillRect(0, 0, W, H);
+      const k = playing ? level(1, t) : 0.15;
+      g.save(); g.translate(W / 2, H / 2);
+      for (let i = 0; i < 24; i++) {
+        const a = (i / 24) * Math.PI * 2 + t * 1.6;
+        const r = 4 + k * 26 + Math.sin(t * 3 + i) * 3;
+        g.strokeStyle = `hsla(${(i * 15 + t * 60) % 360},95%,62%,.9)`;
+        g.lineWidth = 1.5;
+        g.beginPath();
+        g.moveTo(Math.cos(a) * 3, Math.sin(a) * 2);
+        g.lineTo(Math.cos(a + k) * r * 2.2, Math.sin(a + k) * r * 0.75);
+        g.stroke();
+      }
+      g.restore();
     } else if (m === 'scope') {
       g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(0, 0, W, H);
       g.strokeStyle = '#3dff5a'; g.lineWidth = 1.5;
@@ -117,7 +180,7 @@ export function mountPlayer(parent) {
       if (playing) {
         pos += dt;
         const len = TRACKS[ti][2];
-        if (pos >= len) { load(ti + 1); setMode(mode + 1); }
+        if (pos >= len) nextTrack(1);
         el.querySelector('.gp-cur').textContent = fmt(pos);
         el.querySelector('.gp-seek i').style.width = `${(pos / len) * 100}%`;
       }
@@ -128,13 +191,32 @@ export function mountPlayer(parent) {
   const wake = () => { if (!raf && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(frame); } };
   document.addEventListener('visibilitychange', wake);
 
+  const openMenu = (on) => {
+    menu.hidden = !on;
+    // perto do rodapé, o menu abre para cima
+    if (on) menu.classList.toggle('up', el.getBoundingClientRect().top + 30 + menu.offsetHeight > innerHeight - 44);
+  };
   el.addEventListener('click', (e) => {
     const p = e.target.closest('[data-p]')?.dataset.p;
     if (p === 'play') { playing = !playing; e.target.textContent = playing ? '⏸' : '▶'; el.classList.toggle('paused', !playing); }
-    if (p === 'next') { load(ti + 1); setMode(mode + 1); }
-    if (p === 'prev') { load(pos > 3 ? ti : ti - 1); }
-    if (e.target === cv) setMode(mode + 1);
+    if (p === 'next') nextTrack(1);
+    if (p === 'prev') { if (pos > 3) load(ti); else nextTrack(-1); }
+    if (e.target.closest('.gp-modename')) { openMenu(menu.hidden); return; }
+    const v = e.target.closest('[data-vis]')?.dataset.vis;
+    if (v) {
+      vis = v;
+      saveVis(v);
+      setMode(v === 'auto' ? mode : MODES.indexOf(v));
+      openMenu(false);
+      return;
+    }
+    // clique na tela: próxima visualização (e deixa de ser automático)
+    if (e.target === cv) { setMode(mode + 1); vis = MODES[mode]; saveVis(vis); setMode(mode); }
+    openMenu(false);
   });
+  // botão direito na tela abre o menu, como no player original
+  cv.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); openMenu(true); });
+  document.addEventListener('pointerdown', (e) => { if (!el.contains(e.target)) openMenu(false); });
 
   load(ti);
   setMode(mode);

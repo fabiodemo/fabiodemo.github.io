@@ -834,7 +834,8 @@ body.lux #bg { filter: brightness(1.35) saturate(1.1); }
 .sx-date { display: inline-block; margin: 3px 0 0 8px; font-size: 10px; color: #a0aa95; }
 
 /* coluna de gadgets */
-#gadgets { position: absolute; right: 18px; top: 18px; width: 230px; display: flex; flex-direction: column; gap: 12px; max-height: calc(100% - 30px); overflow: hidden; }
+#gadgets { position: absolute; right: 18px; top: 18px; display: flex; flex-direction: row-reverse; align-items: flex-start; gap: 12px; }
+#gadgets .gcol { width: 230px; display: flex; flex-direction: column; gap: 12px; }
 #gadgets .gadget { position: static; width: auto; }
 @media (max-width: 760px) { #gadgets { display: none; } }
 
@@ -871,3 +872,18 @@ body.no-aero .gadget { background: linear-gradient(180deg, #1c3554, #0f1c33); }
 body.no-aero .marquee span, body.no-aero .gd-bar i { animation: none; }
 .pz-color { padding-left: 14px; font-size: 12px; }
 .pz-color label { display: flex; align-items: center; gap: 6px; }
+.gd-sub { margin: -4px 0 8px; font-size: 10.5px; line-height: 1.35; opacity: .8; }
+.tm-sys { margin: 8px 0 2px; padding-top: 4px; border-top: 1px dashed #c9d7e0; font: 700 12px var(--ui); color: #0f3f8c; }
+.gd-player { position: relative; }
+.gp-modename { font: 10px var(--ui); color: #fff; opacity: .8; background: none; border: 1px solid transparent; border-radius: 3px; padding: 1px 4px; cursor: pointer; }
+.gp-modename:hover { opacity: 1; border-color: rgba(255,255,255,.35); background: rgba(255,255,255,.08); }
+.gp-menu { position: absolute; right: 8px; top: 28px; z-index: 5; min-width: 180px; padding: 3px; background: #f0f0f0; border: 1px solid #979797; box-shadow: 2px 3px 8px rgba(0,0,0,.45); }
+.gp-menu[hidden] { display: none; }
+.gp-menu button { display: block; width: 100%; padding: 4px 8px 4px 22px; position: relative; text-align: left; font: 12px var(--ui); color: #111; background: none; border: 1px solid transparent; border-radius: 3px; cursor: pointer; }
+.gp-menu button:hover { background: linear-gradient(#e6f3fd, #cfe7fa); border-color: #7da2ce; }
+.gp-menu button.on::before { content: '●'; position: absolute; left: 7px; font-size: 9px; top: 6px; }
+.gp-menu button[data-vis=auto] { border-bottom: 1px solid #d5d5d5; border-radius: 0; margin-bottom: 2px; }
+#gadgets .gd-player { position: relative; }
+.gp-top { white-space: nowrap; gap: 6px; }
+.gp-modename { max-width: 112px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gp-menu.up { top: auto; bottom: calc(100% - 26px); }

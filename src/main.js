@@ -216,6 +216,30 @@ function buildDesktop() {
   rubberBand();
 }
 
+// Gadgets na ordem: Antes × Depois, Steam, media player. Se a altura não der, o que sobra
+// vai para uma segunda coluna à esquerda (nada é escondido).
+function layoutGadgets() {
+  const col = $('#gadgets');
+  if (!col) return;
+  const items = [...col.querySelectorAll(':scope > .gadget, :scope > .gcol > .gadget')];
+  col.querySelectorAll(':scope > .gcol').forEach((c) => c.remove());
+  const avail = $('#desktop').clientHeight - 36;
+  let cur = null;
+  let used = Infinity;
+  items.forEach((it) => {
+    const h = it.offsetHeight || 200;
+    if (!cur || (used + h + 12 > avail && cur.childElementCount)) {
+      cur = document.createElement('div');
+      cur.className = 'gcol';
+      col.appendChild(cur);
+      used = 0;
+    }
+    cur.appendChild(it);
+    used += h + 12;
+  });
+}
+addEventListener('resize', () => { clearTimeout(layoutGadgets.t); layoutGadgets.t = setTimeout(layoutGadgets, 150); });
+
 function selectIcons(list) {
   document.querySelectorAll('.dicon').forEach((i) => i.classList.toggle('sel', list.includes(i)));
 }
@@ -252,13 +276,14 @@ function rubberBand() {
 function buildGadget() {
   const g = $('#gadget');
   const rows = [
-    ['PortfolioReturns', '12-19h', '≤3h', 180 / 720],
-    ['Positions', '10-12h', '1-2h', 120 / 600],
-    ['Core', '5-7h', '~1h45', 105 / 300],
+    [T('Portfolio returns', 'Rentabilidade'), '12-19h', '≤3h', 180 / 720],
+    [T('Positions', 'Posições'), '10-12h', '1-2h', 120 / 600],
+    [T('Core pipelines', 'Pipelines core'), '5-7h', '~1h45', 105 / 300],
     [T('Sinacor heavy', 'Sinacor pesado'), '>3h', '16min', 16 / 180],
-    ['Apollo (DMS)', '>1h', '<3min', 3 / 60],
+    [T('Internal app DB', 'Banco interno'), '>1h', '<3min', 3 / 60],
   ];
   g.innerHTML = `<div class="gd-h">${T('Before × After', 'Antes × Depois')}</div>
+    <p class="gd-sub">${T('Pipeline optimizations on business-critical data (investment platform). Time per run:', 'Otimização de pipelines que processam dados críticos (plataforma de investimentos). Tempo por execução:')}</p>
     ${rows.map(([n, a, b, p]) => `<div class="gd-row"><div class="gd-l"><span>${n}</span><small>${a} → <b>${b}</b></small></div><div class="gd-bar"><i style="--p:${Math.max(p, 0.03)}"></i></div></div>`).join('')}
     <div class="gd-f">${T('remaining runtime, in green', 'runtime que sobrou, em verde')}</div>`;
   // coluna de gadgets: Antes × Depois, Steam (se houver dados) e o media player
@@ -268,8 +293,9 @@ function buildGadget() {
     g.before(col);
     col.appendChild(g);
   }
+  layoutGadgets();
   const later = (fn) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 2500 }) : setTimeout(fn, 1200));
-  later(() => import('./player.js').then((m) => m.mountPlayer($('#gadgets'))));
+  later(() => import('./player.js').then((m) => { m.mountPlayer($('#gadgets')); layoutGadgets(); }));
   // últimos jogos da Steam, só se o deploy gerou o steam.json (carrega depois do resto)
   later(() => import('./steam.js').then(({ loadSteam, steamList, steamTitle, steamFoot }) => loadSteam().then((d) => {
     if (!d) return;
@@ -280,6 +306,7 @@ function buildGadget() {
     s.title = T('Open Steam', 'Abrir Steam');
     s.addEventListener('click', () => openApp('steam'));
     g.after(s);
+    layoutGadgets();
   })));
 }
 
@@ -814,7 +841,8 @@ ctxMenu.innerHTML = `
   <button type="button" data-cx="next">${T('Next desktop background', 'Próxima tela de fundo')}</button>
   <hr>
   <button type="button" data-cx="ss">${T('Screen saver', 'Proteção de tela')}</button>
-  <button type="button" data-cx="pz"><img src="${icon('photo', 1)}" alt="">${T('Personalize', 'Personalizar')}</button>`;
+  <button type="button" data-cx="pz"><img src="${icon('photo', 1)}" alt="">${T('Personalize', 'Personalizar')}</button>
+  <button type="button" data-cx="sys"><img src="${icon('computer', 1)}" alt="">${T('System Info', 'Informações do Sistema')}</button>`;
 document.body.appendChild(ctxMenu);
 $('#desktop').addEventListener('contextmenu', (e) => {
   if (e.target.closest('.win')) return;
@@ -831,6 +859,7 @@ ctxMenu.addEventListener('click', (e) => {
   if (a === 'refresh') { const ic = $('#icons'); ic.style.opacity = '0'; setTimeout(() => { ic.style.opacity = ''; }, 120); }
   if (a === 'next') nextWall();
   if (a === 'pz') openApp('personalize');
+  if (a === 'sys') openApp('sobre');
   if (a === 'ss') openApp('personalize', { arg: 'pz-ss' });
 });
 document.addEventListener('pointerdown', (e) => { if (!ctxMenu.contains(e.target)) ctxMenu.classList.add('hidden'); });

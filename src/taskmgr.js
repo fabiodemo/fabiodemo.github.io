@@ -1,5 +1,5 @@
 import { T, LANG } from './i18n.js';
-import { REPO_GROUPS } from './data.js';
+import { REPO_GROUPS, SYS } from './data.js';
 
 // Gerenciador de Tarefas: gráficos só com dados reais.
 // Warren: git log dos 5 repositórios (jun/2024 a set/2026) + exports de Jira e Coda.
@@ -19,25 +19,30 @@ const REPOS = [
 // [semestre, build, acessos, plataforma, incidentes] (Jira + Coda; Linear a partir de ago/2026 não é classificado assim)
 // [tarefa, antes, depois, minutos antes, minutos depois]
 const GAINS = [
-  ['PortfolioReturns', '12-19h', '≤3h', 720, 180],
-  ['Positions', '10-12h', '1-2h', 600, 120],
-  ['Core', '5-7h', '~1h45', 300, 105],
+  [T('Portfolio returns', 'Rentabilidade das carteiras'), '12-19h', '≤3h', 720, 180],
+  [T('Positions', 'Posições'), '10-12h', '1-2h', 600, 120],
+  [T('Core pipelines (OCI)', 'Pipelines core (OCI)'), '5-7h', '~1h45', 300, 105],
   ['MongoDB → JDBC', '4h', '5min', 240, 5],
   [T('Silver copies (serverless)', 'Cópias silver (serverless)'), '4h', '1min', 240, 1.15],
   [T('Sinacor heavy tasks', 'Sinacor tasks pesadas'), '>3h', '15-16min', 180, 16],
   [T('Sinacor history table', 'Sinacor tabela histórica'), '>3h', '~40min', 180, 40],
-  ['Apollo (DMS)', '>1h', '<3min', 60, 3],
+  [T('Internal app database (DMS)', 'Banco de app interno (DMS)'), '>1h', '<3min', 60, 3],
 ];
+// linhas com '#' viram subtítulo (o sistema), as outras são [nome, antes → depois, % de corte]
 const COSTS = [
   [T('AWS bill', 'Fatura AWS'), T('~US$11k → ~US$3.4k/mo (-69%)', '~US$11k → ~US$3,4k/mês (-69%)'), 69],
-  [T('DynamoDB (9 tables)', 'DynamoDB (9 tabelas)'), T('US$105 → ~US$5/mo', 'US$105 → ~US$5/mês'), 95],
-  ['Database-One · AWS', T('US$230 → US$19/mo (-92%)', 'US$230 → US$19/mês (-92%)'), 92],
-  [T('Database-One, total', 'Database-One, total'), T('US$317 → US$104/mo (-67%)', 'US$317 → US$104/mês (-67%)'), 67],
-  ['Fees · AWS', T('US$117 → US$15/mo (-87%)', 'US$117 → US$15/mês (-87%)'), 87],
-  ['Adroit · AWS', T('-76% from peak', '-76% desde o pico'), 76],
-  ['Fees · Databricks', T('US$52 → US$13/mo (-75%)', 'US$52 → US$13/mês (-75%)'), 75],
-  ['Adroit · Databricks', T('US$11 → US$3.9/mo (-65%)', 'US$11 → US$3,9/mês (-65%)'), 65],
-  [T('Fees + Adroit, total', 'Fees + Adroit, total'), T('US$199 → US$43/mo (-78.5%)', 'US$199 → US$43/mês (-78,5%)'), 78.5],
+  [T('DynamoDB (9 tables)', 'DynamoDB (9 tabelas)'), T('US$105 → ~US$5/mo (-95%)', 'US$105 → ~US$5/mês (-95%)'), 95],
+  ['#', SYS.pms],
+  ['AWS', T('US$230 → US$19/mo (-92%)', 'US$230 → US$19/mês (-92%)'), 92],
+  [T('Total (AWS + Databricks)', 'Total (AWS + Databricks)'), T('US$317 → US$104/mo (-67%)', 'US$317 → US$104/mês (-67%)'), 67],
+  ['#', SYS.fees],
+  ['AWS', T('US$117 → US$15/mo (-87%)', 'US$117 → US$15/mês (-87%)'), 87],
+  ['Databricks', T('US$52 → US$13/mo (-75%)', 'US$52 → US$13/mês (-75%)'), 75],
+  ['#', SYS.oms],
+  ['AWS', T('US$44 → US$11/mo (-76% vs peak)', 'US$44 → US$11/mês (-76% vs pico)'), 76],
+  ['Databricks', T('US$11 → US$3.9/mo (-65%)', 'US$11 → US$3,9/mês (-65%)'), 65],
+  ['#', T('Fee billing + order management', 'Tarifação + boletagem')],
+  [T('Total (AWS + Databricks)', 'Total (AWS + Databricks)'), T('US$199 → US$43/mo (-78.5%)', 'US$199 → US$43/mês (-78,5%)'), 78.5],
 ];
 
 const C = { bg: '#000', grid: '#0b5d2a', g1: '#39ff5a', g2: '#ffe14a', g3: '#5fd4ff', txt: '#8dff8f', red: '#ff5a4a' };
@@ -128,10 +133,10 @@ export function taskmgr(body, ctx) {
       ${REPOS.map(([img, d, c]) => `<tr><td>${img}</td><td>${d}</td><td>${nf(c)}</td><td><span class="tm-cpu"><i style="width:${(c / total) * 100}%"></i></span> ${((c / total) * 100).toFixed(1)}%</td></tr>`).join('')}
       </table>`,
     run: () => `<div class="tm-box"><div class="tm-h">${T('Runtime left after each optimization', 'Runtime que sobrou depois de cada otimização')}</div>${gainRows()}</div>
-      <div class="tm-box"><div class="tm-h">${T('Cost cut', 'Corte de custo')}</div>${COSTS.map(([n, v, p]) => `<div class="tm-gain"><span class="tm-gn">${n}</span><span class="tm-gbar cost"><i style="width:${p}%"></i></span><span class="tm-gv"><b>${v}</b></span></div>`).join('')}
+      <div class="tm-box"><div class="tm-h">${T('Cost cut', 'Corte de custo')}</div>${COSTS.map(([n, v, p]) => (n === '#' ? `<div class="tm-sys">${v}</div>` : `<div class="tm-gain"><span class="tm-gn">${n}</span><span class="tm-gbar cost"><i style="width:${p}%"></i></span><span class="tm-gv"><b>${v}</b></span></div>`)).join('')}
       <p class="tm-cap">${T('AWS bill, Sep 2025 vs Sep 2026: about US$7.6k a month less. Behind it: pipeline breakups and compute standards, the storage cleanup (Glacier, unused buckets) I reviewed, and cuts like the ones above.', 'Fatura AWS, set/2025 contra set/2026: cerca de US$7,6k a menos por mês. Por trás disso: quebra de pipelines e padrões de compute, a limpeza de storage (Glacier, buckets sem uso) que revisei e cortes como os de cima.')}</p>
-      <p class="tm-cap">${T('Database-One: Sep 2025 peak vs Sep 2026, 6 workflows down to 1 and a gradual move to serverless; about US$2,560 a year less.', 'Database-One: pico de set/2025 contra set/2026, de 6 workflows para 1 e migração gradual para serverless; cerca de US$2.560 por ano a menos.')}</p>
-      <p class="tm-cap">${T('Fees and Adroit in production: average of Nov 2025-Jan 2026 vs after the refactor (Fees on serverless, Adroit from 4 jobs to 1), same runs per day. About US$1,880 a year less; Databricks at list price, AWS is EC2 + EBS.', 'Fees e Adroit em produção: média de nov/2025-jan/2026 contra depois da refatoração (Fees em serverless, Adroit de 4 jobs para 1), com as mesmas execuções por dia. Cerca de US$1.880 por ano a menos; Databricks em preço de tabela, AWS é EC2 + EBS.')}</p></div>`,
+      <p class="tm-cap">${T(`${SYS.pms}: Sep 2025 peak vs Sep 2026, 6 workflows down to 1 and a gradual move to serverless; about US$2,560 a year less.`, `${SYS.pms}: pico de set/2025 contra set/2026, de 6 workflows para 1 e migração gradual para serverless; cerca de US$2.560 por ano a menos.`)}</p>
+      <p class="tm-cap">${T('Fee billing and order management in production: average of Nov 2025-Jan 2026 vs after the refactor (fee billing on serverless, order management from 4 jobs to 1), same runs per day. About US$1,880 a year less; Databricks at list price, AWS is EC2 + EBS.', 'Tarifação e boletagem em produção: média de nov/2025-jan/2026 contra depois da refatoração (tarifação em serverless, boletagem de 4 jobs para 1), com as mesmas execuções por dia. Cerca de US$1.880 por ano a menos; Databricks em preço de tabela, AWS é EC2 + EBS.')}</p></div>`,
     gh: () => `<div class="tm-box">${githubCharts()}</div>`,
   };
   body.innerHTML = `

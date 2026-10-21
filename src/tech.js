@@ -112,7 +112,7 @@ const MAIN = [
   ['databricks', T('The lakehouse I run: Workflows, Serverless, Asset Bundles, Genie, Apps. Certified Data Engineer Associate.', 'O lakehouse que eu opero: Workflows, Serverless, Asset Bundles, Genie, Apps. Certified Data Engineer Associate.')],
   ['delta', T('Medallion tables (Bronze/Silver/Gold) with Liquid Clustering.', 'Tabelas medallion (Bronze/Silver/Gold) com Liquid Clustering.')],
   ['uc', T('Governance: ABAC, column masks, dynamic views, Data Classification. PII masked by default.', 'Governança: ABAC, column masks, dynamic views, Data Classification. PII mascarado por padrão.')],
-  ['aws', T('DMS, S3, Lambda, Glue, Athena, DynamoDB, IAM, EventBridge. AWS bill from ~US$11k to ~US$3.4k/mo (-69%); Database-One alone -92% on AWS.', 'DMS, S3, Lambda, Glue, Athena, DynamoDB, IAM, EventBridge. Fatura AWS de ~US$11k para ~US$3,4k/mês (-69%); só o Database-One caiu 92% na AWS.')],
+  ['aws', T('DMS, S3, Lambda, Glue, Athena, DynamoDB, IAM, EventBridge. AWS bill from ~US$11k to ~US$3.4k/mo (-69%); the portfolio management system alone fell 92% on AWS.', 'DMS, S3, Lambda, Glue, Athena, DynamoDB, IAM, EventBridge. Fatura AWS de ~US$11k para ~US$3,4k/mês (-69%); só o sistema de consolidação de carteiras caiu 92% na AWS.')],
   ['terraform', T('The platform as code: workspaces, grants and views. 640+ commits.', 'A plataforma como código: workspaces, grants e views. 640+ commits.')],
   ['airflow', T('Orchestration on GCP (Cloud Composer) and in portfolio pipelines.', 'Orquestração na GCP (Cloud Composer) e em pipelines de portfólio.')],
   ['dbt', T('Transformations, tests and snapshots; Postgres → Snowflake project.', 'Transformações, testes e snapshots; projeto Postgres → Snowflake.')],
