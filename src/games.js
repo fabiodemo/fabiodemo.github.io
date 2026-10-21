@@ -1,4 +1,5 @@
 import { icon } from './pixels.js';
+import { sfx } from './sfx.js';
 import { T } from './i18n.js';
 
 // Cinco jogos simples, todos em canvas ou DOM puro, sem dependências.
@@ -141,6 +142,7 @@ function tetris(body, ctx) {
   }
   function over() {
     state = 'over';
+    sfx('lose');
     if (score > hiGet('tetris')) { hiSet('tetris', score); set('hi', score); }
     msg.innerHTML = `${T('Game over', 'Fim de jogo')}<br><small>${score} ${T('points · Enter or tap to play again', 'pontos · Enter ou toque para jogar de novo')}</small>`;
   }
@@ -152,6 +154,7 @@ function tetris(body, ctx) {
       if (board[y].every(Boolean)) { board.splice(y, 1); board.unshift(Array(COLS).fill(null)); cleared++; y++; }
     }
     if (cleared) {
+      sfx(cleared === 4 ? 'achieve' : 'line');
       score += [0, 100, 300, 500, 800][cleared] * level;
       lines += cleared;
       const prev = level;
@@ -267,6 +270,7 @@ function velha(body, ctx) {
   }
   function end(w) {
     done = true;
+    sfx(w.p === 'X' ? 'win' : w.p === 'O' ? 'lose' : 'ding');
     tally[w.p]++;
     body.querySelector(`[data-t="${w.p}"]`).textContent = tally[w.p];
     msgEl.textContent = w.p === 'X' ? T('You won! (on Easy, right?)', 'Você ganhou! (no Fácil, né?)') : w.p === 'O' ? T('The machine won.', 'A máquina ganhou.') : T('Draw!', 'Deu velha!');
@@ -378,6 +382,7 @@ function minas(body, ctx) {
   }
   function lose(i) {
     done = true; clearInterval(timer); face.textContent = '😵';
+    sfx('boom');
     toast(body, 'Terrorists Win');
     mine.forEach((m, j) => { if (m) { open[j] = true; paint(j); } });
     grid.children[i].classList.add('hit');
@@ -386,6 +391,7 @@ function minas(body, ctx) {
     const opened = open.filter(Boolean).length;
     if (opened === W * H - M) {
       done = true; clearInterval(timer); face.textContent = '😎';
+      sfx('win');
       toast(body, 'Bomb has been defused. Counter-Terrorists Win');
       mine.forEach((m, j) => { if (m) { flag[j] = true; paint(j); } });
       led('left', 0);
@@ -486,12 +492,13 @@ function snake(body, ctx) {
     const body2 = eat ? s : s.slice(0, -1);
     if (h.x < 0 || h.y < 0 || h.x >= N || h.y >= N || body2.some((p) => p.x === h.x && p.y === h.y)) {
       state = 'over';
+      sfx('lose');
       if (score > hiGet('snake')) { hiSet('snake', score); set('hi', score); }
       msg.innerHTML = `${T('Crashed!', 'Bateu!')}<br><small>${score} ${T('points · Enter or arrow to play again', 'pontos · Enter ou seta para jogar de novo')}</small>`;
       return;
     }
     s = [h, ...body2];
-    if (eat) { score += 10; set('score', score); place(); }
+    if (eat) { score += 10; set('score', score); place(); sfx('coin'); }
   }
   function draw() {
     g.fillStyle = '#0b1f0e'; g.fillRect(0, 0, cv.width, cv.height);
@@ -578,10 +585,12 @@ function flappy(body, ctx) {
     if (state === 'over') { if (performance.now() - dead > 500) { state = 'idle'; msg.innerHTML = `FLAPPY BIRB<br><small>${T('Click, tap or Space', 'Clique, toque ou Espaço')}</small>`; y = 110; pipes = []; } return; }
     if (state === 'pause') { state = 'run'; msg.textContent = ''; }
     vy = -150;
+    sfx('flap');
   }
   function die() {
     state = 'over'; dead = performance.now();
     const record = score > hiGet('flappy');
+    sfx(record ? 'win' : 'lose');
     if (record) { hiSet('flappy', score); set('hi', score); }
     msg.innerHTML = record
       ? `<span class="mission">Mission passed!</span><small>Respect +</small><small>${score} ${T('points · click to continue', 'pontos · clique para continuar')}</small>`

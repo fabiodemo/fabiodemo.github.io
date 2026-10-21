@@ -1,5 +1,6 @@
 import { ABOUT, PROFILE, STATS, EXPERIENCE, EDUCATION, PUBLICATIONS, RESEARCH, ACADEMIC, CERTS, LANGUAGES, SKILLS, REPO_GROUPS, FEATURED, TRASH, RESUME_SKILLS, RESUME_PROJECTS, CASES } from './data.js';
 import { icon } from './pixels.js';
+import { sfx } from './sfx.js';
 import avatarUrl from './assets/avatar.webp';
 import portraitUrl from './assets/portrait.webp';
 import resumeCss from './resume.css?raw';
@@ -265,7 +266,7 @@ function forumIndex() {
       ${row('pesquisa', 'folder+robot', T('Research and publications', 'Pesquisa e publicações'), T('3 papers and the robotics research group (Deep RL, TurtleBot3).', '3 artigos e o grupo de pesquisa em robótica (Deep RL, TurtleBot3).'), 2, '2', `2026<br>${by} fabio`)}
       ${row('academicos', 'folder+db', T('Academic projects', 'Projetos acadêmicos'), T('Data privacy, security outreach, a virtual fitting room and... canoeing.', 'Privacidade de dados, extensão em segurança, provador virtual e... canoagem.'), 4, '4', `2023<br>${by} fabio`)}
       ${row('app:certs', 'cert', T('Certificates', 'Certificados'), T('Databricks Certified Data Engineer Associate and another 23.', 'Databricks Certified Data Engineer Associate e mais 23.'), CERTS.length, CERTS.length, `${T('Aug 2026', 'ago/2026')}<br>${by} fabio`)}
-      ${row('app:taskmgr', 'taskmgr', T('Activity charts', 'Gráficos de atividade'), T('Task Manager with my real numbers: commits, rhythm, tickets, runtime and cost cuts.', 'Gerenciador de Tarefas com meus números reais: commits, ritmo, tickets, runtime e cortes de custo.'), 6, '8.302', `${T('Sep 2026', 'set/2026')}<br>${by} git log`)}
+      ${row('app:taskmgr', 'taskmgr', T('Activity charts', 'Gráficos de atividade'), T('Task Manager with my real numbers: commits, repos, runtime and cost cuts.', 'Gerenciador de Tarefas com meus números reais: commits, repos, runtime e cortes de custo.'), 4, '8.302', `${T('Sep 2026', 'set/2026')}<br>${by} git log`)}
       ${row('app:figs', 'photo', T('Thesis figures', 'Figuras da tese'), T('Stages, results, curriculum and network diagrams from the papers.', 'Estágios, resultados, curriculum e diagramas das redes dos artigos.'), FIGS.length, FIGS.length, `2025<br>${by} fabio`)}
       ${cat('Off-topic')}
       ${row('app:skills', 'folder+gear', T('Tech stack', 'Stack técnico'), T('Opens Device Manager with everything I use.', 'Abre o Gerenciador de Dispositivos com tudo que eu uso.'), SKILLS.length, '90+', `${T('today', 'hoje')}<br>${by} fabio`)}
@@ -703,17 +704,17 @@ function cmd(body, ctx) {
     sudo: () => print(T('fabio is not in the sudoers file. This incident will be reported. (kidding)', 'fabio não está no arquivo sudoers. Este incidente será reportado. (brincadeira)')),
     dnf: () => print(T('Last metadata expiration check: just now.\nPackage fabio-senior-data-engineer is already installed.', 'Last metadata expiration check: agora.\nPackage fabio-senior-data-engineer já está instalado.')),
     // códigos de outra época (não aparecem no help)
-    robin: (a) => { if (a === 'hood') print('+1000 gold'); },
+    robin: (a) => { if (a === 'hood') { sfx('coin'); print('+1000 gold'); } },
     rock: (a) => { if (a === 'on') print('+1000 stone'); },
     lumberjack: () => print('+1000 wood'),
     cheese: () => print('+1000 food'),
     'cheese steak jimmy\'s': () => print('+1000 food'),
-    wololo: () => { document.body.classList.toggle('wololo'); print('Wololo!'); },
+    wololo: () => { sfx('ding'); document.body.classList.toggle('wololo'); print('Wololo!'); },
     hesoyam: () => { window.dispatchEvent(new Event('cv-hesoyam')); print('Cheat activated'); },
     '/gamemode': (a) => print(a ? `Set own game mode to ${a[0].toUpperCase() + a.slice(1)} Mode` : 'Usage: /gamemode <survival|creative>'),
     '/seed': () => print('Seed: [20160301]'),
     '/time': (a) => { if (/day/.test(a)) { document.body.classList.add('lux'); print('Set the time to 1000'); } else if (/night/.test(a)) { document.body.classList.remove('lux'); print('Set the time to 13000'); } },
-    exura: () => print(T('You feel better.', 'Você se sente melhor.')),
+    exura: () => { sfx('line'); print(T('You feel better.', 'Você se sente melhor.')); },
     utevo: (a) => { if (a === 'lux') { document.body.classList.toggle('lux'); print('*utevo lux*'); } },
     connect: (a) => print(a ? `Connecting to ${a}...\nCounter-Terrorists Win` : 'connect <ip>'),
     pacman: () => print(T('warning: fabio-senior-data-engineer is up to date -- reinstalling\n(btw, I use Arch)', 'warning: fabio-senior-data-engineer is up to date -- reinstalling\n(aliás, eu uso Arch)')),
@@ -799,7 +800,8 @@ function lixeira(body) {
     </table>
     <div class="ex-details"><img src="${icon('trash', 3)}" alt=""><div><b>${TRASH.length} ${T('items', 'itens')}</b><br><small>${T('Nothing here can be restored. Thankfully.', 'Nada aqui pode ser restaurado. Ainda bem.')}</small></div></div>
   </div>`;
-  body.querySelectorAll('.ex-cmd span').forEach((s) => s.addEventListener('click', () => {
+  body.querySelectorAll('.ex-cmd span').forEach((s, i) => s.addEventListener('click', () => {
+    sfx(i === 0 ? 'recycle' : 'error');
     body.querySelector('.ex-details small').textContent = T('Access denied: these items are trophies.', 'Acesso negado: esses itens são troféus.');
   }));
 }
@@ -820,6 +822,7 @@ function contato(body) {
   </div>`;
   body.addEventListener('click', (e) => {
     if (e.target.closest('[data-act="nudge"]')) {
+      sfx('nudge');
       const w = body.closest('.win');
       w?.animate([0, -9, 8, -7, 6, -4, 3, 0].map((x, i) => ({ transform: `translate(${x}px, ${i % 2 ? 3 : -3}px)` })), { duration: 500 });
     }

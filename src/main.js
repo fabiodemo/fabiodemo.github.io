@@ -8,6 +8,7 @@ import { icon, orb, favicon } from './pixels.js';
 import { APPS, searchIndex, printCV, avatarUrl, printResume } from './apps.js';
 import { PROFILE } from './data.js';
 import { T, LANG, LANG_SOURCE, detect, setLang } from './i18n.js';
+import { sfx, isMuted, setMuted } from './sfx.js';
 const canoe = () => import('./canoe.js').then((m) => m.canoe());
 
 const LOCALE = LANG === 'pt' ? 'pt-BR' : 'en-US';
@@ -61,37 +62,9 @@ if (wallId === 'aurora') {
 } else setWall(wallId, false);
 
 /* ------------------------------------------------------------------ som */
-let muted = (() => { try { return localStorage.getItem('cv.muted') === '1'; } catch { return false; } })();
-let actx;
-function chime() {
-  if (muted) return;
-  try {
-    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
-    const notes = [523.25, 659.25, 783.99, 1046.5, 987.77, 1318.5];
-    notes.forEach((f, i) => {
-      const o = actx.createOscillator();
-      const g = actx.createGain();
-      o.type = i % 2 ? 'triangle' : 'square';
-      o.frequency.value = f;
-      const t = actx.currentTime + i * 0.11;
-      g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.06, t + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
-      o.connect(g).connect(actx.destination);
-      o.start(t);
-      o.stop(t + 0.55);
-    });
-  } catch { /* sem áudio */ }
-}
-function blip(freq = 880) {
-  if (muted || !actx) return;
-  const o = actx.createOscillator(), g = actx.createGain();
-  o.type = 'square'; o.frequency.value = freq;
-  g.gain.setValueAtTime(0.03, actx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + 0.08);
-  o.connect(g).connect(actx.destination); o.start(); o.stop(actx.currentTime + 0.09);
-}
+const chime = () => sfx('startup');
 function renderSound() {
+  const muted = isMuted();
   $('#tray-sound img').src = icon(muted ? 'speakerOff' : 'speaker', 2);
   $('#tray-sound').title = muted ? T('Sound off', 'Som desligado') : T('Sound on', 'Som ligado');
 }
@@ -302,7 +275,7 @@ function openApp(id, opts = {}) {
   wireWindow(state, app);
   focus(id);
   el.animate([{ opacity: 0, transform: 'scale(.88) translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 220, easing: 'cubic-bezier(.2,.9,.3,1.1)' });
-  if (!opts.quiet) blip(660);
+  if (!opts.quiet) sfx('open');
   renderTasks();
 }
 
@@ -432,6 +405,7 @@ function taskRect(id) {
 function minimize(id) {
   const s = wins.get(id);
   if (!s || s.min) return;
+  sfx('minimize');
   const r = s.el.getBoundingClientRect();
   const t = taskRect(id);
   const dx = t.left + t.width / 2 - (r.left + r.width / 2);
@@ -451,6 +425,7 @@ function minimize(id) {
 function restore(id) {
   const s = wins.get(id);
   if (!s) return;
+  if (s.min) sfx('restore');
   s.min = false;
   s.el.classList.remove('min');
   calm();
@@ -462,9 +437,11 @@ function restore(id) {
   focus(id);
 }
 
+let silentClose = false;
 function closeWin(id) {
   const s = wins.get(id);
   if (!s) return;
+  if (!silentClose) sfx('close');
   wins.delete(id);
   s.ctx.closed = true;
   try { s.ctx.onClose?.(); } catch { /* ok */ }
@@ -506,10 +483,9 @@ tick();
 setInterval(tick, 10000);
 
 $('#tray-sound').addEventListener('click', () => {
-  muted = !muted;
-  try { localStorage.setItem('cv.muted', muted ? '1' : '0'); } catch { /* ok */ }
+  setMuted(!isMuted());
   renderSound();
-  if (!muted) { chime(); }
+  sfx('startup');
 });
 
 // Mostrar área de trabalho + Aero Peek
@@ -532,6 +508,7 @@ function balloon(title, text) {
   b.innerHTML = `<button class="bl-x" aria-label="${T('Close', 'Fechar')}">×</button><b><img src="${orb(16, 1)}" alt=""> ${title}</b><p>${text}</p>`;
   b.classList.remove('hidden');
   b.classList.add('pop');
+  sfx('notify');
   clearTimeout(balloonT);
   balloonT = setTimeout(() => b.classList.add('hidden'), 9000);
   $('.bl-x', b).onclick = () => b.classList.add('hidden');
@@ -597,7 +574,7 @@ $('#start').addEventListener('click', (e) => {
   e.stopPropagation();
   const open = sm.classList.toggle('hidden');
   $('#start').classList.toggle('on', !open);
-  if (!open) { blip(990); setTimeout(() => $('.sm-search', sm).focus(), 50); }
+  if (!open) { sfx('click'); setTimeout(() => $('.sm-search', sm).focus(), 50); }
 });
 document.addEventListener('pointerdown', (e) => {
   if (!sm.contains(e.target) && !$('#start').contains(e.target)) closeStart();
@@ -609,7 +586,10 @@ addEventListener('keydown', (e) => {
 
 function shutdown() {
   closeStart();
+  silentClose = true;
   [...wins.keys()].forEach(closeWin);
+  silentClose = false;
+  sfx('shutdown');
   $('#desktop').classList.add('hidden');
   $('#taskbar').classList.add('hidden');
   const s = $('#shutdown');
@@ -768,6 +748,7 @@ document.body.appendChild(ctxMenu);
 $('#desktop').addEventListener('contextmenu', (e) => {
   if (e.target.closest('.win')) return;
   e.preventDefault();
+  sfx('click');
   ctxMenu.classList.remove('hidden');
   const r = ctxMenu.getBoundingClientRect();
   ctxMenu.style.left = Math.min(e.clientX, innerWidth - r.width - 4) + 'px';
@@ -787,6 +768,7 @@ document.addEventListener('pointerdown', (e) => { if (!ctxMenu.contains(e.target
 let cheatBuf = '';
 function hesoyam() {
   [...wins.values()].filter((w) => w.min).forEach((w) => restore(w.id));
+  sfx('coin');
   balloon('Cheat activated', T('Health, armor and a smaller AWS bill. All minimized windows restored.', 'Vida, colete e uma fatura AWS menor. Todas as janelas minimizadas voltaram.'));
 }
 addEventListener('cv-hesoyam', hesoyam);
@@ -822,6 +804,7 @@ function nextAch() {
   const el = document.createElement('div');
   el.className = 'ach';
   el.innerHTML = `<img src="${icon('chest', 2)}" alt=""><div><b>Achievement get!</b><span>${name}</span></div>`;
+  sfx('achieve');
   document.body.appendChild(el);
   setTimeout(() => { el.classList.add('out'); setTimeout(() => { el.remove(); nextAch(); }, 400); }, 3200);
 }

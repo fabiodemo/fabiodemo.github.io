@@ -3,6 +3,7 @@
 // caixinha de mensagem no estilo Windows com uma lembrança da época.
 import { icon } from './pixels.js';
 import { T } from './i18n.js';
+import { sfx } from './sfx.js';
 
 const SHORTCUTS = [
   { exe: 'Tibia.exe', n: 'Tibia', ic: 'chest+sword', kind: 'error',
@@ -72,6 +73,7 @@ export function lanhouse(body, ctx) {
     go.hidden = !app;
     go.textContent = T('Open', 'Abrir');
     dlg.hidden = false;
+    sfx({ error: 'error', warn: 'ding', info: 'notify', nudge: 'nudge' }[kind] || 'notify');
     body.querySelector('.lh-ok').focus();
     if (kind === 'nudge') {
       const win = body.closest('.win');
@@ -79,7 +81,16 @@ export function lanhouse(body, ctx) {
     }
   }
 
-  const run = (i) => { const s = SHORTCUTS[i]; show(s.exe, s.msg, s.kind, s.app); };
+  const run = (i) => {
+    const s = SHORTCUTS[i];
+    // PolyStation: assopra a fita antes da mensagem
+    if (s.exe === 'polystation.exe') { sfx('blow'); setTimeout(() => show(s.exe, s.msg, s.kind, s.app), 600); return; }
+    show(s.exe, s.msg, s.kind, s.app);
+  };
+  // a lan "conecta" com o som da internet discada, uma vez por sessão
+  try {
+    if (!sessionStorage.getItem('cv.dialup')) { sessionStorage.setItem('cv.dialup', '1'); sfx('dialup'); }
+  } catch { /* ok */ }
   body.addEventListener('dblclick', (e) => {
     const b = e.target.closest('[data-i]');
     if (b) run(+b.dataset.i);
