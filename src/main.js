@@ -11,6 +11,15 @@ import { T, LANG, LANG_SOURCE, detect, setLang } from './i18n.js';
 import { sfx, isMuted, setMuted } from './sfx.js';
 const canoe = () => import('./canoe.js').then((m) => m.canoe());
 
+// O desktop aberto dentro de um iframe (ex.: "CV completo" clicado no blog que já roda dentro do desktop)
+// vira recursão infinita. Em vez de montar outro desktop, cai numa tela azul de "stack overflow".
+let framed = false;
+try { framed = window.top !== window.self; } catch { framed = true; }
+if (framed) import('./recursion.js').then((m) => m.recursion());
+else boot();
+
+function boot() {
+
 const LOCALE = LANG === 'pt' ? 'pt-BR' : 'en-US';
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -26,8 +35,47 @@ let sceneLoading = false;
 const loadScene = () => {
   if (sceneLoading) return;
   sceneLoading = true;
-  import('./scene.js').then((m) => { scene = m.startScene($('#bg')); calm(); });
+  import('./scene.js').then((m) => {
+    scene = m.startScene($('#bg'));
+    if (scene.slow) staticAurora();
+    else scene.onSlow?.(staticAurora);
+    calm();
+  });
 };
+// sem GPU (ou GPU que não aguenta): a aurora vira imagem estática, e o resto do site fica leve
+/* ---------------------------------------------------------- transparência (Aero) */
+// Ligada por padrão; desligada sozinha quando não há GPU (blur por software deixa tudo lento).
+// Na Personalização dá para ligar ou desligar à mão (cv.aero).
+const aeroPref = (() => { try { return localStorage.getItem('cv.aero'); } catch { return null; } })();
+function softwareGL() {
+  try {
+    const gl = document.createElement('canvas').getContext('webgl');
+    if (!gl) return true;
+    const d = gl.getExtension('WEBGL_debug_renderer_info');
+    const name = String(gl.getParameter(d ? d.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
+    gl.getExtension('WEBGL_lose_context')?.loseContext();
+    return /swiftshader|llvmpipe|softpipe|software|basic render/i.test(name);
+  } catch { return true; }
+}
+function setAero(on, save) {
+  document.body.classList.toggle('no-aero', !on);
+  if (save) { try { localStorage.setItem('cv.aero', on ? '1' : '0'); } catch { /* ok */ } }
+}
+setAero(aeroPref ? aeroPref === '1' : !softwareGL(), false);
+addEventListener('cv-aero', (e) => setAero(!!e.detail, true));
+
+let sceneSlow = false;
+function staticAurora() {
+  sceneSlow = true;
+  if (!aeroPref) setAero(false, false);
+  if (wallId !== 'aurora') return;
+  import('./wallpaper.js').then((m) => {
+    if (wallId !== 'aurora') return;
+    m.apply($('#wall'), 'aurora');
+    $('#wall').hidden = false;
+    $('#bg').hidden = true;
+  });
+}
 
 /* ------------------------------------------------- papel de parede */
 // 'aurora' é a cena three.js; os outros são pixel art estática (e aí o three.js nem carrega)
@@ -36,6 +84,7 @@ function setWall(id, save = true) {
   wallId = id;
   if (save) { try { localStorage.setItem('cv.wall', id); } catch { /* ok */ } }
   if (id === 'aurora') {
+    if (sceneSlow) { staticAurora(); calm(); return; }
     $('#wall').hidden = true;
     $('#bg').hidden = false;
     loadScene();
@@ -212,8 +261,17 @@ function buildGadget() {
   g.innerHTML = `<div class="gd-h">${T('Before × After', 'Antes × Depois')}</div>
     ${rows.map(([n, a, b, p]) => `<div class="gd-row"><div class="gd-l"><span>${n}</span><small>${a} → <b>${b}</b></small></div><div class="gd-bar"><i style="--p:${Math.max(p, 0.03)}"></i></div></div>`).join('')}
     <div class="gd-f">${T('remaining runtime, in green', 'runtime que sobrou, em verde')}</div>`;
-  // segundo gadget: últimos jogos da Steam, só se o deploy gerou o steam.json
-  import('./steam.js').then(({ loadSteam, steamList, steamTitle, steamFoot }) => loadSteam().then((d) => {
+  // coluna de gadgets: Antes × Depois, Steam (se houver dados) e o media player
+  if (!g.parentElement.matches('#gadgets')) {
+    const col = document.createElement('div');
+    col.id = 'gadgets';
+    g.before(col);
+    col.appendChild(g);
+  }
+  const later = (fn) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 2500 }) : setTimeout(fn, 1200));
+  later(() => import('./player.js').then((m) => m.mountPlayer($('#gadgets'))));
+  // últimos jogos da Steam, só se o deploy gerou o steam.json (carrega depois do resto)
+  later(() => import('./steam.js').then(({ loadSteam, steamList, steamTitle, steamFoot }) => loadSteam().then((d) => {
     if (!d) return;
     const s = document.createElement('div');
     s.className = 'gadget gd-steam';
@@ -221,9 +279,8 @@ function buildGadget() {
     s.innerHTML = `<div class="gd-h">🎮 ${recent ? steamTitle() : T('Most played', 'Mais jogados')}</div>${steamList(recent ? d : { games: d.top.slice(0, 3) })}<div class="gd-f">${steamFoot(d)}</div>`;
     s.title = T('Open Steam', 'Abrir Steam');
     s.addEventListener('click', () => openApp('steam'));
-    s.style.top = `${g.offsetTop + g.offsetHeight + 12}px`;
     g.after(s);
-  }));
+  })));
 }
 
 /* ---------------------------------------------------------- janelas */
@@ -233,8 +290,9 @@ let activeId = null;
 let cascade = 0;
 
 function openApp(id, opts = {}) {
+  // hasOwn: "open constructor" ou "open __proto__" no cmd não podem virar janela
+  if (typeof id !== 'string' || !Object.hasOwn(APPS, id)) return;
   const app = APPS[id];
-  if (!app) return;
   if (ACH[id]) achievement(ACH[id]);
   closeStart();
   if (wins.has(id)) {
@@ -288,6 +346,7 @@ function openApp(id, opts = {}) {
   focus(id);
   el.animate([{ opacity: 0, transform: 'scale(.88) translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 220, easing: 'cubic-bezier(.2,.9,.3,1.1)' });
   if (!opts.quiet) sfx('open');
+  scene.hold?.(650);
   renderTasks();
 }
 
@@ -671,13 +730,13 @@ function switchLang(l) {
 function restoreWindows() {
   let list;
   try { list = JSON.parse(sessionStorage.getItem('cv.restore') || 'null'); sessionStorage.removeItem('cv.restore'); } catch { list = null; }
-  if (!list || !list.length) return false;
+  if (!Array.isArray(list) || !list.length) return false;
   list.forEach((w) => {
-    if (!APPS[w.id]) return;
+    if (!w || !Object.hasOwn(APPS, w.id)) return;
     openApp(w.id, { x: w.x, y: w.y, arg: w.arg, quiet: true });
     const s = wins.get(w.id);
     if (!s) return;
-    if (!isMobile()) { s.el.style.width = w.w + 'px'; s.el.style.height = w.h + 'px'; }
+    if (!isMobile() && Number.isFinite(w.w) && Number.isFinite(w.h)) { s.el.style.width = w.w + 'px'; s.el.style.height = w.h + 'px'; }
     if (w.max) setMax(w.id, true, false);
     if (w.min) minimize(w.id);
   });
@@ -824,3 +883,4 @@ addEventListener('cv-ach', (e) => achievement(e.detail));
 
 // gancho de teste (só com #simtest na URL)
 if (location.hash.includes('simtest')) window.__open = (id, o) => openApp(id, o);
+}

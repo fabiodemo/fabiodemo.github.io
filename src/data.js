@@ -499,6 +499,7 @@ export const TRASH = [
   { n: 'contacts.ctt', d: T('Old contact list export. Everyone shows as Away now.', 'Lista de contatos antiga. Todo mundo aparece como Ausente agora.') },
   { n: 'GTASAsf1.b', d: T('Save at 100%. Kept only the lessons.', 'Save em 100%. Fiquei só com as lições.') },
   { n: 'giant_fees_cluster.json', d: T('Replaced by serverless: -87% AWS cost, -75% Databricks.', 'Trocado por serverless: -87% no custo AWS, -75% no Databricks.') },
+  { n: 'database_one_x6/', d: T('Six workflows (Backup, Incremental, Positions, Weekends...) turned into one: -92% AWS, -67% in total.', 'Seis workflows (Backup, Incremental, Positions, Weekends...) viraram um só: -92% na AWS, -67% no total.') },
   { n: 'adroit_recreate_II.job', d: T('Merged with 3 other jobs into one. Adroit: -76% AWS from the peak.', 'Juntado com outros 3 jobs num só. Adroit: -76% na AWS desde o pico.') },
 ];
 

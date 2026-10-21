@@ -15,10 +15,11 @@ fórum estilo 2009 e pixel art, com fundo em three.js renderizado em baixa resol
 ## Rodar no Fedora
 
 ```bash
-sudo dnf install -y nodejs npm     # Fedora 40+ já traz Node 20/22
+sudo dnf install -y nodejs npm     # precisa de Node 20.19+ ou 22.12+ (Fedora 41+ já traz)
 cd fabio-cv
 npm install
-npm run dev                        # http://localhost:5173
+npm run dev                        # http://localhost:5173 (só nesta máquina)
+npm run dev:lan                    # expõe na rede local, para testar no celular
 ```
 
 Build de produção:

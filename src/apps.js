@@ -28,7 +28,12 @@ const tags = (list) => `<p class="tags">${list.map((s) => `<span>${esc(s)}</span
 const locale = LANG === 'pt' ? 'pt-BR' : 'en-US';
 
 function store(key, fallback) {
-  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
+  try {
+    const v = JSON.parse(localStorage.getItem(key));
+    // dado adulterado no storage não quebra a janela: o tipo tem que bater com o padrão
+    if (v == null || Array.isArray(fallback) !== Array.isArray(v) || typeof v !== typeof fallback) return fallback;
+    return v;
+  } catch { return fallback; }
 }
 function save(key, v) {
   try { localStorage.setItem(key, JSON.stringify(v)); } catch { /* sem storage, tudo bem */ }
@@ -429,7 +434,7 @@ function forum(body, ctx) {
       status.textContent = T('Done', 'Concluído');
       pageEl.scrollTop = 0;
     }, 120);
-    const meta = FORUM_PAGES[page] || FORUM_PAGES.index;
+    const meta = Object.hasOwn(FORUM_PAGES, page) ? FORUM_PAGES[page] : FORUM_PAGES.index;
     addr.value = `http://www.fabiodemo.com.br/forum/${meta.url}`;
     tab.textContent = `${fname} :: ${meta.title}`;
     ctx.setTitle(`${fname} :: ${meta.title} - ${T('Browser', 'Navegador')}`);
@@ -672,7 +677,7 @@ function cmd(body, ctx) {
     contact: () => print([`GitHub   ${PROFILE.github}`, PROFILE.linkedin && `LinkedIn ${PROFILE.linkedin}`, PROFILE.email && `E-mail   ${PROFILE.email}`].filter(Boolean).join('\n')),
     open: (a) => {
       const alias = { projects: 'projetos', trash: 'lixeira', games: 'jogos', readme: 'leiame', about: 'sobre', badges: 'stack', habbo: 'stack', mspaint: 'paint', 'paint.exe': 'paint', 'mspaint.exe': 'paint', contact: 'contato', tictactoe: 'velha', minesweeper: 'minas' };
-      if (a) ctx.open(alias[a] || a); else print(T('usage: open <app>', 'uso: open <app>'));
+      if (a) ctx.open(Object.hasOwn(alias, a) ? alias[a] : a); else print(T('usage: open <app>', 'uso: open <app>'));
     },
     games: () => { print('  tetris  velha  minas  snake  flappy'); print(T('  e.g.: open tetris', '  ex.: open tetris')); },
     python: (a) => {
@@ -734,7 +739,8 @@ function cmd(body, ctx) {
     if (!raw) return;
     hist.push(raw); hp = hist.length;
     const [c, ...args] = raw.split(/\s+/);
-    const fn = cmds[c.toLowerCase()];
+    const key = c.toLowerCase();
+    const fn = Object.hasOwn(cmds, key) && typeof cmds[key] === 'function' ? cmds[key] : null;  // "__proto__" e afins não viram comando
     if (fn) fn(args.join(' '));
     else print(T(`'${c}' is not recognized as an internal or external command. Try "help".`, `'${c}' não é reconhecido como um comando interno ou externo. Tente "help".`));
     print('');
@@ -748,7 +754,7 @@ function cmd(body, ctx) {
 function guestbook(body) {
   const seed = [{ n: 'fabio (admin)', m: T('First! Leave a message. Messages are saved only in your browser.', 'Primeiro! Deixa um recado aí. Os recados ficam salvos só no seu navegador.'), d: '2026' }];
   const render = () => {
-    const list = [...store('cv.guestbook', []), ...seed];
+    const list = [...store('cv.guestbook', []).filter((x) => x && typeof x === 'object'), ...seed];
     body.querySelector('.gb-list').innerHTML = list.map((x) => `<div class="gb-entry"><div class="gb-h"><b>${esc(x.n)}</b><small>${esc(x.d)}</small></div><p>${esc(x.m)}</p></div>`).join('');
   };
   body.innerHTML = `
@@ -898,7 +904,7 @@ function figs(body, ctx) {
 /* ---------------------------------------------------------- Páginas separadas (stack e blog) num navegador */
 function webPage(page, addr, tab, status) {
   return (body, ctx) => {
-    const url = (a) => `${page}?lang=${LANG}&embed=1${a ? '#' + a : ''}`;
+    const url = (a) => `${page}?lang=${LANG}&embed=1${a ? '#' + encodeURIComponent(a) : ''}`;
     body.innerHTML = `
     <div class="browser">
       <div class="br-bar">

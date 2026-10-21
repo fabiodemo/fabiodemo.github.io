@@ -4,9 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
+    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview --host"
+    "preview": "vite preview",
+    "dev:lan": "vite --host"
   },
   "dependencies": {
     "@fontsource/pixelify-sans": "^5.1.0",
@@ -15,6 +16,9 @@
     "three": "^0.169.0"
   },
   "devDependencies": {
-    "vite": "^5.4.10"
+    "vite": "^7.3.7"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
   }
 }

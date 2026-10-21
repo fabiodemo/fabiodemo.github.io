@@ -110,8 +110,9 @@ export function taskmgr(body, ctx) {
     ['run', T('Runtime', 'Runtime')],
     ['gh', 'GitHub'],
   ];
+  // cada aba só é montada quando abre (antes montava os 4 gráficos de uma vez)
   const panes = {
-    perf: `<div class="tm-box"><div class="tm-h">${T('Commit history (per month)', 'Histórico de commits (por mês)')}</div>${commitChart()}
+    perf: () => `<div class="tm-box"><div class="tm-h">${T('Commit history (per month)', 'Histórico de commits (por mês)')}</div>${commitChart()}
         <div class="tm-legend"><span><i style="background:${C.g1}"></i>${T('total', 'total')}</span><span><i style="background:${C.g2}"></i>${T('infra as code', 'infra como código')}</span></div></div>
       <div class="tm-cols">
         <div class="tm-box"><div class="tm-h">${T('Totals', 'Totais')}</div><table class="tm-kv">
@@ -123,15 +124,15 @@ export function taskmgr(body, ctx) {
           <tr><td>${T('Files touched', 'Arquivos tocados')}</td><td>${nf(3882)}</td></tr><tr><td>${T('Busiest month', 'Mês mais ativo')}</td><td>${T('Feb 2025', 'fev/2025')} (582)</td></tr>
           <tr><td>${T('Busiest IaC month', 'Mês com mais IaC')}</td><td>${T('Sep 2026', 'set/2026')} (338)</td></tr></table></div>
       </div>`,
-    proc: `<table class="tm-proc"><tr><th>${T('Image name', 'Nome da imagem')}</th><th>${T('Description', 'Descrição')}</th><th>Commits</th><th>CPU</th></tr>
+    proc: () => `<table class="tm-proc"><tr><th>${T('Image name', 'Nome da imagem')}</th><th>${T('Description', 'Descrição')}</th><th>Commits</th><th>CPU</th></tr>
       ${REPOS.map(([img, d, c]) => `<tr><td>${img}</td><td>${d}</td><td>${nf(c)}</td><td><span class="tm-cpu"><i style="width:${(c / total) * 100}%"></i></span> ${((c / total) * 100).toFixed(1)}%</td></tr>`).join('')}
       </table>`,
-    run: `<div class="tm-box"><div class="tm-h">${T('Runtime left after each optimization', 'Runtime que sobrou depois de cada otimização')}</div>${gainRows()}</div>
+    run: () => `<div class="tm-box"><div class="tm-h">${T('Runtime left after each optimization', 'Runtime que sobrou depois de cada otimização')}</div>${gainRows()}</div>
       <div class="tm-box"><div class="tm-h">${T('Cost cut', 'Corte de custo')}</div>${COSTS.map(([n, v, p]) => `<div class="tm-gain"><span class="tm-gn">${n}</span><span class="tm-gbar cost"><i style="width:${p}%"></i></span><span class="tm-gv"><b>${v}</b></span></div>`).join('')}
       <p class="tm-cap">${T('AWS bill, Sep 2025 vs Sep 2026: about US$7.6k a month less. Behind it: pipeline breakups and compute standards, the storage cleanup (Glacier, unused buckets) I reviewed, and cuts like the ones above.', 'Fatura AWS, set/2025 contra set/2026: cerca de US$7,6k a menos por mês. Por trás disso: quebra de pipelines e padrões de compute, a limpeza de storage (Glacier, buckets sem uso) que revisei e cortes como os de cima.')}</p>
       <p class="tm-cap">${T('Database-One: Sep 2025 peak vs Sep 2026, 6 workflows down to 1 and a gradual move to serverless; about US$2,560 a year less.', 'Database-One: pico de set/2025 contra set/2026, de 6 workflows para 1 e migração gradual para serverless; cerca de US$2.560 por ano a menos.')}</p>
       <p class="tm-cap">${T('Fees and Adroit in production: average of Nov 2025-Jan 2026 vs after the refactor (Fees on serverless, Adroit from 4 jobs to 1), same runs per day. About US$1,880 a year less; Databricks at list price, AWS is EC2 + EBS.', 'Fees e Adroit em produção: média de nov/2025-jan/2026 contra depois da refatoração (Fees em serverless, Adroit de 4 jobs para 1), com as mesmas execuções por dia. Cerca de US$1.880 por ano a menos; Databricks em preço de tabela, AWS é EC2 + EBS.')}</p></div>`,
-    gh: `<div class="tm-box">${githubCharts()}</div>`,
+    gh: () => `<div class="tm-box">${githubCharts()}</div>`,
   };
   body.innerHTML = `
   <div class="taskmgr">
@@ -143,10 +144,10 @@ export function taskmgr(body, ctx) {
   const pane = body.querySelector('.tm-pane');
   const show = (k) => {
     ctx.arg = k;
-    pane.innerHTML = panes[k];
+    pane.innerHTML = panes[k]();
     body.querySelectorAll('.tm-tabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === k));
   };
   body.querySelector('.tm-tabs').addEventListener('click', (e) => { const b = e.target.closest('[data-tab]'); if (b) show(b.dataset.tab); });
-  ctx.onArg = show;
-  show(panes[ctx.arg] ? ctx.arg : 'perf');
+  ctx.onArg = (k) => show(Object.hasOwn(panes, k ?? '') ? k : 'perf');
+  show(Object.hasOwn(panes, ctx.arg ?? '') ? ctx.arg : 'perf');
 }

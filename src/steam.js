@@ -2,6 +2,9 @@
 // Sem o arquivo (rodando local ou sem secrets), nada aparece.
 import { T, LANG } from './i18n.js';
 
+// imagem da Steam que falhar some, sem handler inline (compatível com a CSP)
+document.addEventListener('error', (e) => { if (e.target?.classList?.contains('st-img')) e.target.style.visibility = 'hidden'; }, true);
+
 let cache;
 export function loadSteam() {
   if (!cache) {
@@ -21,7 +24,7 @@ const hours = (h) => `${h.toLocaleString(LANG === 'pt' ? 'pt-BR' : 'en-US')} h`;
 export function steamList(d) {
   return d.games.map((g) => `
     <div class="st-game" title="${esc(g.name)}">
-      <img src="${header(g.appid)}" alt="${esc(g.name)}" loading="lazy" width="184" height="86" onerror="this.style.visibility='hidden'">
+      <img class="st-img" src="${header(g.appid)}" alt="${esc(g.name)}" loading="lazy" width="184" height="86">
       <div><b>${esc(g.name)}</b><small>${g.h2w ? `${hours(g.h2w)} ${T('past 2 weeks', 'nas últimas 2 semanas')}` : ''}${g.total ? `${g.h2w ? ' · ' : ''}${hours(g.total)} ${T('total', 'no total')}` : ''}</small></div>
     </div>`).join('');
 }
@@ -58,7 +61,7 @@ export function linuxShare(p) {
 function achList(list, nf) {
   return `<div class="sx-achs">${list.map((a) => `
     <div class="sx-a">
-      ${a.icon ? `<img src="${esc(a.icon)}" alt="" width="48" height="48" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="sx-noicon">🏆</i>'}
+      ${a.icon ? `<img src="${esc(a.icon)}" alt="" width="48" height="48" loading="lazy" class="st-img">` : '<i class="sx-noicon">🏆</i>'}
       <div><b>${esc(a.name)}</b><small>${esc(a.game)}${a.desc ? ` · ${esc(a.desc)}` : ''}</small>
       ${a.pct != null ? `<span class="sx-rare${a.pct < 10 ? ' rare' : ''}">${T(`${nf(a.pct)}% of players have it`, `${nf(a.pct)}% dos jogadores têm`)}</span>` : ''}${a.date ? `<span class="sx-date">${new Date(`${a.date}T12:00:00`).toLocaleDateString(LANG === 'pt' ? 'pt-BR' : 'en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</span>` : ''}</div>
     </div>`).join('')}</div>`;
@@ -94,7 +97,7 @@ export function steamApp(body) {
       ${d.games.length ? `<h3 class="sx-h">${steamTitle()}${d.twoWeeks?.hours ? `<span>${hours(d.twoWeeks.hours)} ${T('in the past 2 weeks', 'nas últimas 2 semanas')} · ${d.twoWeeks.games} ${d.twoWeeks.games === 1 ? T('game', 'jogo') : T('games', 'jogos')}</span>` : ''}</h3>
       <div class="sx-recent">${d.games.map((g) => `
         <div class="sx-game">
-          <img src="${header(g.appid)}" alt="${esc(g.name)}" loading="lazy" onerror="this.style.visibility='hidden'">
+          <img src="${header(g.appid)}" alt="${esc(g.name)}" loading="lazy" class="st-img">
           <div class="sx-info">
             <b>${esc(g.name)}</b>
             <small>${g.h2w ? `${hours(g.h2w)} ${T('past 2 weeks', 'nas últimas 2 semanas')} · ` : ''}${hours(g.total)} ${T('on record', 'registradas')}</small>

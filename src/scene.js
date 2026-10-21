@@ -7,7 +7,7 @@ const THREE = { AmbientLight, BoxGeometry, Clock, DirectionalLight, Group, Icosa
 
 // tamanho do "pixel" na tela: cresce em telas grandes para limitar o custo de GPU
 const pixSize = () => Math.max(3, Math.ceil(Math.max(innerWidth, innerHeight) / 640));
-const FRAME = 1 / 30; // 30 fps bastam para pixel art
+let FRAME = 1 / 30; // 30 fps bastam para pixel art (cai para 15 em máquina lenta)
 
 const bgVert = /* glsl */ `
 varying vec2 vUv;
@@ -111,6 +111,18 @@ export function startScene(canvas) {
     return { setFocus() {} };
   }
   renderer.setPixelRatio(1);
+  // WebGL por software (sem GPU) deixa tudo lento: nesse caso nem tenta, o main.js usa a versão estática
+  try {
+    const gl = renderer.getContext();
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    const name = String(gl.getParameter(dbg ? dbg.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
+    if (/swiftshader|llvmpipe|softpipe|software|basic render/i.test(name)) {
+      renderer.dispose();
+      return { setFocus() {}, hold() {}, slow: true };
+    }
+  } catch { /* segue */ }
+  let mult = 1;
+  let onSlow = () => {};
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
@@ -184,7 +196,7 @@ export function startScene(canvas) {
 
   let bounds = { x: 10, y: 6 };
   function resize() {
-    const px = pixSize();
+    const px = Math.ceil(pixSize() * mult);
     const w = Math.max(1, Math.ceil(innerWidth / px));
     const h = Math.max(1, Math.ceil(innerHeight / px));
     renderer.setSize(w, h, false);
@@ -248,14 +260,32 @@ export function startScene(canvas) {
   }
   const tmp = new THREE.Vector3();
 
+  // governador: mede quanto cada quadro custa e reduz a qualidade se a máquina sofrer
+  let ema = 0;
+  let frames = 0;
+  let level = 0;
+  let holdUntil = 0;
+  function govern(ms) {
+    ema = ema ? ema * 0.9 + ms * 0.1 : ms;
+    if (++frames < 45) return;
+    if (level === 0 && ema > 10) { level = 1; FRAME = 1 / 15; mult = 1.6; resize(); frames = 0; ema = 0; return; }
+    if (level === 1 && ema > 18) { level = 2; calm = true; onSlow(); }
+  }
+
   function loop() {
     raf = 0;
     if (document.hidden || calm) return; // parado: nada de GPU enquanto não aparece
+    const now = performance.now();
+    if (now < holdUntil) { raf = requestAnimationFrame(loop); return; } // janela abrindo: prioridade para ela
     acc += Math.min(clock.getDelta(), 0.1);
-    if (acc >= FRAME) { step(Math.min(acc, 0.05)); acc = 0; }
+    if (acc >= FRAME) {
+      step(Math.min(acc, 0.05));
+      acc = 0;
+      govern(performance.now() - now);
+    }
     raf = requestAnimationFrame(loop);
   }
-  const wake = () => { if (!raf && !reduce && !document.hidden && !calm) { clock.getDelta(); raf = requestAnimationFrame(loop); } };
+  const wake = () => { if (!raf && !reduce && !document.hidden && !calm && level < 2) { clock.getDelta(); raf = requestAnimationFrame(loop); } };
 
   clock.getDelta();
   step(0);
@@ -264,6 +294,10 @@ export function startScene(canvas) {
 
   return {
     // com janela maximizada a cena congela (menos distração, zero GPU)
-    setFocus(c) { calm = c; wake(); },
+    setFocus(c) { if (level < 2) { calm = c; wake(); } },
+    // pausa curta enquanto uma janela abre (a animação dela fica lisa)
+    hold(ms = 600) { holdUntil = performance.now() + ms; },
+    // chamado se a máquina não aguentar nem a versão leve
+    onSlow(fn) { onSlow = fn; },
   };
 }

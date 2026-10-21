@@ -832,3 +832,42 @@ body.lux #bg { filter: brightness(1.35) saturate(1.1); }
 .sx-stats { display: grid; grid-template-columns: repeat(4, 1fr); }
 @media (max-width: 600px) { .sx-stats { grid-template-columns: repeat(2, 1fr); } }
 .sx-date { display: inline-block; margin: 3px 0 0 8px; font-size: 10px; color: #a0aa95; }
+
+/* coluna de gadgets */
+#gadgets { position: absolute; right: 18px; top: 18px; width: 230px; display: flex; flex-direction: column; gap: 12px; max-height: calc(100% - 30px); overflow: hidden; }
+#gadgets .gadget { position: static; width: auto; }
+@media (max-width: 760px) { #gadgets { display: none; } }
+
+/* media player */
+.gd-player { padding: 10px 10px 8px; }
+.gp-top { display: flex; justify-content: space-between; align-items: baseline; font: 15px var(--pix); color: #bfe6ff; margin-bottom: 6px; }
+.gp-top small { font: 10px var(--ui); opacity: .7; }
+.gp-vis { display: block; width: 100%; height: 46px; background: #000; border: 1px solid #000; box-shadow: inset 0 0 0 1px rgba(255,255,255,.15); image-rendering: pixelated; cursor: pointer; }
+.gp-track { margin-top: 6px; overflow: hidden; white-space: nowrap; font: 15px var(--mono); color: #3dff5a; background: #000; padding: 1px 4px; border: 1px solid #000; }
+.gp-marq { display: inline-block; animation: gp-marq 14s linear infinite; }
+.gd-player.paused .gp-marq { animation-play-state: paused; }
+@keyframes gp-marq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.gp-time { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 10px; opacity: .85; }
+.gp-seek { flex: 1; height: 5px; background: rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.25); border-radius: 3px; overflow: hidden; }
+.gp-seek i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #5fd4ff, #2a85d8); }
+.gp-ctl { display: flex; align-items: center; gap: 6px; margin-top: 7px; }
+.gp-ctl button { width: 30px; height: 24px; padding: 0; border-radius: 12px; border: 1px solid rgba(0,0,0,.6); color: #fff; font-size: 11px; cursor: pointer; background: radial-gradient(circle at 50% 30%, #6fb6f0, #1d4f8f 70%); box-shadow: inset 0 1px rgba(255,255,255,.5); }
+.gp-ctl .gp-play { width: 36px; height: 30px; border-radius: 50%; font-size: 13px; }
+.gp-ctl button:hover { filter: brightness(1.15); }
+.gp-vol { margin-left: auto; font-size: 13px; opacity: .8; cursor: help; }
+@media (prefers-reduced-motion: reduce) { .gp-marq { animation: none; } }
+
+/* desempenho: blur só na janela ativa (as de trás ficam com vidro opaco, quase igual e bem mais barato) */
+.win.inactive { backdrop-filter: none; -webkit-backdrop-filter: none; background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0) 40px), rgba(150, 175, 205, .92); }
+.win.max { backdrop-filter: none; -webkit-backdrop-filter: none; }
+
+/* sem transparência (Personalização, ou automático em máquina sem GPU): nada de blur nem animação decorativa */
+body.no-aero .win, body.no-aero #taskbar, body.no-aero #startmenu, body.no-aero .gadget, body.no-aero #snap-preview { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+body.no-aero .win { background: linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,0) 40px), #8fb3d9; }
+body.no-aero .win.inactive { background: linear-gradient(180deg, rgba(255,255,255,.2), rgba(255,255,255,0) 40px), #b4c7dc; }
+body.no-aero #taskbar { background: linear-gradient(180deg, #33507a, #13233b); }
+body.no-aero #startmenu { background: linear-gradient(180deg, #2c4f7c, #13284a); }
+body.no-aero .gadget { background: linear-gradient(180deg, #1c3554, #0f1c33); }
+body.no-aero .marquee span, body.no-aero .gd-bar i { animation: none; }
+.pz-color { padding-left: 14px; font-size: 12px; }
+.pz-color label { display: flex; align-items: center; gap: 6px; }

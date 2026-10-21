@@ -4,7 +4,7 @@ const PAL = {
   k: '#14161c', K: '#000000', w: '#ffffff', g: '#c9ced6', G: '#8a919c', d: '#454b55',
   b: '#2f7fe0', B: '#0f3f8c', c: '#8fdcff', y: '#ffd95a', Y: '#d99a00', o: '#ff8c1a',
   r: '#e5483b', R: '#8e1f1b', n: '#46c04a', N: '#1f7a2a', p: '#a66bff', s: '#f2c48d',
-  S: '#c78a4f', h: '#4a2f1b', t: '#2bd1a6',
+  S: '#c78a4f', h: '#4a2f1b', t: '#2bd1a6', P: '#ff6fb5',
 };
 
 const S = {
@@ -502,6 +502,20 @@ S.gamepad = [
   '................',
   '................',
 ];
+
+// Lan House: um ícone que lembra cada clássico (formas genéricas, nada de logo)
+S.potion = ['................', '......kkkk......', '......kSSk......', '......kggk......', '......kggk......', '.....kgwggk.....', '....kgwrrrgk....', '...kgrrrrrrgk...', '..kgwrrrrrrrrgk.', '..kgwrrrrrrrRgk.', '..kgrrrrrrrrRgk.', '..kgrrrrrrrRRgk.', '...kgRRRRRRRgk..', '....kkgggggkk...', '......kkkkk.....', '................'];
+S.wings = ['................', 'k..............k', 'kk............kk', 'kwk..........kwk', 'kwwk........kwwk', 'kpwwk......kwwpk', '.kpwwk.yy.kwwpk.', '.kppwwkYYkwwppk.', '..kppwkYYkwppk..', '..kpppkYYkpppk..', '...kppkyykppk...', '...kpk.kk.kpk...', '....kk....kk....', '................', '................', '................'];
+S.c4 = ['................', '................', '...........k....', '..........k.k...', '..kkkkkkkkkk.k..', '..kNNNNNNNNk....', '..kNkkkkkkNk....', '..kNkrrrkkNk....', '..kNkkkkkkNk....', '..kNggggggNk....', '..kNgdgdgdNk....', '..kNggggggNk....', '..kNgdgdgdNk....', '..kNNNNNNNNk....', '..kkkkkkkkkk....', '................'];
+S.swords = ['................', 'kk............kk', 'kwk..........kwk', '.kwk........kwk.', '..kwk......kwk..', '...kwk....kwk...', '....kwk..kwk....', '.....kwkkwk.....', '......kwwk......', '.....kwkkwk.....', '..kkkwk..kwkkk..', '..kyykk..kkyyk..', '...kyk....kyk...', '..kSk......kSk..', '.kSk........kSk.', '.kk..........kk.'];
+S.castle = ['.......kr.......', '.......krr......', '.......k........', '..kgkgkgkgkgk...', '..kgggggggggk...', '..kgGgggggGgk...', '..kgggggggggk...', '..kggggkggggk...', '..kgggkhkgggk...', '.kgggggggggggk..', '.kgGggkhhkggGgk.', '.kgggkhhhhkgggk.', '.kgggkhhhhkgggk.', '.kkkkkkkkkkkkkk.', '.nnnnnnnnnnnnnn.', '................'];
+S.car = ['................', '................', '................', '................', '................', '....kkkkkk......', '...kcckcck......', '..kccckccck.....', '.kkkkkkkkkkkkk..', 'krrrrrrrrrrrrrk.', 'krrwrrrrrrrrrrk.', 'kRRkkkRRRRkkkRk.', '...kdgdk..kdgdk.', '....kkk....kkk..', '................', '................'];
+S.sofa = ['................', '................', '................', '................', '.....kkkkkk.....', '...kkrrrrrrkk...', '..krrrrrrrrrrk..', '..kRrrrrrrrrRk..', '.kkRRrrrrrrRRkk.', 'krrkRRrrrrRRkrrk', 'krrrkRRRRRRkrrrk', 'kRrrrkkkkkkrrrRk', '.kRRrrrrrrrrRRk.', '..kkRRRRRRRRkk..', '...kk......kk...', '................'];
+S.bubble = ['................', '..kkkkkkkkkkkk..', '.kcccccccccccck.', 'kcwwwwwwwwwwwwck', 'kcwwkwwwwkwwwwck', 'kcwwkwwwwkwwwwck', 'kcwwwwwwwwwwwwck', 'kcwkwwwwwwwkwwck', 'kcwwkkkkkkkwwwck', 'kcwwwwwwwwwwwwck', '.kcccccccccccck.', '..kkkkcckkkkkk..', '......kck.......', '......kk........', '................', '................'];
+S.scrap = ['................', '..kkkkkkkkkkk...', '..kwwwwwwwwwkk..', '..kwwwwwwwwwkgk.', '..kwwPPwPPwwwwk.', '..kwPPPPPPPwwwk.', '..kwPPPPPPPwwwk.', '..kwwPPPPPwwwwk.', '..kwwwPPPwwwwwk.', '..kwwwwPwwwwwwk.', '..kwwwwwwwwwwwk.', '..kwGGGGGGGwwwk.', '..kwwwwwwwwwwwk.', '..kwGGGGGwwwwwk.', '..kkkkkkkkkkkkk.', '................'];
+S.grass = ['................', '.......kk.......', '.....kknnkk.....', '...kknnnnnnkk...', '.kknnnNnnnnnnkk.', 'knnnnnnnnnnnNnnk', 'kkNNnnnnnnnnNNkk', 'knNnnNnkknNnnNnk', 'kSnSSnSkkhnhhnhk', 'kSSSSSSkkhhhhhhk', 'kSShSSSkkhhShhhk', 'kSSSSShkkhhhhShk', '.kkSSSSkkhhhhkk.', '...kkSSkkhhkk...', '.....kkkkkk.....', '................'];
+S.console = ['................', '................', '....kkkkkkkk....', '....kyyyyyyk....', '....kyrrrryk....', '.kkkkGGGGGGkkkk.', 'kggggggggggggggk', 'kgrgggggggggbggk', 'kggggggggggggggk', 'kgGGGGGGGGGGGGgk', 'kggkkggggggkkggk', 'kggggggggggggggk', '.kkkkkkkkkkkkkk.', '..kd........dk..', '..kk........kk..', '................'];
+S.memcard = ['................', '....kkkkkkkk....', '....kddddddk....', '....kdbbbbdk....', '....kdbccbdk....', '....kdbbbbdk....', '....kddddddk....', '....kddddddk....', '....kddddddk....', '....kddddddk....', '....kdGGGGdk....', '....kddddddk....', '....kyyyyyyk....', '....kykykyyk....', '....kkkkkkkk....', '................'];
 
 // Badges 8x8 para pastas e para o Gerenciador de Dispositivos
 const B = {

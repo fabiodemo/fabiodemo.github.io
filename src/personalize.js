@@ -16,6 +16,7 @@ export function personalize(body, ctx) {
     <aside class="cp-side">
       <a data-go="pz-bg">${T('Desktop Background', 'Plano de Fundo da Área de Trabalho')}</a>
       <a data-go="pz-ss">${T('Screen Saver', 'Proteção de Tela')}</a>
+      <a data-go="pz-color">${T('Window Color', 'Cor da Janela')}</a>
       <div class="cp-see">${T('See also', 'Consulte também')}</div>
       <a data-app="sobre">${T('System', 'Sistema')}</a>
       <a data-app="paint">Paint</a>
@@ -28,6 +29,11 @@ export function personalize(body, ctx) {
         <button type="button" class="pz-wall${w.id === wall ? ' on' : ''}" data-wall="${w.id}">
           <img src="${thumb(w.id)}" alt="" width="128" height="72"><span>${w.n}</span>
         </button>`).join('')}
+      </div>
+      <h3 id="pz-color">${T('Window Color and Appearance', 'Cor e Aparência da Janela')}</h3>
+      <div class="pz-color">
+        <label><input type="checkbox" class="pz-aero"${document.body.classList.contains('no-aero') ? '' : ' checked'}> ${T('Enable transparency', 'Habilitar transparência')}</label>
+        <p class="pz-hint">${T('Turned off automatically on computers without graphics acceleration, where the glass blur makes everything slow.', 'Desligada sozinha em computadores sem aceleração gráfica, onde o desfoque do vidro deixa tudo lento.')}</p>
       </div>
       <h3 id="pz-ss">${T('Screen Saver', 'Proteção de Tela')}</h3>
       <div class="pz-ss">
@@ -59,6 +65,7 @@ export function personalize(body, ctx) {
     dispatchEvent(new CustomEvent('cv-ss-cfg'));
     return cfg;
   };
+  body.querySelector('.pz-aero').addEventListener('change', (e) => dispatchEvent(new CustomEvent('cv-aero', { detail: e.target.checked })));
   sel.addEventListener('change', save);
   wait.addEventListener('change', save);
   txt.addEventListener('change', save);
