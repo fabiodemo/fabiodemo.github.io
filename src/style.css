@@ -638,7 +638,7 @@ body.lux #bg { filter: brightness(1.35) saturate(1.1); }
 .tm-gbar.cost { background: #222; } .tm-gbar.cost i { background: repeating-linear-gradient(90deg, #ffe14a 0 3px, #d9a400 3px 6px); }
 .tm-gv { font-family: var(--mono); font-size: 14px; }
 .tm-status { flex: none; display: flex; gap: 18px; padding: 3px 8px; font-size: 11px; background: #f0f0f0; border-top: 1px solid #ccc; white-space: nowrap; overflow: hidden; }
-@media (max-width: 760px) { .tm-cols { grid-template-columns: 1fr; } .tm-gain { grid-template-columns: 110px 1fr 90px; } .tm-status span:last-child { display: none; } }
+@media (max-width: 760px) { .tm-cols { grid-template-columns: 1fr; } .tm-gain { grid-template-columns: 110px 1fr 90px; } .tm-status span:nth-child(3) { display: none; } }
 .star { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; margin: 0; }
 .star dt { font: 700 13px var(--pix); color: #0b4ea2; }
 .star dd { margin: 0; }
@@ -914,3 +914,47 @@ body.no-aero .marquee span, body.no-aero .gd-bar i { animation: none; }
 #gadgets .gadget { right: auto; top: auto; left: auto; padding: 12px 12px 10px; }
 #gadgets .gd-player .gp-top { font: 16px var(--pix); color: #bfe6ff; margin-bottom: 8px; }
 #gadgets .gd-steam .gd-h, #gadgets .gadget > .gd-h { margin-bottom: 8px; }
+
+/* ---------- easter egg: autodestruição */
+.tm-sd { margin-left: auto; flex: none; padding: 1px 8px; font: 600 11px/1.4 inherit; color: #8e1f1b; background: linear-gradient(#fff2f2, #f3cfcf); border: 1px solid #b85450; border-radius: 3px; cursor: pointer; }
+.tm-sd:hover { background: linear-gradient(#ffe2e2, #eeb3b3); }
+.sd { position: fixed; inset: 0; z-index: 99995; pointer-events: none; transition: opacity .45s; }
+.sd.sd-off { opacity: 0; }
+.sd > * { pointer-events: auto; }
+.sd-pal { position: fixed; left: 0; top: 0; width: 80px; height: 80px; will-change: transform; }
+.sd-pal img { width: 80px; height: 80px; image-rendering: pixelated; animation: sd-bob 1.6s ease-in-out infinite; filter: drop-shadow(0 8px 6px rgba(0,0,0,.45)); }
+@keyframes sd-bob { 50% { transform: translateY(-9px) rotate(-4deg); } }
+.sd-say { position: absolute; left: 50%; bottom: calc(100% + 14px); transform: translateX(-50%); width: max-content; max-width: min(260px, calc(100vw - 24px)); padding: 8px 12px; font-size: 13px; color: #000; background: #ffffe1; border: 1px solid #333; border-radius: 10px; box-shadow: 2px 3px 8px rgba(0,0,0,.35); animation: fadeIn .2s; }
+.sd-say::after { content: ''; position: absolute; left: 50%; top: 100%; transform: translateX(-50%); border: 8px solid transparent; border-top-color: #333; }
+.sd-dlg { position: absolute; right: calc(100% + 16px); top: -24px; width: 330px; color: #000; background: #f0f0f0; border: 1px solid #6b7b8f; border-radius: 6px; box-shadow: 0 10px 28px rgba(0,0,0,.5); font-size: 12px; animation: fadeIn .15s; }
+.sd-dlg-t { padding: 6px 10px; border-radius: 6px 6px 0 0; background: linear-gradient(#e3edf8, #c7d8ee); }
+.sd-dlg-b { display: flex; gap: 12px; align-items: flex-start; padding: 16px 14px 14px; background: #fff; }
+.sd-dlg-b i { font-style: normal; font-size: 28px; line-height: 1; color: #d99a00; }
+.sd-dlg-b p { margin: 2px 0 0; font-size: 13px; line-height: 1.4; }
+.sd-dlg-b.big p { font-size: 17px; font-weight: 700; color: #b0201b; letter-spacing: .3px; }
+.sd-dlg-b.big i { color: #e5483b; }
+.sd-dlg-btns { display: flex; justify-content: flex-end; gap: 8px; padding: 10px 12px; }
+.sd-dlg-btns .btn7 { white-space: nowrap; min-width: 72px; }
+@media (max-width: 699px) { .sd-dlg { right: auto; top: auto; left: 50%; bottom: calc(100% + 16px); transform: translateX(-50%); width: min(330px, calc(100vw - 24px)); } }
+.sd-term { position: fixed; inset: 0; margin: auto; width: min(720px, calc(100vw - 24px)); height: min(390px, 62vh); display: flex; flex-direction: column; overflow: hidden; background: #0c0c0c; border: 1px solid #6b7b8f; border-radius: 6px; box-shadow: 0 12px 40px rgba(0,0,0,.6); animation: fadeIn .2s; }
+.sd-term-t { flex: none; display: flex; justify-content: space-between; gap: 10px; padding: 5px 10px; font-size: 12px; color: #000; background: linear-gradient(#e3edf8, #c7d8ee); }
+.sd-term-t b { color: #8e1f1b; font-variant-numeric: tabular-nums; }
+.sd-term pre { flex: 1; margin: 0; padding: 8px 10px; overflow: hidden; color: #c8c8c8; font: 13px/1.35 Consolas, ui-monospace, monospace; white-space: pre-wrap; word-break: break-all; }
+html.sd-glitch #desktop, html.sd-glitch #taskbar, html.sd-glitch .sd-term { animation: sd-jit .16s steps(2) infinite; filter: drop-shadow(calc(var(--gi, 1) * 2px) 0 0 rgba(255,0,70,.75)) drop-shadow(calc(var(--gi, 1) * -2px) 0 0 rgba(0,235,255,.75)); }
+html.sd-glitch #taskbar { animation-duration: .13s; }
+@keyframes sd-jit {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(calc(var(--gi, 1) * -4px), calc(var(--gi, 1) * 1px)) skewX(-2deg); }
+  50% { transform: translate(calc(var(--gi, 1) * 3px), calc(var(--gi, 1) * -2px)); }
+  75% { transform: translate(calc(var(--gi, 1) * -1px), calc(var(--gi, 1) * 2px)) skewX(2deg); }
+}
+.sd-scan { position: fixed; inset: 0; z-index: 99996; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.2) 0 1px, transparent 1px 3px); }
+.sd-scan i { position: absolute; left: -5%; width: 110%; }
+@media (prefers-reduced-motion: reduce) { html.sd-glitch #desktop, html.sd-glitch #taskbar, html.sd-glitch .sd-term { animation: none; } }
+.sd-bh { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; display: block; pointer-events: none; }
+.sd-end { position: fixed; left: 50%; top: 62%; transform: translateX(-50%); width: min(600px, calc(100vw - 32px)); text-align: center; color: #ffd6a3; font: 20px/1.3 var(--pix); text-shadow: 0 0 8px rgba(255,140,40,.35); animation: fadeIn 1.4s both; }
+.sd-end h2 { margin: 0 0 12px; font: 32px/1.1 var(--pix); color: #fff; letter-spacing: 1px; }
+.sd-end ul { margin: 0; padding: 0; list-style: none; }
+.sd-end li { margin: 2px 0; }
+.sd-reboot { position: fixed; right: 16px; bottom: 16px; padding: 6px 14px; font-size: 13px; animation: fadeIn 1s 1.2s both; }
+@media (max-width: 699px) { .sd-end { top: 52%; font-size: 17px; } .sd-end h2 { font-size: 24px; } }

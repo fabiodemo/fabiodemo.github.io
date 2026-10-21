@@ -528,6 +528,9 @@ S.joystick = ['................', '......rrr.......', '.....rrwrr......', '.....
 S.arcade = ['...kkkkkkkkk....', '...kpppppppk....', '...kkkkkkkkk....', '...kKKKKKKKk....', '...kKcKKnKKk....', '...kKKKyKKKk....', '...kKKKKKKKk....', '...kkkkkkkkk....', '..kgrgggbggk....', '..kkkkkkkkkk....', '...kpppppppk....', '...kpkkkkkpk....', '...kpkyyykpk....', '...kpkkkkkpk....', '...kpppppppk....', '...kkkkkkkkk....'];
 S.coolface = ['................', '.....kkkkkk.....', '...kkyyyyyykk...', '..kyyyyyyyyyyk..', '.kyyyyyyyyyyyyk.', '.kykkkkykkkkkyk.', 'kyykKKkkkKKkkyyk', 'kyyykkyyykkyyyyk', 'kyyyyyyyyyyyyyyk', 'kyyyyyyyyyyyyyyk', 'kyykyyyyyyyykyyk', '.kyykyyyyyykyyk.', '.kyyykkkkkkyyyk.', '..kyyyyyyyyyyk..', '...kkyyyyyykk...', '.....kkkkkk.....'];
 
+// Assistente da autodestruição: um disquete com olhos (personagem próprio)
+S.floppypal = ['................', '.kkkkkkkkkkkkk..', '.kbbkggggGgkbbk.', '.kbbkggggGgkbbbk', '.kbbkggggGgkbbbk', '.kbbbkkkkkkbbbbk', '.kbbbbbbbbbbbbbk', '.kbbwwbbbbwwbbbk', '.kbbwkbbbbwkbbbk', '.kbbbbbbbbbbbbbk', '.kbbbkbbbbkbbbbk', '.kbbbbkkkkbbbbbk', '.kbwwwwwwwwwwwbk', '.kbwGGGGGGGGGwbk', '.kbwwwwwwwwwwwbk', '.kkkkkkkkkkkkkkk'];
+
 // Badges 8x8 para pastas e para o Gerenciador de Dispositivos
 const B = {
   db: ['.kkkkkk.', 'kcbbbbck', 'kkccccKk', 'kbbbbbbk', 'kkbbbbkk', 'kbbbbbbk', 'kkbbbbkk', '.kkkkkk.'],

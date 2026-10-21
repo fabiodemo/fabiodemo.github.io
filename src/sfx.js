@@ -117,6 +117,20 @@ const SOUNDS = {
   boom() { noise({ dur: 0.9, vol: 0.22, type: 'lowpass', from: 1200, to: 60, q: 0.7 }); tone(70, { dur: 0.5, type: 'sine', vol: 0.12, to: 35 }); },
   // lixeira: papel amassando
   recycle() { for (let i = 0; i < 7; i++) noise({ at: i * 0.045 + Math.random() * 0.02, dur: 0.06, vol: 0.06, from: 2500 + Math.random() * 2500, to: 1500, q: 1.5 }); },
+  // glitch: rajadas de estática e bips quebrados por ~5 s
+  glitch() {
+    for (let i = 0; i < 46; i++) {
+      const at = i * 0.105 + Math.random() * 0.05;
+      noise({ at, dur: 0.04 + Math.random() * 0.08, vol: 0.05 + (i / 46) * 0.06, from: 300 + Math.random() * 5000, to: 200 + Math.random() * 3000, q: 2 + Math.random() * 6 });
+      if (i % 3 === 0) tone(80 + Math.random() * 1600, { at, dur: 0.05, vol: 0.02 + (i / 46) * 0.02, to: 60 + Math.random() * 900 });
+    }
+  },
+  // buraco negro: ronco grave que cresce
+  rumble() {
+    noise({ dur: 6, vol: 0.22, type: 'lowpass', from: 260, to: 40, q: 0.8 });
+    tone(58, { dur: 6, type: 'sine', vol: 0.1, to: 28, attack: 1.5 });
+    tone(87, { at: 0.5, dur: 5, type: 'triangle', vol: 0.04, to: 41, attack: 1.2 });
+  },
   // assoprar a fita
   blow() { noise({ dur: 0.55, vol: 0.09, type: 'lowpass', from: 900, to: 300, q: 0.5 }); },
   // internet discada: tons de discagem, portadora e o "chiado" do handshake

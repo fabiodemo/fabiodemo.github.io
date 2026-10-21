@@ -790,12 +790,13 @@ const SS_DEF = { id: 'bubbles', wait: 10, text: 'DemOS 7' };
 const ssCfg = () => { try { return { ...SS_DEF, ...JSON.parse(localStorage.getItem('cv.ss') || '{}') }; } catch { return SS_DEF; } };
 let ssStop = null;
 let ssIdle = 0;
+let sdRunning = false;
 let ssSince = 0;
 let ssFrom = null;
 function armIdle() {
   clearTimeout(ssIdle);
   const c = ssCfg();
-  if (!loggedIn || c.id === 'none' || !c.wait) return;
+  if (!loggedIn || sdRunning || c.id === 'none' || !c.wait) return;
   ssIdle = setTimeout(() => { if (!document.hidden) startSaver(c.id); }, c.wait * 60000);
 }
 function startSaver(id) {
@@ -909,6 +910,26 @@ function nextAch() {
   setTimeout(() => { el.classList.add('out'); setTimeout(() => { el.remove(); nextAch(); }, 400); }, 3200);
 }
 addEventListener('cv-ach', (e) => achievement(e.detail));
+
+/* ---------------------------------------------------------- easter egg: autodestruição (Gerenciador de Tarefas) */
+addEventListener('cv-selfdestruct', () => {
+  if (sdRunning) return;
+  sdRunning = true;
+  clearTimeout(ssIdle);
+  import('./selfdestruct.js').then((m) => m.selfDestruct({
+    closeAll: () => {
+      const n = wins.size;
+      closeStart();
+      silentClose = true;
+      [...wins.keys()].forEach(closeWin);
+      silentClose = false;
+      return n;
+    },
+    cancel: () => { sdRunning = false; armIdle(); },
+    freeze: () => scene.setFocus(true),
+    ach: achievement,
+  })).catch(() => { sdRunning = false; });
+});
 
 // gancho de teste (só com #simtest na URL)
 if (location.hash.includes('simtest')) window.__open = (id, o) => openApp(id, o);

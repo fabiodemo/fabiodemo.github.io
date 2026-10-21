@@ -169,7 +169,7 @@ export function taskmgr(body, ctx) {
     <div class="menubar"><span>${T('File', 'Arquivo')}</span><span>${T('Options', 'Opções')}</span><span>${T('View', 'Exibir')}</span><span>${T('Help', 'Ajuda')}</span></div>
     <div class="tm-tabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" data-tab="${k}" role="tab">${l}</button>`).join('')}</div>
     <div class="tm-pane"></div>
-    <div class="tm-status"><span>${T('Processes', 'Processos')}: 5</span><span>Commits: ${nf(total)}</span><span>${T('Source: git log, Jun 2024 - Sep 2026', 'Fonte: git log, jun/2024 - set/2026')}</span></div>
+    <div class="tm-status"><span>${T('Processes', 'Processos')}: 5</span><span>Commits: ${nf(total)}</span><span>${T('Source: git log, Jun 2024 - Sep 2026', 'Fonte: git log, jun/2024 - set/2026')}</span><button type="button" class="tm-sd" title="self_destruct.exe">☢ ${T('Self-destruct', 'Autodestruição')}</button></div>
   </div>`;
   const pane = body.querySelector('.tm-pane');
   const show = (k) => {
@@ -178,6 +178,7 @@ export function taskmgr(body, ctx) {
     body.querySelectorAll('.tm-tabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === k));
   };
   body.querySelector('.tm-tabs').addEventListener('click', (e) => { const b = e.target.closest('[data-tab]'); if (b) show(b.dataset.tab); });
+  body.querySelector('.tm-sd').addEventListener('click', () => dispatchEvent(new CustomEvent('cv-selfdestruct')));
   ctx.onArg = (k) => show(Object.hasOwn(panes, k ?? '') ? k : 'perf');
   show(Object.hasOwn(panes, ctx.arg ?? '') ? ctx.arg : 'perf');
 }
