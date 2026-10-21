@@ -11,7 +11,7 @@ import avatarUrl from './assets/avatar.webp';
 import { icon } from './pixels.js';
 import { T, LANG, setLang } from './i18n.js';
 import { PROFILE, ABOUT } from './data.js';
-import { loadSteam, steamList, steamTitle, steamFoot } from './steam.js';
+import { loadSteam, steamList, steamTitle, steamFoot, linuxShare } from './steam.js';
 
 const EMBED = new URLSearchParams(location.search).has('embed');
 // Rascunhos (draft: true) só aparecem no `npm run dev`
@@ -316,9 +316,8 @@ loadSteam().then((d) => {
   const box = document.getElementById('bp-steam');
   const recent = d.games.length > 0;
   if (!recent) box.querySelector('.box-h').textContent = `🎮 ${T('Most played', 'Mais jogados')}`;
-  const p = d.platforms;
-  const linuxPct = p && p.linux + p.windows + p.mac ? Math.round((p.linux / (p.linux + p.windows + p.mac)) * 100) : null;
-  const extra = [d.level != null && `${T('Level', 'Nível')} ${d.level}`, d.owned && `${d.owned} ${T('games', 'jogos')}`, linuxPct != null && `${linuxPct}% ${T('of hours on Linux', 'das horas no Linux')}`].filter(Boolean).join(' · ');
+  const linuxPct = linuxShare(d.platforms);
+  const extra = [d.level != null && `${T('Level', 'Nível')} ${d.level}`, d.owned && `${d.owned} ${T('games', 'jogos')}`, linuxPct != null && `${linuxPct}% ${T('of hours on Linux (Deck included)', 'das horas no Linux (Deck incluso)')}`].filter(Boolean).join(' · ');
   box.querySelector('.box-b').innerHTML = `${steamList(recent ? d : { games: d.top.slice(0, 3) })}${extra ? `<small class="st-foot">${extra}</small><br>` : ''}<small class="st-foot">${steamFoot(d)}</small>`;
   box.hidden = false;
 });

@@ -831,3 +831,4 @@ body.lux #bg { filter: brightness(1.35) saturate(1.1); }
 .sx-note { display: block; margin-top: 3px; color: #a0aa95; font-size: 10px; }
 .sx-stats { display: grid; grid-template-columns: repeat(4, 1fr); }
 @media (max-width: 600px) { .sx-stats { grid-template-columns: repeat(2, 1fr); } }
+.sx-date { display: inline-block; margin: 3px 0 0 8px; font-size: 10px; color: #a0aa95; }
