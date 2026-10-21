@@ -721,7 +721,7 @@ function cmd(body, ctx) {
   };
   Object.assign(cmds, {
     clear: cmds.cls, dir: cmds.ls, projetos: cmds.projects, contato: cmds.contact, jogos: cmds.games,
-    paper: cmds.papers, canoa: cmds.canoe, mspaint: () => ctx.open('paint'), 'desk.cpl': () => ctx.open('personalize'), wallpaper: () => ctx.open('personalize'), scrnsave: () => ctx.open('personalize', { arg: 'pz-ss' }), lanhouse: () => ctx.open('lanhouse'), lan: () => ctx.open('lanhouse'), 'mspaint.exe': () => ctx.open('paint'), 'paint.exe': () => ctx.open('paint'), blog: () => ctx.open('blog'), 'turtle.py': () => cmds.python('turtle'), turtle: () => cmds.python('turtle'),
+    paper: cmds.papers, canoa: cmds.canoe, mspaint: () => ctx.open('paint'), 'desk.cpl': () => ctx.open('personalize'), wallpaper: () => ctx.open('personalize'), scrnsave: () => ctx.open('personalize', { arg: 'pz-ss' }), lanhouse: () => ctx.open('lanhouse'), steam: () => ctx.open('steam'), lan: () => ctx.open('lanhouse'), 'mspaint.exe': () => ctx.open('paint'), 'paint.exe': () => ctx.open('paint'), blog: () => ctx.open('blog'), 'turtle.py': () => cmds.python('turtle'), turtle: () => cmds.python('turtle'),
   });
   print(T('DemOS 7 [version 7.9.2026]\n(c) Fábio Demo da Rosa. Type "help" to start.\n', 'DemOS 7 [versão 7.9.2026]\n(c) Fábio Demo da Rosa. Digite "help" para começar.\n'));
   input.addEventListener('keydown', (e) => {
@@ -924,6 +924,7 @@ export const APPS = {
   figs: { title: T('Windows Photo Viewer', 'Visualizador de Fotos'), label: T('Thesis figures', 'Figuras da tese'), icon: 'photo', w: 820, h: 640, render: figs },
   taskmgr: { title: T('Task Manager', 'Gerenciador de Tarefas'), label: T('Task Manager', 'Ger. de Tarefas'), icon: 'taskmgr', w: 760, h: 600, render: lazy(() => import('./taskmgr.js'), 'taskmgr') },
   personalize: { title: T('Personalization', 'Personalização'), label: T('Personalize', 'Personalizar'), icon: 'photo', w: 780, h: 600, render: lazy(() => import('./personalize.js'), 'personalize') },
+  steam: { title: 'Steam', label: 'Steam', icon: 'gamepad', w: 680, h: 600, render: lazy(() => import('./steam.js'), 'steamApp') },
   lanhouse: { title: T('LAN House', 'Lan House'), label: 'Lan House', icon: 'folder+game', w: 640, h: 520, render: lazy(() => import('./lanhouse.js'), 'lanhouse') },
   blog: { title: T('Blog - fabiodemo.blog', 'Blog - fabiodemo.blog'), label: 'Blog', icon: 'doc+cone', w: 940, h: 660, render: blog },
   paint: { title: T('untitled - Paint', 'sem título - Paint'), label: 'Paint', icon: 'paint', w: 800, h: 600, render: lazy(() => import('./paint.js'), 'paint') },

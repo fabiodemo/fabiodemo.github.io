@@ -484,6 +484,25 @@ S.worker = [
   '................',
 ];
 
+S.gamepad = [
+  '................',
+  '................',
+  '................',
+  '...kkkk..kkkk...',
+  '..kGGGGkkGGGGk..',
+  '.kGgggggggggGGk.',
+  '.kGgkgggggrgGGk.',
+  'kGgkkkgggrgbgGGk',
+  'kGggkggggynggGGk',
+  'kGgggggggggyggGk',
+  'kGggggkkkkgggGGk',
+  'kGgggk....kgggGk',
+  '.kGGk......kGGk.',
+  '..kk........kk..',
+  '................',
+  '................',
+];
+
 // Badges 8x8 para pastas e para o Gerenciador de Dispositivos
 const B = {
   db: ['.kkkkkk.', 'kcbbbbck', 'kkccccKk', 'kbbbbbbk', 'kkbbbbkk', 'kbbbbbbk', 'kkbbbbkk', '.kkkkkk.'],

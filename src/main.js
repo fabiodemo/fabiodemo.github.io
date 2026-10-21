@@ -141,7 +141,7 @@ if (skipBoot || location.hash === '#skip') {
 $('#login-tile').addEventListener('click', login);
 
 /* ------------------------------------------------------------- desktop */
-const DESKTOP = ['sobre', 'leiame', 'forum', 'blog', 'stack', 'projetos', 'turtle', 'figs', 'taskmgr', 'skills', 'certs', 'cmd', 'jogos', 'lanhouse', 'paint', 'guestbook', 'contato', 'lixeira'];
+const DESKTOP = ['sobre', 'leiame', 'forum', 'blog', 'stack', 'projetos', 'turtle', 'figs', 'taskmgr', 'skills', 'certs', 'cmd', 'jogos', 'lanhouse', 'steam', 'paint', 'guestbook', 'contato', 'lixeira'];
 
 function buildDesktop() {
   const wrap = $('#icons');
@@ -217,7 +217,10 @@ function buildGadget() {
     if (!d) return;
     const s = document.createElement('div');
     s.className = 'gadget gd-steam';
-    s.innerHTML = `<div class="gd-h">🎮 ${steamTitle()}</div>${steamList(d)}<div class="gd-f">${steamFoot(d)}</div>`;
+    const recent = d.games.length > 0;
+    s.innerHTML = `<div class="gd-h">🎮 ${recent ? steamTitle() : T('Most played', 'Mais jogados')}</div>${steamList(recent ? d : { games: d.top.slice(0, 3) })}<div class="gd-f">${steamFoot(d)}</div>`;
+    s.title = T('Open Steam', 'Abrir Steam');
+    s.addEventListener('click', () => openApp('steam'));
     s.style.top = `${g.offsetTop + g.offsetHeight + 12}px`;
     g.after(s);
   }));

@@ -58,8 +58,8 @@ export const EXPERIENCE = [
         'Redesenhou o pipeline core de portfólio com AWS DMS e fila de processamento D-1: PortfolioReturns diário de 12-19h para ≤3h, Positions de 10-12h para 1-2h, e cargas semanais viraram diárias.'),
       T('Led the ingestion re-architecture for the AWS → OCI migration (OCI Data Integration) with zero pipeline downtime; Core pipelines went from 5-7h to ~1h45 with 40 tables moved.',
         'Liderou a re-arquitetura de ingestão na migração AWS → OCI (OCI Data Integration) sem downtime de pipeline; pipelines Core de 5-7h para ~1h45 e 40 tabelas migradas.'),
-      T('Ran the FinOps work behind an AWS bill that went from ~US$7k to ~US$3k a month (estimated US$2-4k/mo saved): broke up heavy pipelines on a DMS + single-node standard (Fees: -80% AWS, -62% Databricks), moved 9 DynamoDB tables to on-demand (US$105 → ~US$5/mo), traced and stopped a data-sharing egress spike, and reviewed the storage cleanup (Glacier tiering, unused buckets).',
-        'Tocou o FinOps por trás de uma fatura AWS que caiu de ~US$7k para ~US$3k por mês (economia estimada de US$2-4k/mês): quebrou pipelines pesados num padrão DMS + single node (Fees: -80% AWS, -62% Databricks), passou 9 tabelas DynamoDB para on-demand (US$105 → ~US$5/mês), rastreou e cortou um pico de egress de data sharing, e revisou a limpeza de storage (Glacier, buckets sem uso).'),
+      T('Ran the FinOps work behind an AWS bill that went from ~US$7k to ~US$3k a month (estimated US$2-4k/mo saved): broke up heavy pipelines on a DMS + single-node or serverless standard (Fees and Adroit: -78.5% in AWS + Databricks, about US$1.9k a year), moved 9 DynamoDB tables to on-demand (US$105 → ~US$5/mo), traced and stopped a data-sharing egress spike, and reviewed the storage cleanup (Glacier tiering, unused buckets).',
+        'Tocou o FinOps por trás de uma fatura AWS que caiu de ~US$7k para ~US$3k por mês (economia estimada de US$2-4k/mês): quebrou pipelines pesados num padrão DMS + single node ou serverless (Fees e Adroit: -78,5% em AWS + Databricks, cerca de US$1,9k por ano), passou 9 tabelas DynamoDB para on-demand (US$105 → ~US$5/mês), rastreou e cortou um pico de egress de data sharing, e revisou a limpeza de storage (Glacier, buckets sem uso).'),
       T('Moved pipelines and users off the legacy Datalake to Delta Lake + Unity Catalog (a UCX assessment found 9,574 legacy table uses) and shut the old workspace down in Jun 2026 with a Terraform backup.',
         'Migrou pipelines e usuários do Datalake legado para Delta Lake + Unity Catalog (assessment UCX com 9.574 usos de tabelas legadas) e desligou o workspace antigo em jun/2026 com backup em Terraform.'),
       T('Built the trading desks\' near-real-time cash-management feed (Projeto Ganesha): 6 sources (Sinacor, B3, TED/PIX, fixed income, funds, internal API) refreshed every 5 minutes behind a monitoring dashboard.',
@@ -445,8 +445,8 @@ export const FEATURED = [
     t: 'FinOps',
     big: T('~US$7k → ~US$3k/mo', '~US$7k → ~US$3k/mês'),
     body: T(
-      'AWS bill from about US$7k to US$3k a month, an estimated US$2-4k/mo saved. My part: breaking up heavy pipelines (DMS + single node, serverless by default), DynamoDB on-demand (US$105 → ≤US$5/mo), Nelogica from US$30 to US$6/day, an egress spike stopped, per-group budgets and a cost dashboard, plus reviewing the storage cleanup (Glacier tiering and unused buckets) that the team executed.',
-      'Fatura AWS de cerca de US$7k para US$3k por mês, economia estimada de US$2-4k/mês. Minha parte: quebrar pipelines pesados (DMS + single node, serverless por padrão), DynamoDB on-demand (US$105 → ≤US$5/mês), Nelogica de US$30 para US$6/dia, um pico de egress cortado, budgets por grupo e dashboard de custo, além de revisar a limpeza de storage (Glacier e buckets sem uso) que o time executou.',
+      'AWS bill from about US$7k to US$3k a month, an estimated US$2-4k/mo saved. My part: breaking up heavy pipelines (DMS + single node, serverless by default; Fees and Adroit alone went from US$199 to US$43 a month), DynamoDB on-demand (US$105 → ≤US$5/mo), Nelogica from US$30 to US$6/day, an egress spike stopped, per-group budgets and a cost dashboard, plus reviewing the storage cleanup (Glacier tiering and unused buckets) that the team executed.',
+      'Fatura AWS de cerca de US$7k para US$3k por mês, economia estimada de US$2-4k/mês. Minha parte: quebrar pipelines pesados (DMS + single node, serverless por padrão; só Fees e Adroit foram de US$199 para US$43 por mês), DynamoDB on-demand (US$105 → ≤US$5/mês), Nelogica de US$30 para US$6/dia, um pico de egress cortado, budgets por grupo e dashboard de custo, além de revisar a limpeza de storage (Glacier e buckets sem uso) que o time executou.',
     ),
     stack: ['System tables', 'Budgets', 'Serverless', 'DynamoDB', 'Terraform'],
   },
@@ -498,7 +498,8 @@ export const TRASH = [
   { n: T('unused_buckets/', 'buckets_sem_uso/'), d: T('Moved to Glacier or deleted. Part of taking the AWS bill from ~US$7k to ~US$3k a month.', 'Foram para o Glacier ou apagados. Parte de levar a fatura AWS de ~US$7k para ~US$3k por mês.') },
   { n: 'contacts.ctt', d: T('Old contact list export. Everyone shows as Away now.', 'Lista de contatos antiga. Todo mundo aparece como Ausente agora.') },
   { n: 'GTASAsf1.b', d: T('Save at 100%. Kept only the lessons.', 'Save em 100%. Fiquei só com as lições.') },
-  { n: 'giant_fees_cluster.json', d: T('Replaced by DMS + single node: -80% AWS cost.', 'Trocado por DMS + single node: -80% no custo AWS.') },
+  { n: 'giant_fees_cluster.json', d: T('Replaced by serverless: -87% AWS cost, -75% Databricks.', 'Trocado por serverless: -87% no custo AWS, -75% no Databricks.') },
+  { n: 'adroit_recreate_II.job', d: T('Merged with 3 other jobs into one. Adroit: -76% AWS from the peak.', 'Juntado com outros 3 jobs num só. Adroit: -76% na AWS desde o pico.') },
 ];
 
 // Bloco de skills do currículo formatado (curado, para caber numa página)

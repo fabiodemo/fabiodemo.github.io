@@ -30,11 +30,12 @@ const GAINS = [
 ];
 const COSTS = [
   [T('AWS bill (team program)', 'Fatura AWS (programa do time)'), T('~US$7k → ~US$3k/mo', '~US$7k → ~US$3k/mês'), 57],
-  [T('DynamoDB (9 tables)', 'DynamoDB (9 tabelas)'), 'US$105 → ~US$5/mo', 95],
-  ['Fees · AWS', '-80%', 80],
-  ['Adroit · AWS', '-73%', 73],
-  ['Fees · Databricks', '-62%', 62],
-  ['Adroit · Databricks', '-35%', 35],
+  [T('DynamoDB (9 tables)', 'DynamoDB (9 tabelas)'), T('US$105 → ~US$5/mo', 'US$105 → ~US$5/mês'), 95],
+  ['Fees · AWS', T('US$117 → US$15/mo (-87%)', 'US$117 → US$15/mês (-87%)'), 87],
+  ['Adroit · AWS', T('-76% from peak', '-76% desde o pico'), 76],
+  ['Fees · Databricks', T('US$52 → US$13/mo (-75%)', 'US$52 → US$13/mês (-75%)'), 75],
+  ['Adroit · Databricks', T('US$11 → US$3.9/mo (-65%)', 'US$11 → US$3,9/mês (-65%)'), 65],
+  [T('Fees + Adroit, total', 'Fees + Adroit, total'), T('US$199 → US$43/mo (-78.5%)', 'US$199 → US$43/mês (-78,5%)'), 78.5],
 ];
 
 const C = { bg: '#000', grid: '#0b5d2a', g1: '#39ff5a', g2: '#ffe14a', g3: '#5fd4ff', txt: '#8dff8f', red: '#ff5a4a' };
@@ -125,7 +126,8 @@ export function taskmgr(body, ctx) {
       </table>`,
     run: `<div class="tm-box"><div class="tm-h">${T('Runtime left after each optimization', 'Runtime que sobrou depois de cada otimização')}</div>${gainRows()}</div>
       <div class="tm-box"><div class="tm-h">${T('Cost cut', 'Corte de custo')}</div>${COSTS.map(([n, v, p]) => `<div class="tm-gain"><span class="tm-gn">${n}</span><span class="tm-gbar cost"><i style="width:${p}%"></i></span><span class="tm-gv"><b>${v}</b></span></div>`).join('')}
-      <p class="tm-cap">${T('Estimated US$2-4k/mo saved: pipeline breakups and compute standards I led, plus the storage cleanup (Glacier, unused buckets) I reviewed.', 'Economia estimada de US$2-4k/mês: quebra de pipelines e padrões de compute que liderei, mais a limpeza de storage (Glacier, buckets sem uso) que revisei.')}</p></div>`,
+      <p class="tm-cap">${T('Estimated US$2-4k/mo saved: pipeline breakups and compute standards I led, plus the storage cleanup (Glacier, unused buckets) I reviewed.', 'Economia estimada de US$2-4k/mês: quebra de pipelines e padrões de compute que liderei, mais a limpeza de storage (Glacier, buckets sem uso) que revisei.')}</p>
+      <p class="tm-cap">${T('Fees and Adroit in production: average of Nov 2025-Jan 2026 vs after the refactor (Fees on serverless, Adroit from 4 jobs to 1), same runs per day. About US$1,880 a year less; Databricks at list price, AWS is EC2 + EBS.', 'Fees e Adroit em produção: média de nov/2025-jan/2026 contra depois da refatoração (Fees em serverless, Adroit de 4 jobs para 1), com as mesmas execuções por dia. Cerca de US$1.880 por ano a menos; Databricks em preço de tabela, AWS é EC2 + EBS.')}</p></div>`,
     gh: `<div class="tm-box">${githubCharts()}</div>`,
   };
   body.innerHTML = `
