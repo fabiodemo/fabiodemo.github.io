@@ -889,3 +889,6 @@ body.no-aero .marquee span, body.no-aero .gd-bar i { animation: none; }
 .gp-menu.up { top: auto; bottom: calc(100% - 26px); }
 .lh-kind.k-plugin { background: #e8e8e8; border: 1px solid #aaa; font-size: 18px; }
 .lh-btns [hidden] { display: none; }
+/* valores do Task Manager: monoespaçada nítida no lugar da fonte pixelada (mais legível) */
+.tm-gv { font: 12px/1.3 ui-monospace, 'Cascadia Mono', Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace; font-variant-numeric: tabular-nums; letter-spacing: -.2px; color: #1b1b1b; }
+.tm-gv b { font-weight: 600; }
