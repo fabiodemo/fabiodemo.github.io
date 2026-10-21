@@ -170,6 +170,10 @@ function login() {
         setTimeout(() => openApp('forum', { x: Math.max(10, fx), y: 40, quiet: true }), 350);
       }
       const how = isMobile() || coarse ? T('Tap the icons to open them.', 'Toque nos ícones para abrir.') : T('Double-click the icons to open them.', 'Duplo clique nos ícones para abrir.');
+      // primeira visita: o Disquete oferece o guia (uma vez por navegador; fora dos testes automáticos)
+      if (!location.hash.includes('simtest') || location.hash.includes('guide')) {
+        setTimeout(() => { if (!sdRunning) import('./guide.js').then((m) => m.offerGuide((id) => openApp(id))); }, 2600);
+      }
       setTimeout(() => balloon('DemOS 7', `${how} ${T('The full CV is in the Forum. Try turtle.py, the Games folder, and the EN/PT button below.', 'O CV completo está no Fórum. Teste o turtle.py, a pasta Jogos e o botão EN/PT aqui embaixo.')}`), 1200);
     }, 450);
   }, 900);
@@ -190,7 +194,7 @@ if (skipBoot || location.hash === '#skip') {
 $('#login-tile').addEventListener('click', login);
 
 /* ------------------------------------------------------------- desktop */
-const DESKTOP = ['sobre', 'leiame', 'forum', 'blog', 'stack', 'projetos', 'turtle', 'figs', 'taskmgr', 'skills', 'certs', 'cmd', 'jogos', 'lanhouse', 'steam', 'paint', 'guestbook', 'contato', 'lixeira'];
+const DESKTOP = ['sobre', 'guia', 'leiame', 'forum', 'blog', 'stack', 'projetos', 'turtle', 'figs', 'taskmgr', 'skills', 'certs', 'cmd', 'jogos', 'lanhouse', 'steam', 'paint', 'guestbook', 'contato', 'lixeira'];
 
 function buildDesktop() {
   const wrap = $('#icons');
@@ -614,7 +618,7 @@ function balloon(title, text) {
 
 /* ---------------------------------------------------------- menu iniciar */
 const sm = $('#startmenu');
-const LEFT = ['forum', 'leiame', 'blog', 'projetos', 'turtle', 'taskmgr', 'cmd', 'jogos', 'paint'];
+const LEFT = ['guia', 'forum', 'leiame', 'blog', 'projetos', 'turtle', 'taskmgr', 'cmd', 'jogos', 'paint'];
 const RIGHT = [
   ['sobre', PROFILE.short], ['leiame', T('Documents', 'Documentos')], ['projetos', T('Projects', 'Projetos')], ['sobre', T('Computer', 'Computador')],
   ['skills', T('Control Panel', 'Painel de Controle')], ['personalize', T('Personalize', 'Personalizar')], ['certs', T('Certificates', 'Certificados')], ['contato', T('Contact', 'Contato')], ['lixeira', T('Recycle Bin', 'Lixeira')],

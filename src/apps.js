@@ -633,6 +633,7 @@ function cmd(body, ctx) {
   let hp = 0;
   const cmds = {
     help: () => print(T(`Available commands:
+  guide           site guide, references and secrets
   whoami          who I am
   xp              work experience
   stats           Warren numbers
@@ -650,6 +651,7 @@ function cmd(body, ctx) {
   lang pt         muda para português (lang auto: segue o navegador)
   neofetch        system info
   cls             clear the screen`, `Comandos disponíveis:
+  guia            guia do site, referências e segredos
   whoami          quem sou eu
   xp              experiência profissional
   stats           números da Warren
@@ -676,7 +678,7 @@ function cmd(body, ctx) {
     certs: () => CERTS.forEach((c) => print(`  ${c.star ? '*' : ' '} ${c.d.padEnd(9)} ${c.by.padEnd(26)} ${c.n}`)),
     contact: () => print([`GitHub   ${PROFILE.github}`, PROFILE.linkedin && `LinkedIn ${PROFILE.linkedin}`, PROFILE.email && `E-mail   ${PROFILE.email}`].filter(Boolean).join('\n')),
     open: (a) => {
-      const alias = { projects: 'projetos', trash: 'lixeira', games: 'jogos', readme: 'leiame', about: 'sobre', badges: 'stack', habbo: 'stack', mspaint: 'paint', 'paint.exe': 'paint', 'mspaint.exe': 'paint', contact: 'contato', tictactoe: 'velha', minesweeper: 'minas' };
+      const alias = { projects: 'projetos', trash: 'lixeira', games: 'jogos', readme: 'leiame', about: 'sobre', badges: 'stack', habbo: 'stack', guide: 'guia', mspaint: 'paint', 'paint.exe': 'paint', 'mspaint.exe': 'paint', contact: 'contato', tictactoe: 'velha', minesweeper: 'minas' };
       if (a) ctx.open(Object.hasOwn(alias, a) ? alias[a] : a); else print(T('usage: open <app>', 'uso: open <app>'));
     },
     games: () => { print('  tetris  velha  minas  snake  flappy'); print(T('  e.g.: open tetris', '  ex.: open tetris')); },
@@ -726,7 +728,7 @@ function cmd(body, ctx) {
   };
   Object.assign(cmds, {
     clear: cmds.cls, dir: cmds.ls, projetos: cmds.projects, contato: cmds.contact, jogos: cmds.games,
-    paper: cmds.papers, canoa: cmds.canoe, mspaint: () => ctx.open('paint'), 'desk.cpl': () => ctx.open('personalize'), wallpaper: () => ctx.open('personalize'), scrnsave: () => ctx.open('personalize', { arg: 'pz-ss' }), lanhouse: () => ctx.open('lanhouse'), steam: () => ctx.open('steam'), lan: () => ctx.open('lanhouse'), 'mspaint.exe': () => ctx.open('paint'), 'paint.exe': () => ctx.open('paint'), blog: () => ctx.open('blog'), 'turtle.py': () => cmds.python('turtle'), turtle: () => cmds.python('turtle'),
+    paper: cmds.papers, canoa: cmds.canoe, mspaint: () => ctx.open('paint'), 'desk.cpl': () => ctx.open('personalize'), wallpaper: () => ctx.open('personalize'), scrnsave: () => ctx.open('personalize', { arg: 'pz-ss' }), lanhouse: () => ctx.open('lanhouse'), guide: () => ctx.open('guia'), guia: () => ctx.open('guia'), steam: () => ctx.open('steam'), lan: () => ctx.open('lanhouse'), 'mspaint.exe': () => ctx.open('paint'), 'paint.exe': () => ctx.open('paint'), blog: () => ctx.open('blog'), 'turtle.py': () => cmds.python('turtle'), turtle: () => cmds.python('turtle'),
   });
   print(T('DemOS 7 [version 7.9.2026]\n(c) Fábio Demo da Rosa. Type "help" to start.\n', 'DemOS 7 [versão 7.9.2026]\n(c) Fábio Demo da Rosa. Digite "help" para começar.\n'));
   input.addEventListener('keydown', (e) => {
@@ -928,6 +930,7 @@ export const APPS = {
   projetos: { title: 'fabiodemo - GitHub', label: T('Projects', 'Projetos'), icon: 'folder+net', w: 820, h: 560, render: projetos },
   turtle: { title: T('turtle.py - TurtleBot3 simulation', 'turtle.py - simulação do TurtleBot3'), label: 'turtle.py', icon: 'turtlebot', w: 760, h: 620, render: lazy(() => import('./turtle.js'), 'turtle') },
   figs: { title: T('Windows Photo Viewer', 'Visualizador de Fotos'), label: T('Thesis figures', 'Figuras da tese'), icon: 'photo', w: 820, h: 640, render: figs },
+  guia: { title: T('DemOS Guide', 'Guia do DemOS'), label: T('Guide', 'Guia'), icon: 'floppypal', w: 820, h: 600, render: lazy(() => import('./guide.js'), 'guide') },
   taskmgr: { title: T('Task Manager', 'Gerenciador de Tarefas'), label: T('Task Manager', 'Ger. de Tarefas'), icon: 'taskmgr', w: 760, h: 600, render: lazy(() => import('./taskmgr.js'), 'taskmgr') },
   personalize: { title: T('Personalization', 'Personalização'), label: T('Personalize', 'Personalizar'), icon: 'photo', w: 780, h: 600, render: lazy(() => import('./personalize.js'), 'personalize') },
   steam: { title: 'Steam', label: 'Steam', icon: 'gamepad', w: 680, h: 600, render: lazy(() => import('./steam.js'), 'steamApp') },

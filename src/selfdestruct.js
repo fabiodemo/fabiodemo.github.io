@@ -4,11 +4,9 @@
 // Tudo é encenação: nada é apagado de verdade, e "Reiniciar" só recarrega o site.
 import { T } from './i18n.js';
 import { sfx } from './sfx.js';
-import { icon } from './pixels.js';
+import { createPal, wait, narrow } from './assistant.js';
 
-const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const calmMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const narrow = () => innerWidth < 700;
 const nf = (n) => n.toLocaleString(T('en-US', 'pt-BR'));
 
 export async function selfDestruct({ closeAll, cancel, freeze, ach }) {
@@ -17,65 +15,22 @@ export async function selfDestruct({ closeAll, cancel, freeze, ach }) {
   document.body.appendChild(root);
 
   /* ------------------------------------------------ o assistente */
-  const pal = document.createElement('div');
-  pal.className = 'sd-pal';
-  pal.innerHTML = `<img src="${icon('floppypal', 5)}" alt="${T('Floppy, the DemOS assistant', 'Disquete, o assistente do DemOS')}">`;
-  root.appendChild(pal);
-  const img = pal.querySelector('img');
-
-  const place = (x, y, ms = 0, ease = 'cubic-bezier(.3,.7,.3,1)') => {
-    pal.style.transition = ms ? `transform ${ms}ms ${ease}` : 'none';
-    pal.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
-    return wait(ms);
-  };
-  const home = () => (narrow() ? [innerWidth / 2 - 40, innerHeight * 0.6] : [Math.min(innerWidth * 0.66, innerWidth - 150), innerHeight * 0.42]);
-
-  const say = async (text, ms) => {
-    const b = document.createElement('div');
-    b.className = 'sd-say';
-    b.textContent = text;
-    pal.appendChild(b);
-    await wait(ms);
-    b.remove();
-  };
-
-  const ask = (text, yes, no, big = false) => new Promise((resolve) => {
-    const d = document.createElement('div');
-    d.className = 'sd-dlg';
-    d.setAttribute('role', 'alertdialog');
-    d.innerHTML = `<div class="sd-dlg-t">${T('DemOS Assistant', 'Assistente do DemOS')}</div>
-      <div class="sd-dlg-b${big ? ' big' : ''}"><i>⚠</i><p></p></div>
-      <div class="sd-dlg-btns"><button type="button" class="btn7" data-a="yes"></button><button type="button" class="btn7" data-a="no"></button></div>`;
-    d.querySelector('p').textContent = text;
-    d.querySelector('[data-a=yes]').textContent = yes;
-    d.querySelector('[data-a=no]').textContent = no;
-    pal.appendChild(d);
-    const done = (v) => { removeEventListener('keydown', key, true); d.remove(); resolve(v); };
-    const key = (e) => { if (e.key === 'Escape') { e.stopPropagation(); done(false); } };
-    addEventListener('keydown', key, true);
-    d.addEventListener('click', (e) => { const b = e.target.closest('[data-a]'); if (b) { sfx('click'); done(b.dataset.a === 'yes'); } });
-    d.querySelector('[data-a=no]').focus();
-  });
-
-  const shakePal = () => img.animate([0, -7, 6, -5, 4, -2, 0].map((x) => ({ transform: `translateX(${x}px)` })), { duration: 450 });
-
-  // entra flutuando pelo canto
-  place(innerWidth + 40, innerHeight * 0.7);
-  pal.getBoundingClientRect();
-  sfx('restore');
-  await place(...home(), 1100);
+  const P = createPal(root);
+  const pal = P.el;
+  const { img, place, say, ask } = P;
+  await P.enter();
   await say(T("Hi! I'm Floppy, your DemOS assistant.", 'Oi! Eu sou o Disquete, seu assistente do DemOS.'), 1700);
 
   sfx('ding');
   let ok = await ask(T('It looks like you are trying to destroy the system. Are you sure you want to do this?', 'Parece que você está tentando destruir o sistema. Tem certeza que deseja fazer isso?'), T('Yes', 'Sim'), T('No', 'Não'));
   if (ok) {
     sfx('error');
-    shakePal();
-    ok = await ask(T('ARE YOU ABSOLUTELY SURE?', 'TEM CERTEZA ABSOLUTA?'), T('YES', 'SIM'), T('No, get me out of here', 'Não, me tira daqui'), true);
+    P.shake();
+    ok = await ask(T('ARE YOU ABSOLUTELY SURE?', 'TEM CERTEZA ABSOLUTA?'), T('YES', 'SIM'), T('No, get me out of here', 'Não, me tira daqui'), { big: true });
   }
   if (!ok) {
     await say(T('Phew. Good call.', 'Ufa. Boa escolha.'), 1500);
-    await place(innerWidth + 60, innerHeight * 0.3, 800, 'ease-in');
+    await P.leave();
     root.remove();
     cancel();
     return;
