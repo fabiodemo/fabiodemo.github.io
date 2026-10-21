@@ -139,6 +139,38 @@ export function turtle(body, ctx) {
     <div class="tt-note">${T('Click the arena to set a new goal. Demo with a reactive controller fed by the same inputs as my agents (LIDAR + goal distance/angle). The trained SAC-XH policy and Gazebo stages live in', 'Clique na arena para escolher um novo objetivo. Demo com controlador reativo usando as mesmas entradas dos meus agentes (LIDAR + distância/ângulo até o alvo). A política SAC-XH treinada e os estágios do Gazebo estão em')} <a href="https://github.com/fabiodemo/turtlebot-sac-x-hybrid" target="_blank" rel="noopener">turtlebot-sac-x-hybrid</a>.</div>
   </div>`;
 
+  // janela de apresentação: o que é a simulação e para onde ir depois
+  let intro = (() => { try { return localStorage.getItem('cv.turtleIntro') !== '0'; } catch { return true; } })();
+  if (intro) {
+    const ov = document.createElement('div');
+    ov.className = 'tt-intro';
+    ov.innerHTML = `
+      <div class="tt-dlg" role="dialog" aria-modal="true" aria-labelledby="tt-dlg-t">
+        <div class="tt-dlg-h" id="tt-dlg-t">${T('turtle.py · my thesis, in miniature', 'turtle.py · minha tese em miniatura')}</div>
+        <div class="tt-dlg-b">
+          <p>${T('This simulation shows the topic of my master\'s thesis: <b>autonomous navigation of mobile robots with Deep Reinforcement Learning</b>. In the research, a TurtleBot3 trains in <b>Gazebo + ROS 2</b> and learns on its own, by trial and error, to reach the goal without crashing, using only its LIDAR and the position of the target. That work produced SAC-XH, published in the Journal of Intelligent &amp; Fuzzy Systems.', 'Esta simulação mostra o tema do meu mestrado: <b>navegação autônoma de robôs móveis com Deep Reinforcement Learning</b>. Na pesquisa, um TurtleBot3 treina no <b>Gazebo + ROS 2</b> e aprende sozinho, por tentativa e erro, a chegar ao objetivo sem bater, usando só o LIDAR e a posição do alvo. Daí saiu o SAC-XH, publicado no Journal of Intelligent &amp; Fuzzy Systems.')}</p>
+          <p>${T('Here in the browser runs a light version with the same 6 stages and the same agent inputs (LIDAR + distance and angle to the goal). Click the arena to move the goal.', 'Aqui no navegador roda uma versão leve, com os mesmos 6 estágios e as mesmas entradas do agente (LIDAR + distância e ângulo até o alvo). Clique na arena para mudar o objetivo.')}</p>
+        </div>
+        <div class="tt-dlg-f">
+          <label class="tt-dlg-chk"><input type="checkbox" data-intro="never"> ${T('Do not show again', 'Não mostrar de novo')}</label>
+          <button type="button" class="btn7" data-intro="pesquisa">${T('Research and papers', 'Pesquisa e artigos')}</button>
+          <button type="button" class="btn7" data-intro="formacao">${T('Education', 'Formação acadêmica')}</button>
+          <button type="button" class="btn7" data-intro="academicos">${T('Academic projects', 'Projetos acadêmicos')}</button>
+          <button type="button" class="btn7 tt-go" data-intro="go">▶ ${T('Continue to the simulation', 'Continuar para a simulação')}</button>
+        </div>
+      </div>`;
+    body.querySelector('.turtle').appendChild(ov);
+    ov.addEventListener('click', (e) => {
+      const a = e.target.closest('button[data-intro]')?.dataset.intro;
+      if (!a) return;
+      if (ov.querySelector('[data-intro=never]').checked) { try { localStorage.setItem('cv.turtleIntro', '0'); } catch { /* ok */ } }
+      ov.remove();
+      intro = false;
+      if (a !== 'go') ctx.open('forum', { arg: a });
+    });
+    setTimeout(() => ov.querySelector('.tt-go')?.focus(), 60);
+  }
+
   const cv = body.querySelector('canvas');
   const g = cv.getContext('2d');
   const stageEl = body.querySelector('.tt-stage');
@@ -378,7 +410,7 @@ export function turtle(body, ctx) {
     if (!ctx.isVisible() || (!ctx.isActive() && now - last < 33)) { raf = requestAnimationFrame(frame); return; }
     const dt = Math.min(0.1, (now - last) / 1000);
     last = now;
-    if (!paused && !document.hidden) {
+    if (!paused && !intro && !document.hidden) {
       acc += dt * +get('speed').value;
       let n = 0;
       while (acc >= DT && n++ < 60) { step(); acc -= DT; }

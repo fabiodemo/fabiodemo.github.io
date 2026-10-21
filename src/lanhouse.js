@@ -59,7 +59,7 @@ export function lanhouse(body, ctx) {
       <div class="lh-box" role="alertdialog" aria-modal="true">
         <div class="lh-title"></div>
         <div class="lh-body"><i class="lh-kind"></i><p></p></div>
-        <div class="lh-btns"><button type="button" class="btn7 lh-go" hidden></button><button type="button" class="btn7 lh-ok">OK</button></div>
+        <div class="lh-btns"><button type="button" class="btn7 lh-again" hidden>${T('Nudge again', 'Chamar de novo')}</button><button type="button" class="btn7 lh-go" hidden></button><button type="button" class="btn7 lh-ok">OK</button></div>
       </div>
     </div>
   </div>`;
@@ -81,10 +81,15 @@ export function lanhouse(body, ctx) {
     dlg.hidden = false;
     sfx({ error: 'error', warn: 'ding', info: 'notify', nudge: 'nudge', plugin: 'ding' }[kind] || 'notify');
     body.querySelector('.lh-ok').focus();
-    if (kind === 'nudge') {
-      const win = body.closest('.win');
-      win?.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-8px,3px)' }, { transform: 'translate(8px,-3px)' }, { transform: 'translate(-6px,-2px)' }, { transform: 'translate(6px,2px)' }, { transform: 'translate(0,0)' }], { duration: 420 });
-    }
+    body.querySelector('.lh-again').hidden = kind !== 'nudge';
+    if (kind === 'nudge') shake();
+  }
+
+  // treme-treme do MSN: a janela chacoalha (e a tela inteira junto, de leve)
+  function shake() {
+    const win = body.closest('.win');
+    win?.animate([0, -9, 8, -7, 6, -4, 3, 0].map((x, k) => ({ transform: `translate(${x}px, ${k % 2 ? 3 : -3}px)` })), { duration: 500 });
+    document.querySelector('#desktop')?.animate([0, -3, 3, -2, 2, 0].map((x) => ({ transform: `translate(${x}px, 0)` })), { duration: 420 });
   }
 
   const run = (i) => {
@@ -109,6 +114,7 @@ export function lanhouse(body, ctx) {
       return;
     }
     if (e.target.closest('.lh-ok')) { dlg.hidden = true; return; }
+    if (e.target.closest('.lh-again')) { sfx('nudge'); shake(); return; }
     if (e.target.closest('.lh-go')) { dlg.hidden = true; if (pendingApp) ctx.open(pendingApp); }
   });
   body.addEventListener('keydown', (e) => {
