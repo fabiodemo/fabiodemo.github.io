@@ -910,3 +910,7 @@ body.no-aero .marquee span, body.no-aero .gd-bar i { animation: none; }
 .tt-dlg { color: #1b1b1b; }
 .lh-btns .btn7 { white-space: nowrap; }
 .tt-noai { padding: 6px 8px; background: #fff8d6; border: 1px solid #e8d48a; border-radius: 3px; font-size: 12.5px; }
+/* coluna de gadgets padronizada: mesma largura, mesmo respiro, mesmo título; o player não herda o deslocamento antigo */
+#gadgets .gadget { right: auto; top: auto; left: auto; padding: 12px 12px 10px; }
+#gadgets .gd-player .gp-top { font: 16px var(--pix); color: #bfe6ff; margin-bottom: 8px; }
+#gadgets .gd-steam .gd-h, #gadgets .gadget > .gd-h { margin-bottom: 8px; }
