@@ -907,3 +907,4 @@ body.no-aero .marquee span, body.no-aero .gd-bar i { animation: none; }
 .tt-go { font-weight: 700; }
 .tt-dlg { color: #1b1b1b; }
 .lh-btns .btn7 { white-space: nowrap; }
+.tt-noai { padding: 6px 8px; background: #fff8d6; border: 1px solid #e8d48a; border-radius: 3px; font-size: 12.5px; }
