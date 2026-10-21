@@ -690,7 +690,7 @@ function jogos(body, ctx) {
         </button>`).join('')}
         <button class="gx-item gx-lan" data-game="lanhouse" type="button">
           <img src="${icon('folder+game', 3)}" alt="">
-          <span class="gx-txt"><b>${T('LAN House (2000s classics)', 'Lan House (clássicos dos anos 2000)')}</b><span>${T('Tibia, Mu Online, CS 1.6, Grand Chase, AoE II, GTA SA, Habbo, MSN, Orkut, Minecraft, Click Jogos, Bacaninha, Miniclip, PolyStation and PS2. R$1.50 per hour.', 'Tibia, Mu Online, CS 1.6, Grand Chase, AoE II, GTA SA, Habbo, MSN, Orkut, Minecraft, Click Jogos, Bacaninha, Miniclip, PolyStation e PS2. R$1,50 a hora.')}</span></span>
+          <span class="gx-txt"><b>${T('LAN House (2000s classics)', 'Lan House (clássicos dos anos 2000)')}</b><span>${T('Tibia, Mu Online, CS 1.6, Grand Chase, AoE II, GTA SA, Habbo, MSN, Orkut, Minecraft, Click Jogos, Bacaninha, Miniclip, Baixaki, Flash Player, Nero, Ares, PolyStation and PS2. R$1.50 per hour.', 'Tibia, Mu Online, CS 1.6, Grand Chase, AoE II, GTA SA, Habbo, MSN, Orkut, Minecraft, Click Jogos, Bacaninha, Miniclip, Baixaki, Flash Player, Nero, Ares, PolyStation e PS2. R$1,50 a hora.')}</span></span>
           <span class="gx-play">${T('Enter', 'Entrar')}</span>
         </button>
       </div>

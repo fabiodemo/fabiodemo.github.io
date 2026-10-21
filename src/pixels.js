@@ -519,6 +519,15 @@ S.memcard = ['................', '....kkkkkkkk....', '....kddddddk....', '....kd
 
 S.flashsite = ['................', 'kkkkkkkkkkkkkkkk', 'kBBBBBBBBBBBwrwk', 'kkkkkkkkkkkkkkkk', 'kwwwwwwwwwwwwwwk', 'kwwwwwwwwyykwwwk', 'kwwwwwwwyykwwwwk', 'kwwwwwwyykwwwwwk', 'kwwwwwyyyyyykwwk', 'kwwwwwwwwyykwwwk', 'kwwwwwwwyykwwwwk', 'kwwwwwwyykwwwwwk', 'kwwwwwykwwwwwwwk', 'kwwwwwwwwwwwwwwk', 'kkkkkkkkkkkkkkkk', '................'];
 
+// Lan House: programas e sites da época (ícones genéricos, nada de logo)
+S.download = ['................', '......kkkk......', '......knnk......', '......knnk......', '......knnk......', '...kkkknnkkkk...', '...knnnnnnnnk...', '....knnnnnnk....', '.....knnnnk.....', '......knnk......', '.kk....kk....kk.', '.kgk........kgk.', '.kgkkkkkkkkkkgk.', '.kggggggggggggk.', '.kkkkkkkkkkkkkk.', '................'];
+S.flashbolt = ['................', '..kkkkkkkkkkkk..', '.krrrrrrrrrrrrk.', '.krrrrrrrwwwrrk.', '.krrrrrrwwwrrrk.', '.krrrrrwwwrrrrk.', '.krrrrwwwrrrrrk.', '.krrrwwwwwwwrrk.', '.krrrrrrwwwrrrk.', '.krrrrrwwwrrrrk.', '.krrrrwwwrrrrrk.', '.krrrrwwrrrrrrk.', '.krrrrwrrrrrrRk.', '.kRrrrrrrrrrRRk.', '..kkkkkkkkkkkk..', '................'];
+S.burncd = ['................', '.....r...r......', '....ror.ror.r...', '...royoroyoror..', '.....kkkkkk.....', '...kkgcgcgckk...', '..kgcgcgcgcgck..', '.kcgcgcgcgcgcgk.', '.kgcgcgkkgcgcgk.', '.kcgcgkwwkgcgck.', '.kgcgckwwkcgcgk.', '.kcgcgckkcgcgck.', '..kcgcgcgcgcgk..', '...kkcgcgcgkk...', '.....kkkkkk.....', '................'];
+S.p2p = ['................', 'kkkkkk..........', 'kbbbbk..........', 'kbccbk..........', 'kbbbbk...n......', 'kkkkkk...nn.....', '..kk.nnnnnnn....', '.kkkk....nn.....', '..........kkkkkk', '...o......kbbbbk', '..oo......kbccbk', '.ooooooo..kbbbbk', '..oo......kkkkkk', '...o.........kk.', '............kkkk', '................'];
+S.joystick = ['................', '......rrr.......', '.....rrwrr......', '.....rrrrr......', '......rrr.......', '.......k........', '.......k........', '.......k........', '..kkkkkkkkkkk...', '.kddddddddddrk..', '.kdyddddddddddk.', '.kddddddddddddk.', '..kkkkkkkkkkkk..', '................', '................', '................'];
+S.arcade = ['...kkkkkkkkk....', '...kpppppppk....', '...kkkkkkkkk....', '...kKKKKKKKk....', '...kKcKKnKKk....', '...kKKKyKKKk....', '...kKKKKKKKk....', '...kkkkkkkkk....', '..kgrgggbggk....', '..kkkkkkkkkk....', '...kpppppppk....', '...kpkkkkkpk....', '...kpkyyykpk....', '...kpkkkkkpk....', '...kpppppppk....', '...kkkkkkkkk....'];
+S.coolface = ['................', '.....kkkkkk.....', '...kkyyyyyykk...', '..kyyyyyyyyyyk..', '.kyyyyyyyyyyyyk.', '.kykkkkykkkkkyk.', 'kyykKKkkkKKkkyyk', 'kyyykkyyykkyyyyk', 'kyyyyyyyyyyyyyyk', 'kyyyyyyyyyyyyyyk', 'kyykyyyyyyyykyyk', '.kyykyyyyyykyyk.', '.kyyykkkkkkyyyk.', '..kyyyyyyyyyyk..', '...kkyyyyyykk...', '.....kkkkkk.....'];
+
 // Badges 8x8 para pastas e para o Gerenciador de Dispositivos
 const B = {
   db: ['.kkkkkk.', 'kcbbbbck', 'kkccccKk', 'kbbbbbbk', 'kkbbbbkk', 'kbbbbbbk', 'kkbbbbkk', '.kkkkkk.'],

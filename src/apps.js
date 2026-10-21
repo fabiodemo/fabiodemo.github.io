@@ -931,7 +931,7 @@ export const APPS = {
   taskmgr: { title: T('Task Manager', 'Gerenciador de Tarefas'), label: T('Task Manager', 'Ger. de Tarefas'), icon: 'taskmgr', w: 760, h: 600, render: lazy(() => import('./taskmgr.js'), 'taskmgr') },
   personalize: { title: T('Personalization', 'Personalização'), label: T('Personalize', 'Personalizar'), icon: 'photo', w: 780, h: 600, render: lazy(() => import('./personalize.js'), 'personalize') },
   steam: { title: 'Steam', label: 'Steam', icon: 'gamepad', w: 680, h: 600, render: lazy(() => import('./steam.js'), 'steamApp') },
-  lanhouse: { title: T('LAN House', 'Lan House'), label: 'Lan House', icon: 'folder+game', w: 640, h: 520, render: lazy(() => import('./lanhouse.js'), 'lanhouse') },
+  lanhouse: { title: T('LAN House', 'Lan House'), label: 'Lan House', icon: 'folder+game', w: 660, h: 600, render: lazy(() => import('./lanhouse.js'), 'lanhouse') },
   blog: { title: T('Blog - fabiodemo.blog', 'Blog - fabiodemo.blog'), label: 'Blog', icon: 'doc+cone', w: 940, h: 660, render: blog },
   paint: { title: T('untitled - Paint', 'sem título - Paint'), label: 'Paint', icon: 'paint', w: 800, h: 600, render: lazy(() => import('./paint.js'), 'paint') },
   stack: { title: T('My badges - Stack', 'Meus emblemas - Stack'), label: 'Stack', icon: 'globe+code', w: 940, h: 660, render: stack },
