@@ -617,7 +617,9 @@ body.lux #bg { filter: brightness(1.35) saturate(1.1); }
 .tm-box { border: 1px solid #a0a0a0; padding: 6px 8px 8px; margin-bottom: 8px; background: #f7f7f7; }
 .tm-h { font-size: 12px; color: #1e3287; margin-bottom: 4px; }
 .tm-svg { width: 100%; height: auto; display: block; }
-.tm-svg text { font: 13px var(--mono); }
+.tm-svg text { font: 11px ui-monospace, 'Cascadia Mono', Consolas, 'DejaVu Sans Mono', monospace; font-variant-numeric: tabular-nums; }
+.tm-svg .tm-val { font-weight: 600; }
+.tm-svg .tm-ann { font-size: 11px; }
 .tm-ann { font: 12px var(--mono) !important; }
 .tm-legend { display: flex; gap: 12px; font-size: 11px; margin-top: 4px; }
 .tm-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 4px; vertical-align: -1px; border: 1px solid #000; }

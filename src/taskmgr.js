@@ -45,47 +45,70 @@ const COSTS = [
   [T('Total (AWS + Databricks)', 'Total (AWS + Databricks)'), T('US$199 → US$43/mo (-78.5%)', 'US$199 → US$43/mês (-78,5%)'), 78.5],
 ];
 
-const C = { bg: '#000', grid: '#0b5d2a', g1: '#39ff5a', g2: '#ffe14a', g3: '#5fd4ff', txt: '#8dff8f', red: '#ff5a4a' };
+const C = { bg: '#050a07', grid: '#163b24', base: '#2f6b45', g1: '#39ff5a', g2: '#ffd84a', g3: '#5fd4ff', txt: '#c9d1d9', dim: '#8b949e', red: '#ff5a4a' };
 
-function grid(w, h, step = 24) {
-  let s = '';
-  for (let x = 0; x <= w; x += step) s += `<line x1="${x}" y1="0" x2="${x}" y2="${h}"/>`;
-  for (let y = 0; y <= h; y += step) s += `<line x1="0" y1="${y}" x2="${w}" y2="${y}"/>`;
-  return `<g stroke="${C.grid}" stroke-width="1">${s}</g>`;
+// Gráficos no estilo do Gerenciador de Tarefas (fundo de monitor), com eixo e valores legíveis.
+const PL = 40; // espaço do eixo y
+const PB = 22; // espaço dos rótulos do eixo x
+const PT = 14; // respiro no topo para os valores
+
+function frame(W, H, label) {
+  return `<svg viewBox="0 0 ${W + PL + 8} ${H + PT + PB}" class="tm-svg" role="img" aria-label="${label}">
+    <rect x="0" y="0" width="${W + PL + 8}" height="${H + PT + PB}" rx="3" fill="${C.bg}"/>`;
 }
+const yTicks = (H, max, ticks, fmt = nf) => ticks.map((v) => {
+  const y = PT + H - (v / max) * H;
+  return `<line x1="${PL}" y1="${y}" x2="${PL + 999}" y2="${y}" stroke="${v ? C.grid : C.base}" stroke-width="1"/>
+    <text x="${PL - 6}" y="${y + 3.5}" text-anchor="end" fill="${C.dim}" class="tm-axis">${fmt(v)}</text>`;
+}).join('');
 
 function commitChart() {
-  const W = 672, H = 200, n = MONTHS.length, step = W / (n - 1);
+  const W = 640, H = 170, n = MONTHS.length, step = W / (n - 1);
   const max = 600;
-  const y = (v) => H - (v / max) * (H - 10);
+  const X = (i) => PL + i * step;
+  const Y = (v) => PT + H - (v / max) * H;
   const totals = MONTHS.map((m) => m[1] + m[2] + m[3]);
-  const line = (vals) => vals.map((v, i) => `${(i * step).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
-  const area = `0,${H} ${line(totals)} ${W},${H}`;
+  const line = (vals) => vals.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+  const area = `${X(0)},${PT + H} ${line(totals)} ${X(n - 1)},${PT + H}`;
   const peak = totals.indexOf(Math.max(...totals));
-  const dots = MONTHS.map((m, i) => `<circle cx="${i * step}" cy="${y(totals[i])}" r="6" fill="transparent"><title>${m[0]}: ${nf(totals[i])} commits (pipelines ${m[1]}, IaC ${m[2]}${m[3] ? `, ${T('other', 'outros')} ${m[3]}` : ''})</title></circle>`).join('');
-  const labels = MONTHS.map((m, i) => (i % 3 === 0 ? `<text x="${i * step}" y="${H + 14}" text-anchor="middle">${m[0].slice(2).replace('-', '/')}</text>` : '')).join('');
-  return `<svg viewBox="-4 -4 ${W + 8} ${H + 22}" class="tm-svg" role="img" aria-label="${T('Commits per month', 'Commits por mês')}">
-    <rect x="-4" y="-4" width="${W + 8}" height="${H + 8}" fill="${C.bg}"/>
-    ${grid(W, H)}
-    <polygon points="${area}" fill="rgba(57,255,90,.18)"/>
-    <polyline points="${line(totals)}" fill="none" stroke="${C.g1}" stroke-width="2"/>
-    <polyline points="${line(MONTHS.map((m) => m[2]))}" fill="none" stroke="${C.g2}" stroke-width="1.5" stroke-dasharray="4 3"/>
-    <text x="${peak * step + 6}" y="${y(totals[peak]) + 4}" fill="${C.g1}" class="tm-ann">${T('peak', 'pico')}: ${nf(totals[peak])} (HubSpot)</text>
+  const mon = (k) => {
+    const [yy, mm] = k.split('-');
+    const names = LANG === 'pt' ? ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'] : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${names[+mm - 1]}/${yy.slice(2)}`;
+  };
+  const dots = MONTHS.map((m, i) => `<circle cx="${X(i)}" cy="${Y(totals[i])}" r="7" fill="transparent"><title>${mon(m[0])}: ${nf(totals[i])} commits (pipelines ${m[1]}, IaC ${m[2]}${m[3] ? `, ${T('other', 'outros')} ${m[3]}` : ''})</title></circle>`).join('');
+  const labels = MONTHS.map((m, i) => (i % 3 === 0 || i === n - 1 ? `<text x="${X(i)}" y="${PT + H + 15}" text-anchor="${i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}" fill="${C.txt}" class="tm-axis">${mon(m[0])}</text>` : '')).join('');
+  const px = X(peak);
+  const py = Y(totals[peak]);
+  return `${frame(W, H, T('Commits per month', 'Commits por mês'))}
+    <defs><linearGradient id="tmArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.g1}" stop-opacity=".28"/><stop offset="1" stop-color="${C.g1}" stop-opacity=".02"/></linearGradient></defs>
+    ${yTicks(H, max, [0, 150, 300, 450, 600])}
+    <polygon points="${area}" fill="url(#tmArea)"/>
+    <polyline points="${line(MONTHS.map((m) => m[2]))}" fill="none" stroke="${C.g2}" stroke-width="1.4" stroke-dasharray="4 3" stroke-linejoin="round"/>
+    <polyline points="${line(totals)}" fill="none" stroke="${C.g1}" stroke-width="1.8" stroke-linejoin="round"/>
+    <circle cx="${px}" cy="${py}" r="3.5" fill="${C.bg}" stroke="${C.g1}" stroke-width="1.5"/>
+    <text x="${px + 8}" y="${py + 4}" fill="${C.txt}" class="tm-ann">${T('peak', 'pico')}: ${nf(totals[peak])} (HubSpot)</text>
     ${dots}
-    <g fill="${C.txt}" class="tm-axis">${labels}</g>
+    ${labels}
   </svg>`;
 }
 
-function bars(values, labels, { W = 672, H = 150, color = C.g1, fmt = nf, title = '' } = {}) {
-  const max = Math.max(...values), bw = W / values.length;
-  return `<svg viewBox="-4 -4 ${W + 8} ${H + 22}" class="tm-svg" role="img" aria-label="${title}">
-    <rect x="-4" y="-4" width="${W + 8}" height="${H + 8}" fill="${C.bg}"/>
-    ${grid(W, H)}
+function bars(values, labels, { W = 640, H = 120, color = C.g1, fmt = nf, title = '' } = {}) {
+  const max = Math.max(...values, 1);
+  const slot = W / values.length;
+  const bw = Math.min(64, slot * 0.56);
+  const top = Math.ceil(max / 5) * 5;
+  const stepT = top <= 20 ? 5 : 10;
+  const ticks = Array.from({ length: Math.floor(top / stepT) + 1 }, (_, k) => k * stepT);
+  return `${frame(W, H, title)}
+    ${yTicks(H, top, ticks)}
     ${values.map((v, i) => {
-      const h = max ? (v / max) * (H - 8) : 0;
-      return `<rect x="${i * bw + 2}" y="${H - h}" width="${bw - 4}" height="${h}" fill="${color}"><title>${labels[i]}: ${fmt(v)}</title></rect>`;
+      const h = (v / top) * H;
+      const x = PL + i * slot + (slot - bw) / 2;
+      return `<rect x="${x}" y="${PT + H - h}" width="${bw}" height="${h}" fill="${color}" opacity=".9"><title>${labels[i]}: ${fmt(v)}</title></rect>
+        <text x="${x + bw / 2}" y="${PT + H - h - 4}" text-anchor="middle" fill="${C.txt}" class="tm-val">${fmt(v)}</text>
+        <text x="${x + bw / 2}" y="${PT + H + 15}" text-anchor="middle" fill="${C.txt}" class="tm-axis">${labels[i]}</text>`;
     }).join('')}
-    <g fill="${C.txt}" class="tm-axis">${labels.map((l, i) => `<text x="${i * bw + bw / 2}" y="${H + 14}" text-anchor="middle">${l}</text>`).join('')}</g>
   </svg>`;
 }
 
@@ -96,6 +119,8 @@ function gainRows() {
   }).join('');
 }
 
+const GROUP_LABEL = { data: T('Data', 'Dados'), research: T('Research', 'Pesquisa'), apis: 'APIs', ml: 'ML', games: T('Games', 'Jogos') };
+
 function githubCharts() {
   const repos = REPO_GROUPS.flatMap((g) => g.repos.map((r) => ({ ...r, g: g.name })));
   const years = [2022, 2023, 2024, 2026];
@@ -104,7 +129,7 @@ function githubCharts() {
   return `<p class="tm-cap">${T('Public repos by last update year', 'Repos públicos por ano da última atualização')} (${repos.length}, ${T('forks excluded', 'sem forks')})</p>
     ${bars(byYear, years.map(String), { H: 110, color: C.g3, title: 'repos/year' })}
     <p class="tm-cap">${T('Repos by topic', 'Repos por tema')}</p>
-    ${bars(byGroup, REPO_GROUPS.map((g) => g.name.split(' ')[0].replace('·', '')), { H: 110, color: C.g2, title: 'repos/topic' })}`;
+    ${bars(byGroup, REPO_GROUPS.map((g) => GROUP_LABEL[g.id] || g.id), { H: 110, color: C.g2, title: 'repos/topic' })}`;
 }
 
 export function taskmgr(body, ctx) {
