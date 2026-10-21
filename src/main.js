@@ -212,6 +212,15 @@ function buildGadget() {
   g.innerHTML = `<div class="gd-h">${T('Before × After', 'Antes × Depois')}</div>
     ${rows.map(([n, a, b, p]) => `<div class="gd-row"><div class="gd-l"><span>${n}</span><small>${a} → <b>${b}</b></small></div><div class="gd-bar"><i style="--p:${Math.max(p, 0.03)}"></i></div></div>`).join('')}
     <div class="gd-f">${T('remaining runtime, in green', 'runtime que sobrou, em verde')}</div>`;
+  // segundo gadget: últimos jogos da Steam, só se o deploy gerou o steam.json
+  import('./steam.js').then(({ loadSteam, steamList, steamTitle, steamFoot }) => loadSteam().then((d) => {
+    if (!d) return;
+    const s = document.createElement('div');
+    s.className = 'gadget gd-steam';
+    s.innerHTML = `<div class="gd-h">🎮 ${steamTitle()}</div>${steamList(d)}<div class="gd-f">${steamFoot(d)}</div>`;
+    s.style.top = `${g.offsetTop + g.offsetHeight + 12}px`;
+    g.after(s);
+  }));
 }
 
 /* ---------------------------------------------------------- janelas */

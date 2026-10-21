@@ -94,6 +94,19 @@ Site 100% estático: banda ilimitada no plano grátis, sem cobrança de egress, 
 
 Sem nenhum post publicado, a página inicial do blog mostra a plaquinha grande de "em obras". Com posts, ela vira uma plaquinha pequena na lateral; para tirar, mude `UNDER_CONSTRUCTION` para `false` em `src/blog.js`.
 
+## Steam: jogado recentemente
+
+O gadget do desktop e a caixa na lateral do blog mostram os 3 últimos jogos da Steam. Quem busca os dados é o deploy no GitHub Actions (`scripts/steam.mjs`), a cada push e a cada 6 horas. Só o nome do jogo, o appid e as horas vão para o `steam.json` público; SteamID, chave e link do perfil ficam fora do site.
+
+1. Gere uma chave em https://steamcommunity.com/dev/apikey (o campo de domínio aceita `fabiodemo.github.io`).
+2. No repo: Settings > Secrets and variables > Actions > New repository secret:
+   - `STEAM_API_KEY`: a chave
+   - `STEAM_ID`: o nome do perfil (`steamcommunity.com/id/<nome>`) ou o SteamID64
+3. Na Steam, deixe "Detalhes dos jogos" como público (Privacidade do perfil), senão a API não devolve nada.
+4. Actions > Deploy GitHub Pages > Run workflow.
+
+Sem os secrets, o widget simplesmente não aparece. O GitHub pausa agendamentos depois de 60 dias sem atividade no repo; um push reativa.
+
 ## Página de stack (tech.html)
 
 - Para mexer nas tecnologias, edite `B` (label, cor, logo do simple-icons) e as listas `MAIN` e `GROUPS` em `src/tech.js`.

@@ -11,6 +11,7 @@ import avatarUrl from './assets/avatar.webp';
 import { icon } from './pixels.js';
 import { T, LANG, setLang } from './i18n.js';
 import { PROFILE, ABOUT } from './data.js';
+import { loadSteam, steamList, steamTitle, steamFoot } from './steam.js';
 
 const EMBED = new URLSearchParams(location.search).has('embed');
 // Rascunhos (draft: true) só aparecem no `npm run dev`
@@ -239,6 +240,10 @@ function shell() {
             <p class="links"><a href="#/about">${T('More about me »', 'Mais sobre mim »')}</a><br><a href="./">${T('Full CV (desktop)', 'CV completo (desktop)')}</a> · <a href="${sib('tech.html')}">Stack</a></p>
           </div>
         </section>
+        <section class="box" id="bp-steam" hidden>
+          <h3 class="box-h gray">🎮 ${steamTitle()}</h3>
+          <div class="box-b"></div>
+        </section>
         <section class="box" id="bp-toc-box" hidden>
           <h3 class="box-h orange">${T('Contents', 'Neste post')}</h3>
           <div class="box-b"><ul class="toc" id="bp-toc"></ul></div>
@@ -306,5 +311,11 @@ document.addEventListener('click', (e) => {
 
 if (EMBED) document.documentElement.classList.add('embed');
 shell();
+loadSteam().then((d) => {
+  if (!d) return;
+  const box = document.getElementById('bp-steam');
+  box.querySelector('.box-b').innerHTML = `${steamList(d)}<small class="st-foot">${steamFoot(d)}</small>`;
+  box.hidden = false;
+});
 route();
 addEventListener('hashchange', route);

@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # atualiza o "jogado recentemente" da Steam a cada 6 horas
+  schedule:
+    - cron: '17 */6 * * *'
 permissions:
   contents: read
   pages: write
@@ -22,6 +25,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Steam (últimos jogos)
+        run: node scripts/steam.mjs
+        env:
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+          STEAM_ID: ${{ secrets.STEAM_ID }}
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
