@@ -316,7 +316,9 @@ loadSteam().then((d) => {
   const box = document.getElementById('bp-steam');
   const recent = d.games.length > 0;
   if (!recent) box.querySelector('.box-h').textContent = `🎮 ${T('Most played', 'Mais jogados')}`;
-  const extra = [d.level != null && `${T('Level', 'Nível')} ${d.level}`, d.owned && `${d.owned} ${T('games', 'jogos')}`].filter(Boolean).join(' · ');
+  const p = d.platforms;
+  const linuxPct = p && p.linux + p.windows + p.mac ? Math.round((p.linux / (p.linux + p.windows + p.mac)) * 100) : null;
+  const extra = [d.level != null && `${T('Level', 'Nível')} ${d.level}`, d.owned && `${d.owned} ${T('games', 'jogos')}`, linuxPct != null && `${linuxPct}% ${T('of hours on Linux', 'das horas no Linux')}`].filter(Boolean).join(' · ');
   box.querySelector('.box-b').innerHTML = `${steamList(recent ? d : { games: d.top.slice(0, 3) })}${extra ? `<small class="st-foot">${extra}</small><br>` : ''}<small class="st-foot">${steamFoot(d)}</small>`;
   box.hidden = false;
 });

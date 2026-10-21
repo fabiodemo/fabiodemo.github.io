@@ -138,10 +138,12 @@ const LEARNING = [
   T('Libraries around Data Engineering, Data Science and Deep Learning', 'Bibliotecas de Data Engineering, Data Science e Deep Learning'),
 ];
 
-const STATS = `https://github-readme-stats.vercel.app/api?username=${USER}&show_icons=true&theme=dark&include_all_commits=true&count_private=true`;
-const LANGS = `https://github-readme-stats.vercel.app/api/top-langs/?username=${USER}&layout=compact&langs_count=10&hide=jupyter%20notebook,html&theme=dark`;
-const SNAKE = `https://raw.githubusercontent.com/${USER}/${USER}/output/github-contribution-grid-snake-dark.svg`;
-const SNAKE_LOCAL = `${import.meta.env.BASE_URL}snake-dark.svg`;
+// cores do card combinando com o blog: fundo branco, título azul-petróleo, ícones verdes
+const CARD = 'bg_color=ffffff&title_color=0b3a55&text_color=1d2a33&icon_color=2f8a35&border_color=06202e&border_radius=6';
+const STATS = `https://github-readme-stats.vercel.app/api?username=${USER}&show_icons=true&include_all_commits=true&count_private=true&${CARD}`;
+const LANGS = `https://github-readme-stats.vercel.app/api/top-langs/?username=${USER}&layout=compact&langs_count=10&hide=jupyter%20notebook,html&${CARD}`;
+const SNAKE = `https://raw.githubusercontent.com/${USER}/${USER}/output/github-contribution-grid-snake.svg`;
+const SNAKE_LOCAL = `${import.meta.env.BASE_URL}snake.svg`;
 
 function hits() {
   try {

@@ -40,7 +40,7 @@ npm run preview                    # serve dist/ em http://localhost:4173
 | `src/games.js` | os 5 jogos: Tetris, Jogo da Velha (minimax), Campo Minado, Snake, Flappy Birb |
 | `src/turtle.js` | turtle.py: TurtleBot3 com LIDAR em 6 estágios |
 | `tech.html` + `src/tech.js` + `src/tech.css` | página separada estilo blog: emblemas (shields.io) da stack, Data Engineering em destaque, github-readme-stats e a cobrinha. Abre sozinha em `/tech.html` ou como janela "Stack (blog)" no desktop |
-| `public/snake-dark.svg` | cópia local da cobrinha, usada se o raw.githubusercontent falhar |
+| `public/snake.svg` | cópia local da cobrinha (tema claro), usada se o raw.githubusercontent falhar |
 | `blog.html` + `src/blog.js` + `src/blog.css` | blog (posts em Markdown) com a plaquinha de "em obras". Abre em `/blog.html` ou como janela "Blog" no desktop |
 | `posts/*.md` | os posts do blog. `posts/_modelo.md` é o modelo (rascunho, só aparece no `npm run dev`) |
 | `src/wallpaper.js` | papéis de parede em pixel art gerados em canvas (colinas, lago, cidade, peixe betta, mundo de blocos, pôr do sol 16-bit, hotel pixelado, cor sólida). Com um deles ativo, o three.js nem carrega |

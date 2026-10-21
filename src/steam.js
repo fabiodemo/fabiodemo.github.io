@@ -29,6 +29,19 @@ export function steamList(d) {
 export const steamTitle = () => T('Recently played', 'Jogado recentemente');
 export const steamFoot = (d) => `${T('via Steam · updated', 'via Steam · atualizado em')} ${new Date(d.updated).toLocaleDateString(LANG === 'pt' ? 'pt-BR' : 'en-US', { day: '2-digit', month: 'short' })}`;
 
+// horas por plataforma; a Steam conta o Deck dentro do Linux, então o Deck aparece só como nota
+function platforms(p) {
+  if (!p) return '';
+  const tot = p.linux + p.windows + p.mac;
+  if (!tot) return '';
+  const parts = [['linux', 'Linux', '#c4b550'], ['windows', 'Windows', '#7e9cc4'], ['mac', 'macOS', '#b8c0ad']].filter(([k]) => p[k] > 0);
+  const pct = (v) => Math.round((v / tot) * 100);
+  return `<h3 class="sx-h">${T('Hours by platform', 'Horas por plataforma')}</h3>
+    <div class="sx-plat"><div class="sx-stack">${parts.map(([k, , c]) => `<i style="width:${(p[k] / tot) * 100}%;background:${c}" title="${k}"></i>`).join('')}</div>
+    <div class="sx-legend">${parts.map(([k, n, c]) => `<span><i style="background:${c}"></i>${n} ${pct(p[k])}% (${hours(p[k])})</span>`).join('')}${p.deck ? `<span>${T('Steam Deck', 'Steam Deck')}: ${hours(p.deck)}</span>` : ''}</div>
+    <small class="sx-note">${T('Steam only splits playtime by platform for recent years.', 'A Steam só separa as horas por plataforma dos últimos anos.')}</small></div>`;
+}
+
 const bar = (a, b) => `<span class="sx-bar"><i style="width:${b ? Math.round((a / b) * 100) : 0}%"></i></span>`;
 
 /** Janela "Steam": resumo do perfil no visual oliva da Steam antiga (sem logo, sem link de perfil). */
@@ -46,6 +59,8 @@ export function steamApp(body) {
       d.owned && [T('Games', 'Jogos'), nf(d.owned)],
       d.totalHours && [T('Hours played', 'Horas jogadas'), nf(d.totalHours)],
       d.badges != null && [T('Badges', 'Insígnias'), nf(d.badges)],
+      d.achievements && [T('Achievements', 'Conquistas'), nf(d.achievements.unlocked)],
+      d.achievements && [T('100% games', 'Jogos 100%'), nf(d.achievements.perfect)],
       d.since && [T('Member since', 'Membro desde'), d.since],
     ].filter(Boolean);
     const maxTop = Math.max(1, ...(d.top || []).map((g) => g.total));
@@ -54,7 +69,7 @@ export function steamApp(body) {
         <div class="sx-tabs"><span class="on">${T('PROFILE', 'PERFIL')}</span><span>${T('LIBRARY', 'BIBLIOTECA')}</span><span>${T('COMMUNITY', 'COMUNIDADE')}</span></div>
         <div class="sx-stats">${stats.map(([k, v]) => `<div><b>${v}</b><small>${k}</small></div>`).join('')}</div>
       </div>
-      ${d.games.length ? `<h3 class="sx-h">${steamTitle()}</h3>
+      ${d.games.length ? `<h3 class="sx-h">${steamTitle()}${d.twoWeeks?.hours ? `<span>${hours(d.twoWeeks.hours)} ${T('in the past 2 weeks', 'nas últimas 2 semanas')} · ${d.twoWeeks.games} ${d.twoWeeks.games === 1 ? T('game', 'jogo') : T('games', 'jogos')}</span>` : ''}</h3>
       <div class="sx-recent">${d.games.map((g) => `
         <div class="sx-game">
           <img src="${header(g.appid)}" alt="${esc(g.name)}" loading="lazy" onerror="this.style.visibility='hidden'">
@@ -64,6 +79,14 @@ export function steamApp(body) {
             ${g.ach ? `<div class="sx-ach"><span>${T('Achievements', 'Conquistas')} ${g.ach[0]}/${g.ach[1]}</span>${bar(g.ach[0], g.ach[1])}</div>` : ''}
           </div>
         </div>`).join('')}</div>` : ''}
+      ${d.lastAch?.length ? `<h3 class="sx-h">${T('Latest achievements', 'Últimas conquistas')}</h3>
+      <div class="sx-achs">${d.lastAch.map((a) => `
+        <div class="sx-a">
+          ${a.icon ? `<img src="${esc(a.icon)}" alt="" width="48" height="48" loading="lazy" onerror="this.style.visibility='hidden'">` : '<i class="sx-noicon">🏆</i>'}
+          <div><b>${esc(a.name)}</b><small>${esc(a.game)}${a.desc ? ` · ${esc(a.desc)}` : ''}</small>
+          ${a.pct != null ? `<span class="sx-rare${a.pct < 10 ? ' rare' : ''}">${T(`${nf(a.pct)}% of players have it`, `${nf(a.pct)}% dos jogadores têm`)}</span>` : ''}</div>
+        </div>`).join('')}</div>` : ''}
+      ${platforms(d.platforms)}
       ${d.top?.length ? `<h3 class="sx-h">${T('Most played, all time', 'Mais jogados de todos os tempos')}</h3>
       <div class="sx-top">${d.top.map((g) => `<div class="sx-row"><span>${esc(g.name)}</span>${bar(g.total, maxTop)}<b>${hours(g.total)}</b></div>`).join('')}</div>` : ''}
       <div class="sx-foot">${steamFoot(d)} · ${T('profile not linked on purpose', 'perfil não linkado de propósito')}</div>`;

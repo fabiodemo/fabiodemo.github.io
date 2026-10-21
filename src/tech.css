@@ -94,8 +94,8 @@ img { image-rendering: auto; }
 /* stats */
 .cards { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; text-decoration: none; }
 .card { height: 180px; width: auto; max-width: 100%; }
-.card-off { display: block; padding: 18px; background: #0d1117; color: #c9d1d9; border-radius: 6px; font-size: 12px; }
-.snake { display: block; width: 100%; height: auto; background: #0d1117; border-radius: 6px; padding: 6px; min-height: 60px; }
+.card-off { display: block; padding: 18px; background: #f6fafc; color: #33444f; border: 2px solid #06202e; border-radius: 6px; font-size: 12px; }
+.snake { display: block; width: 100%; height: auto; background: #fff; border: 2px solid #06202e; border-radius: 6px; padding: 6px; min-height: 60px; }
 .comments .bobba { font: 16px var(--mono); color: #7a2b8f; margin: 6px 0 0; }
 
 /* lateral */
