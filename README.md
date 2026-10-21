@@ -43,6 +43,10 @@ npm run preview                    # serve dist/ em http://localhost:4173
 | `public/snake-dark.svg` | cópia local da cobrinha, usada se o raw.githubusercontent falhar |
 | `blog.html` + `src/blog.js` + `src/blog.css` | blog (posts em Markdown) com a plaquinha de "em obras". Abre em `/blog.html` ou como janela "Blog" no desktop |
 | `posts/*.md` | os posts do blog. `posts/_modelo.md` é o modelo (rascunho, só aparece no `npm run dev`) |
+| `src/wallpaper.js` | papéis de parede em pixel art gerados em canvas (colinas, lago, cidade, peixe betta, mundo de blocos, pôr do sol 16-bit, hotel pixelado, cor sólida). Com um deles ativo, o three.js nem carrega |
+| `src/screensaver.js` | protetores de tela: Bolhas, Mystify, Canos 3D, Viagem espacial, Texto 3D, Fotos (figuras da tese), PolyStation, Em branco |
+| `src/personalize.js` | janela Personalização (botão direito no desktop > Personalizar, ou `desk.cpl` no cmd) |
+| `src/lanhouse.js` | pasta Lan House com os clássicos dos anos 2000 (só mensagens, nenhum jogo ou arte de terceiros) |
 | `src/paint.js` | paint.exe: lápis, pincel, spray, borracha, balde, conta-gotas, linha, retângulo e elipse, sem antialiasing; abre imagem e salva PNG |
 | `src/canoe.js` | easter egg da canoagem |
 | `src/taskmgr.js` | Gerenciador de Tarefas com gráficos reais (git log, Jira/Coda, GitHub) |

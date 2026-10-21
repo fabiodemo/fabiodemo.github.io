@@ -21,8 +21,44 @@ $('#print-cv').innerHTML = printCV();
 // three.js chega depois do boot, num chunk separado
 let scene = { setFocus() {} };
 let wantCalm = false;
-const loadScene = () => import('./scene.js').then((m) => { scene = m.startScene($('#bg')); scene.setFocus(wantCalm); });
-if ('requestIdleCallback' in window) requestIdleCallback(loadScene, { timeout: 600 }); else setTimeout(loadScene, 200);
+let sceneLoading = false;
+const loadScene = () => {
+  if (sceneLoading) return;
+  sceneLoading = true;
+  import('./scene.js').then((m) => { scene = m.startScene($('#bg')); calm(); });
+};
+
+/* ------------------------------------------------- papel de parede */
+// 'aurora' é a cena three.js; os outros são pixel art estática (e aí o three.js nem carrega)
+let wallId = (() => { try { return localStorage.getItem('cv.wall') || 'aurora'; } catch { return 'aurora'; } })();
+function setWall(id, save = true) {
+  wallId = id;
+  if (save) { try { localStorage.setItem('cv.wall', id); } catch { /* ok */ } }
+  if (id === 'aurora') {
+    $('#wall').hidden = true;
+    $('#bg').hidden = false;
+    loadScene();
+    calm();
+    return;
+  }
+  import('./wallpaper.js').then((m) => {
+    if (wallId !== id) return;
+    m.apply($('#wall'), id);
+    $('#wall').hidden = false;
+    $('#bg').hidden = true;
+    calm();
+  });
+}
+function nextWall() {
+  import('./wallpaper.js').then(({ WALLS }) => {
+    const i = WALLS.findIndex((w) => w.id === wallId);
+    setWall(WALLS[(i + 1) % WALLS.length].id);
+  });
+}
+addEventListener('cv-wall', (e) => setWall(e.detail));
+if (wallId === 'aurora') {
+  if ('requestIdleCallback' in window) requestIdleCallback(loadScene, { timeout: 600 }); else setTimeout(loadScene, 200);
+} else setWall(wallId, false);
 
 /* ------------------------------------------------------------------ som */
 let muted = (() => { try { return localStorage.getItem('cv.muted') === '1'; } catch { return false; } })();
@@ -104,6 +140,7 @@ function login() {
     buildDesktop();
     setTimeout(() => {
       $('#login').classList.add('hidden');
+      armIdle();
       if (restoreWindows()) return;
       openApp('leiame');
       if (!isMobile()) {
@@ -131,7 +168,7 @@ if (skipBoot || location.hash === '#skip') {
 $('#login-tile').addEventListener('click', login);
 
 /* ------------------------------------------------------------- desktop */
-const DESKTOP = ['sobre', 'leiame', 'forum', 'blog', 'stack', 'projetos', 'turtle', 'figs', 'taskmgr', 'skills', 'certs', 'cmd', 'jogos', 'paint', 'guestbook', 'contato', 'lixeira'];
+const DESKTOP = ['sobre', 'leiame', 'forum', 'blog', 'stack', 'projetos', 'turtle', 'figs', 'taskmgr', 'skills', 'certs', 'cmd', 'jogos', 'lanhouse', 'paint', 'guestbook', 'contato', 'lixeira'];
 
 function buildDesktop() {
   const wrap = $('#icons');
@@ -505,7 +542,7 @@ const sm = $('#startmenu');
 const LEFT = ['forum', 'leiame', 'blog', 'projetos', 'turtle', 'taskmgr', 'cmd', 'jogos', 'paint'];
 const RIGHT = [
   ['sobre', PROFILE.short], ['leiame', T('Documents', 'Documentos')], ['projetos', T('Projects', 'Projetos')], ['sobre', T('Computer', 'Computador')],
-  ['skills', T('Control Panel', 'Painel de Controle')], ['certs', T('Certificates', 'Certificados')], ['contato', T('Contact', 'Contato')], ['lixeira', T('Recycle Bin', 'Lixeira')],
+  ['skills', T('Control Panel', 'Painel de Controle')], ['personalize', T('Personalize', 'Personalizar')], ['certs', T('Certificates', 'Certificados')], ['contato', T('Contact', 'Contato')], ['lixeira', T('Recycle Bin', 'Lixeira')],
   ['@linkedin', 'LinkedIn'], ['@github', 'GitHub'], ['@print', T('Print CV', 'Imprimir CV')],
 ];
 function buildStart() {
@@ -666,8 +703,85 @@ addEventListener('keydown', (e) => {
 
 function calm() {
   wantCalm = [...wins.values()].some((w) => w.max && !w.min);
-  scene.setFocus(wantCalm);
+  // cena congela com janela maximizada, papel de parede estático ou protetor de tela ligado
+  scene.setFocus(wantCalm || wallId !== 'aurora' || !!ssStop);
 }
+
+/* ---------------------------------------------------------- protetor de tela */
+const SS_DEF = { id: 'bubbles', wait: 10, text: 'DemOS 7' };
+const ssCfg = () => { try { return { ...SS_DEF, ...JSON.parse(localStorage.getItem('cv.ss') || '{}') }; } catch { return SS_DEF; } };
+let ssStop = null;
+let ssIdle = 0;
+let ssSince = 0;
+let ssFrom = null;
+function armIdle() {
+  clearTimeout(ssIdle);
+  const c = ssCfg();
+  if (!loggedIn || c.id === 'none' || !c.wait) return;
+  ssIdle = setTimeout(() => { if (!document.hidden) startSaver(c.id); }, c.wait * 60000);
+}
+function startSaver(id) {
+  if (ssStop) return;
+  ssStop = () => {};
+  import('./screensaver.js').then((m) => {
+    ssStop = m.start(id, ssCfg());
+    ssSince = performance.now();
+    ssFrom = null;
+    calm();
+  });
+}
+function stopSaver() {
+  ssStop?.();
+  ssStop = null;
+  calm();
+  armIdle();
+}
+const activity = (e) => {
+  if (ssStop) {
+    // meio segundo de carência (o clique em "Visualizar") e um mínimo de movimento do mouse
+    if (performance.now() - ssSince < 600) return;
+    if (e.type === 'pointermove') {
+      if (!ssFrom) { ssFrom = [e.clientX, e.clientY]; return; }
+      if (Math.hypot(e.clientX - ssFrom[0], e.clientY - ssFrom[1]) < 8) return;
+    }
+    if (e.type === 'keydown' || e.type === 'pointerdown') e.preventDefault();
+    stopSaver();
+    return;
+  }
+  armIdle();
+};
+['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((t) => addEventListener(t, activity, { capture: true, passive: t !== 'keydown' && t !== 'pointerdown' }));
+addEventListener('cv-ss', (e) => startSaver(e.detail));
+addEventListener('cv-ss-cfg', armIdle);
+document.addEventListener('visibilitychange', armIdle);
+
+/* ---------------------------------------------------------- menu de contexto do desktop */
+const ctxMenu = document.createElement('div');
+ctxMenu.className = 'ctxmenu hidden';
+ctxMenu.innerHTML = `
+  <button type="button" data-cx="refresh">${T('Refresh', 'Atualizar')}</button>
+  <button type="button" data-cx="next">${T('Next desktop background', 'Próxima tela de fundo')}</button>
+  <hr>
+  <button type="button" data-cx="ss">${T('Screen saver', 'Proteção de tela')}</button>
+  <button type="button" data-cx="pz"><img src="${icon('photo', 1)}" alt="">${T('Personalize', 'Personalizar')}</button>`;
+document.body.appendChild(ctxMenu);
+$('#desktop').addEventListener('contextmenu', (e) => {
+  if (e.target.closest('.win')) return;
+  e.preventDefault();
+  ctxMenu.classList.remove('hidden');
+  const r = ctxMenu.getBoundingClientRect();
+  ctxMenu.style.left = Math.min(e.clientX, innerWidth - r.width - 4) + 'px';
+  ctxMenu.style.top = Math.min(e.clientY, innerHeight - r.height - 44) + 'px';
+});
+ctxMenu.addEventListener('click', (e) => {
+  const a = e.target.closest('[data-cx]')?.dataset.cx;
+  ctxMenu.classList.add('hidden');
+  if (a === 'refresh') { const ic = $('#icons'); ic.style.opacity = '0'; setTimeout(() => { ic.style.opacity = ''; }, 120); }
+  if (a === 'next') nextWall();
+  if (a === 'pz') openApp('personalize');
+  if (a === 'ss') openApp('personalize', { arg: 'pz-ss' });
+});
+document.addEventListener('pointerdown', (e) => { if (!ctxMenu.contains(e.target)) ctxMenu.classList.add('hidden'); });
 
 /* ---------------------------------------------------------- HESOYAM: cura tudo */
 let cheatBuf = '';
@@ -688,7 +802,7 @@ addEventListener('keydown', (e) => {
 });
 
 /* ---------------------------------------------------------- conquistas (estilo bloco) */
-const ACH = { skills: 'Taking Inventory', taskmgr: 'Benchmarking', minas: 'Time to Mine!', certs: 'Acquire Hardware', turtle: 'On A Rail', figs: 'The End?', blog: 'Hot Topic' };
+const ACH = { skills: 'Taking Inventory', taskmgr: 'Benchmarking', minas: 'Time to Mine!', certs: 'Acquire Hardware', turtle: 'On A Rail', figs: 'The End?', blog: 'Hot Topic', lanhouse: 'Adventuring Time', personalize: 'Enchanter' };
 const achQueue = [];
 let achBusy = false;
 function achievement(name) {

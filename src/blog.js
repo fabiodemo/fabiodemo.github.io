@@ -10,7 +10,7 @@ import { marked } from 'marked';
 import avatarUrl from './assets/avatar.webp';
 import { icon } from './pixels.js';
 import { T, LANG, setLang } from './i18n.js';
-import { PROFILE } from './data.js';
+import { PROFILE, ABOUT } from './data.js';
 
 const EMBED = new URLSearchParams(location.search).has('embed');
 // Rascunhos (draft: true) só aparecem no `npm run dev`
@@ -99,11 +99,50 @@ function card(p) {
   </article>`;
 }
 
+// Card fixo levando para a página Sobre mim (aparece na home)
+function aboutTeaser() {
+  return `
+  <article class="post bp-card about-teaser">
+    <div class="bp-date pin" aria-hidden="true"><small>${T('pinned', 'fixado')}</small><b>📌</b><i>&nbsp;</i></div>
+    <div class="bp-body">
+      <h2 class="bp-t"><a href="#/about">${T('About me', 'Sobre mim')}</a></h2>
+      <p class="bp-sum">${T('Interests, the hardware on my desk and a few odd facts: Linux, robots, LLMs at home, SNES clones, Tibia and canoes.', 'Interesses, o hardware da minha mesa e umas curiosidades: Linux, robôs, LLMs em casa, réplicas de Super Nintendo, Tibia e canoa.')}</p>
+      <p class="bp-foot"><a class="more" href="#/about">${T('Read more »', 'Continuar lendo »')}</a></p>
+    </div>
+  </article>`;
+}
+
+function aboutView() {
+  return `
+  <article class="post bp-full about">
+    <h2 class="post-t">${T('About me', 'Sobre mim')}</h2>
+    <div class="post-b md">
+      <div class="ab-intro">
+        <img src="${avatarUrl}" alt="" width="88" height="88">
+        <p>${T(`I'm ${PROFILE.name}, ${PROFILE.role}. During the day, lakehouse, pipelines and Terraform. The rest of the time, the stuff below.`, `Sou o ${PROFILE.name}, ${PROFILE.role}. De dia, lakehouse, pipelines e Terraform. No resto do tempo, o que está aqui embaixo.`)}</p>
+      </div>
+      <h2 id="interesses">${T('General interests', 'Interesses gerais')}</h2>
+      <ul class="ab-list">${ABOUT.interests.map((i) => `<li>${i}</li>`).join('')}</ul>
+      <h2 id="hardware">Hardware</h2>
+      <div class="rigs">${ABOUT.rigs.map((r) => `
+        <div class="rig">
+          <div class="rig-h"><b>${r.n}</b><small>${r.os}</small></div>
+          <table>${r.parts.map((p, i) => `<tr><td>${['CPU', 'GPU', 'RAM', T('Storage', 'Disco')][i]}</td><td>${p}</td></tr>`).join('')}</table>
+        </div>`).join('')}
+      </div>
+      <h2 id="curiosidades">${T('Trivia', 'Curiosidades')}</h2>
+      <ul class="ab-trivia">${ABOUT.trivia.map((t) => `<li>${t}</li>`).join('')}</ul>
+    </div>
+    <footer class="post-f">${T('Last edited by', 'Editado por')} <b>fabio</b> · <a href="#/">${T('← Back to the blog', '← Voltar ao blog')}</a></footer>
+  </article>`;
+}
+
 function listView(tag) {
   const list = tag ? POSTS.filter((p) => p.tags.includes(tag)) : POSTS;
-  if (!POSTS.length) return plaque(true);
+  if (!POSTS.length) return plaque(true) + aboutTeaser();
   return `
     ${tag ? `<div class="bp-filter">${T('Posts tagged', 'Posts com a tag')} <b>${esc(tag)}</b> · <a href="#/">${T('show all', 'ver todos')}</a></div>` : ''}
+    ${tag ? '' : aboutTeaser()}
     ${list.map(card).join('') || `<p class="bp-empty">${T('Nothing here yet.', 'Nada aqui ainda.')}</p>`}`;
 }
 
@@ -183,6 +222,7 @@ function shell() {
     </header>
     <nav class="tb-nav">
       <a href="#/">${T('Home', 'Início')}</a>
+      <a href="#/about">${T('About me', 'Sobre mim')}</a>
       <a href="${sib('tech.html')}">★ Stack</a>
       <a href="${PROFILE.github}" target="_blank" rel="noopener">GitHub</a>
       <a href="${PROFILE.linkedin}" target="_blank" rel="noopener">LinkedIn</a>
@@ -196,7 +236,7 @@ function shell() {
           <div class="box-b me">
             <img src="${avatarUrl}" alt="" width="56" height="56">
             <div><b>${PROFILE.name}</b><small>${PROFILE.role}</small><span class="online">● Online</span></div>
-            <p class="links"><a href="./">${T('Full CV (desktop)', 'CV completo (desktop)')}</a> · <a href="${sib('tech.html')}">Stack</a></p>
+            <p class="links"><a href="#/about">${T('More about me »', 'Mais sobre mim »')}</a><br><a href="./">${T('Full CV (desktop)', 'CV completo (desktop)')}</a> · <a href="${sib('tech.html')}">Stack</a></p>
           </div>
         </section>
         <section class="box" id="bp-toc-box" hidden>
@@ -243,13 +283,16 @@ function route() {
     html = postView(slug);
     const p = POSTS.find((x) => x.slug === slug);
     if (p) titleText = `${p.title} · fabiodemo.blog`;
+  } else if (h === '/about') {
+    html = aboutView();
+    titleText = `${T('About me', 'Sobre mim')} · fabiodemo.blog`;
   } else if (h.startsWith('/tag/')) html = listView(h.slice(5));
   else html = listView(null);
   main.innerHTML = html;
   document.title = titleText;
   const toc = enhance(main);
   const box = document.getElementById('bp-toc-box');
-  box.hidden = !(h.startsWith('/p/') && toc.length > 1);
+  box.hidden = !((h.startsWith('/p/') || h === '/about') && toc.length > 1);
   document.getElementById('bp-toc').innerHTML = toc.map(([sub, id, t]) => `<li class="${sub ? 'lvl3' : ''}"><a href="#/p/${encodeURIComponent(h.slice(3))}" data-to="${id}">${esc(t)}</a></li>`).join('');
   window.scrollTo(0, 0);
 }

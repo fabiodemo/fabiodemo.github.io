@@ -547,3 +547,34 @@ export const CASES = [
     r: T('A standing learning routine; features like serverless performance mode went from a shared link to the team default.', 'Uma rotina fixa de aprendizado; features como o performance mode do serverless passaram de link compartilhado a padrão do time.'),
   },
 ];
+
+// Página "Sobre mim" do blog (e pedaços no Sistema e no neofetch)
+export const ABOUT = {
+  interests: [
+    T('<b>Linux and self-hosting:</b> rolling-release distros, tweaking the system until it is just right, running LLMs locally', '<b>Linux e self-hosting:</b> distros rolling, ajustar o sistema até ficar do jeito certo, rodar LLMs localmente'),
+    T('<b>Robotics and AI</b>, especially reinforcement learning and agents', '<b>Robótica e IA</b>, principalmente aprendizado por reforço e agentes'),
+    T('<b>Games:</b> from the Super Nintendo and its Brazilian clones (Polystation, One Station) to 2000s classics (PS1/PS2, MMOs, RTS) and today\'s indies, played on Linux', '<b>Games:</b> do Super Nintendo e suas réplicas (Polystation, One Station) aos clássicos dos anos 2000 (PS1/PS2, MMOs, RTS) e aos indies atuais, jogando no Linux'),
+    T('<b>Hardware and DIY:</b> maintaining my own gear, basic mechanics, projects around the house', '<b>Hardware e DIY:</b> manutenção do próprio equipamento, mecânica básica, projetos em casa'),
+    T('<b>Personal finance</b> and investing', '<b>Finanças pessoais</b> e investimentos'),
+    T('<b>Exercise:</b> weight training, cycling, walking', '<b>Atividade física:</b> musculação, bike, caminhada'),
+    T('<b>Road trips</b> to places with lots of nature and few people', '<b>Viagens de carro</b> para lugares com natureza e pouca gente'),
+    T('<b>Languages and Latin American culture</b>, especially Argentina and Spanish', '<b>Idiomas e cultura latino-americana</b>, em especial Argentina e espanhol'),
+  ],
+  rigs: [
+    { n: 'Desktop', os: 'Fedora Workstation · GNOME', parts: ['AMD Ryzen 5 1400', 'NVIDIA RTX 3060 12GB', '24GB RAM', T('NVMe SSD + HDD', 'SSD NVMe + HD')] },
+    { n: T('Laptop', 'Notebook'), os: 'Arch Linux · KDE Plasma (Wayland)', parts: ['Intel Core i7-12700H', 'NVIDIA RTX 3050 4GB', '32GB RAM', T('512GB NVMe + extra 1TB NVMe', 'NVMe 512GB + NVMe extra de 1TB')] },
+  ],
+  trivia: [
+    T('I teach robots to fend for themselves. Some of them learned.', 'Ensino robôs a se virarem sozinhos. Alguns aprenderam.'),
+    T('I have published papers about things that move without anyone telling them to.', 'Tenho artigos publicados sobre coisas que andam sem ninguém precisar mandar.'),
+    T('I once put a cloud bill on a serious diet. Nobody noticed the difference, except the invoice.', 'Já fiz uma conta de cloud emagrecer bastante sem ninguém perceber a diferença, só a fatura.'),
+    T('I keep a small zoo of LLMs running at home.', 'Mantenho um pequeno zoológico de LLMs rodando em casa.'),
+    T('I use Arch, and it still works.', 'Uso Arch, e ele ainda funciona.'),
+    T('I have opened my laptop to replace the VRAM thermal paste. It survived, and so did I.', 'Já abri o notebook para trocar pasta térmica da VRAM. Ele sobreviveu, eu também.'),
+    T('I started out in information security and data privacy, and the habit never left.', 'Comecei pela segurança da informação e privacidade de dados, e esse hábito nunca saiu.'),
+    T('My first console was a clone with a creative name (Polystation, One Station). Ever since, I distrust hardware that promises too much.', 'Meu primeiro console foi uma réplica com nome criativo (Polystation, One Station). Desde então desconfio de hardware que promete demais.'),
+    T('I grew up between Tibia, Mu Online and CS 1.6. That is where the grind and the patience come from.', 'Cresci entre Tibia, Mu Online e CS 1.6. Grind e paciência vêm daí.'),
+    T('I am gaúcho, born near the Uruguay border: I speak little Spanish, but understand almost everything.', 'Sou gaúcho, nasci perto da fronteira com o Uruguai: falo espanhol pouco, mas entendo quase tudo.'),
+    T('I used to paddle for the university. These days I paddle in pipelines.', 'Já remei pela universidade. Hoje remo em pipeline.'),
+  ],
+};

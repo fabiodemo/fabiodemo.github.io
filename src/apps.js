@@ -1,4 +1,4 @@
-import { PROFILE, STATS, EXPERIENCE, EDUCATION, PUBLICATIONS, RESEARCH, ACADEMIC, CERTS, LANGUAGES, SKILLS, REPO_GROUPS, FEATURED, TRASH, RESUME_SKILLS, RESUME_PROJECTS, CASES } from './data.js';
+import { ABOUT, PROFILE, STATS, EXPERIENCE, EDUCATION, PUBLICATIONS, RESEARCH, ACADEMIC, CERTS, LANGUAGES, SKILLS, REPO_GROUPS, FEATURED, TRASH, RESUME_SKILLS, RESUME_PROJECTS, CASES } from './data.js';
 import { icon } from './pixels.js';
 import avatarUrl from './assets/avatar.webp';
 import portraitUrl from './assets/portrait.webp';
@@ -137,6 +137,8 @@ function sobre(body, ctx) {
         <tr><td>${T('Infrastructure:', 'Infraestrutura:')}</td><td>${T('Terraform on AWS and OCI', 'Terraform em AWS e OCI')}</td></tr>
         <tr><td>${T('Certified:', 'Certificado:')}</td><td><a data-act="certs">${esc(cert.n)}</a></td></tr>
       </table>
+      <h3>${T('Real hardware (home lab)', 'Hardware de verdade (em casa)')}</h3>
+      <table class="cp-table">${ABOUT.rigs.map((r) => `<tr><td>${esc(r.n)}:</td><td>${r.parts.map(esc).join(' · ')}<br><small>${esc(r.os)}</small></td></tr>`).join('')}</table>
       <h3>${T('Computer name, domain and workgroup', 'Nome do computador, domínio e grupo de trabalho')}</h3>
       <table class="cp-table">
         <tr><td>${T('Full name:', 'Nome completo:')}</td><td>${esc(PROFILE.name)}</td></tr>
@@ -636,6 +638,8 @@ function cmd(body, ctx) {
   python turtle.py   run the TurtleBot3 simulation
   games           list the games (open tetris, open snake...)
   mspaint         open Paint
+  desk.cpl        wallpaper and screen saver
+  lanhouse        2000s classics
   open <app>      open a window: forum, blog, stack, projects, skills, certs, guestbook, trash
   lang pt         muda para português (lang auto: segue o navegador)
   neofetch        system info
@@ -651,6 +655,8 @@ function cmd(body, ctx) {
   python turtle.py   roda a simulação do TurtleBot3
   jogos           lista os jogos (open tetris, open snake...)
   mspaint         abre o Paint
+  desk.cpl        papel de parede e proteção de tela
+  lanhouse        clássicos dos anos 2000
   open <app>      abre uma janela: forum, blog, stack, projetos, skills, certs, guestbook, lixeira
   lang en         switch to English (lang auto: follow the browser)
   neofetch        info do sistema
@@ -683,7 +689,10 @@ function cmd(body, ctx) {
    '-------'      Packages: 154 (pipelines)
                   Shell: terraform
                   Commits: ${T('8,302', '8.302')}
-                  ${T('Real life: Fedora + Arch at home, macOS (M4) at work', 'Vida real: Fedora + Arch em casa, macOS (M4) no trabalho')}
+                  ${T('Desktop: Ryzen 5 1400 · RTX 3060 12GB · 24GB · Fedora/GNOME', 'Desktop: Ryzen 5 1400 · RTX 3060 12GB · 24GB · Fedora/GNOME')}
+                  ${T('Laptop: i7-12700H · RTX 3050 · 32GB · Arch/KDE', 'Notebook: i7-12700H · RTX 3050 · 32GB · Arch/KDE')}
+                  ${T('Work: macOS (M4)', 'Trabalho: macOS (M4)')}
+                  ${T('Local LLMs: a small zoo', 'LLMs locais: um pequeno zoológico')}
                   ${T('Pets: 1 cat, 1 dog', 'Pets: 1 gata, 1 cachorro')}
                   ${T('Now playing: Hollow Knight', 'Jogando: Hollow Knight')}`),
     cls: () => { out.textContent = ''; },
@@ -711,7 +720,7 @@ function cmd(body, ctx) {
   };
   Object.assign(cmds, {
     clear: cmds.cls, dir: cmds.ls, projetos: cmds.projects, contato: cmds.contact, jogos: cmds.games,
-    paper: cmds.papers, canoa: cmds.canoe, mspaint: () => ctx.open('paint'), 'mspaint.exe': () => ctx.open('paint'), 'paint.exe': () => ctx.open('paint'), blog: () => ctx.open('blog'), 'turtle.py': () => cmds.python('turtle'), turtle: () => cmds.python('turtle'),
+    paper: cmds.papers, canoa: cmds.canoe, mspaint: () => ctx.open('paint'), 'desk.cpl': () => ctx.open('personalize'), wallpaper: () => ctx.open('personalize'), scrnsave: () => ctx.open('personalize', { arg: 'pz-ss' }), lanhouse: () => ctx.open('lanhouse'), lan: () => ctx.open('lanhouse'), 'mspaint.exe': () => ctx.open('paint'), 'paint.exe': () => ctx.open('paint'), blog: () => ctx.open('blog'), 'turtle.py': () => cmds.python('turtle'), turtle: () => cmds.python('turtle'),
   });
   print(T('DemOS 7 [version 7.9.2026]\n(c) Fábio Demo da Rosa. Type "help" to start.\n', 'DemOS 7 [versão 7.9.2026]\n(c) Fábio Demo da Rosa. Digite "help" para começar.\n'));
   input.addEventListener('keydown', (e) => {
@@ -911,6 +920,8 @@ export const APPS = {
   turtle: { title: T('turtle.py - TurtleBot3 simulation', 'turtle.py - simulação do TurtleBot3'), label: 'turtle.py', icon: 'turtlebot', w: 760, h: 620, render: lazy(() => import('./turtle.js'), 'turtle') },
   figs: { title: T('Windows Photo Viewer', 'Visualizador de Fotos'), label: T('Thesis figures', 'Figuras da tese'), icon: 'photo', w: 820, h: 640, render: figs },
   taskmgr: { title: T('Task Manager', 'Gerenciador de Tarefas'), label: T('Task Manager', 'Ger. de Tarefas'), icon: 'taskmgr', w: 760, h: 600, render: lazy(() => import('./taskmgr.js'), 'taskmgr') },
+  personalize: { title: T('Personalization', 'Personalização'), label: T('Personalize', 'Personalizar'), icon: 'photo', w: 780, h: 600, render: lazy(() => import('./personalize.js'), 'personalize') },
+  lanhouse: { title: T('LAN House', 'Lan House'), label: 'Lan House', icon: 'folder+game', w: 640, h: 520, render: lazy(() => import('./lanhouse.js'), 'lanhouse') },
   blog: { title: T('Blog - fabiodemo.blog', 'Blog - fabiodemo.blog'), label: 'Blog', icon: 'doc+cone', w: 940, h: 660, render: blog },
   paint: { title: T('untitled - Paint', 'sem título - Paint'), label: 'Paint', icon: 'paint', w: 800, h: 600, render: lazy(() => import('./paint.js'), 'paint') },
   stack: { title: T('My badges - Stack', 'Meus emblemas - Stack'), label: 'Stack', icon: 'globe+code', w: 940, h: 660, render: stack },
