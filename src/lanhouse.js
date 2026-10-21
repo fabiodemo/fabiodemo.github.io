@@ -28,11 +28,17 @@ const SHORTCUTS = [
     msg: T('Saving world... Golden rule: never dig straight down.', 'Salvando o mundo... Regra de ouro: nunca cave reto pra baixo.'), app: 'minas' },
   { exe: 'polystation.exe', n: T('PolyStation (9999 in 1)', 'PolyStation (9999 em 1)'), ic: 'console', kind: 'error',
     msg: T('No signal. Blow on the cartridge and try again.', 'Sem sinal. Assopre a fita e tente de novo.') },
+  { exe: 'ClickJogos.url', n: 'Click Jogos', ic: 'flashsite+game', kind: 'plugin',
+    msg: T('Loading... 99%. The ad before the game was longer than the game. Adobe Flash Player was retired on 31/12/2020; these games now live in memory (and in Flashpoint).', 'Carregando... 99%. O anúncio antes do jogo era maior que o jogo. O Adobe Flash Player foi aposentado em 31/12/2020; esses jogos agora vivem na memória (e no Flashpoint).') },
+  { exe: 'Bacaninha.url', n: 'Bacaninha', ic: 'flashsite+heart', kind: 'plugin',
+    msg: T('This content requires Adobe Flash Player. Click here to install. (Since 2020, clicking here does nothing.)', 'Este conteúdo requer o Adobe Flash Player. Clique aqui para instalar. (Desde 2020, clicar aqui não faz nada.)') },
+  { exe: 'Miniclip.url', n: 'Miniclip', ic: 'flashsite+star8', kind: 'plugin',
+    msg: T('Error #1009: Cannot access a property or method of a null object reference. Lab class is over anyway.', 'Error #1009: Cannot access a property or method of a null object reference. A aula no laboratório acabou mesmo.') },
   { exe: 'ps2.exe', n: 'PlayStation 2', ic: 'memcard', kind: 'warn',
     msg: T('The memory card (8MB) in slot 1 is full. Delete the 2003 save?', 'O memory card (8MB) no slot 1 está cheio. Apagar o save de 2003?') },
 ];
 
-const KIND = { info: 'ℹ', warn: '⚠', error: '✖', nudge: '✉' };
+const KIND = { info: 'ℹ', warn: '⚠', error: '✖', nudge: '✉', plugin: '🧩' };
 
 export function lanhouse(body, ctx) {
   let left = 60 * 60;
@@ -73,7 +79,7 @@ export function lanhouse(body, ctx) {
     go.hidden = !app;
     go.textContent = T('Open', 'Abrir');
     dlg.hidden = false;
-    sfx({ error: 'error', warn: 'ding', info: 'notify', nudge: 'nudge' }[kind] || 'notify');
+    sfx({ error: 'error', warn: 'ding', info: 'notify', nudge: 'nudge', plugin: 'ding' }[kind] || 'notify');
     body.querySelector('.lh-ok').focus();
     if (kind === 'nudge') {
       const win = body.closest('.win');

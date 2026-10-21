@@ -261,7 +261,7 @@ function forumIndex() {
       ${row('grey', 'folder+chip', 'GreyLogix Brasil <em>(2021 - 2024)</em>', T('Industrial IoT, GCP data engineering, DW/Data Lake, dashboards, low-code and edge. 4 phases, 10+ clients.', 'IoT industrial, data engineering na GCP, DW/Data Lake, dashboards, low-code e edge. 4 fases, 10+ clientes.'), 7, T('1,337', '1.337'), `${T('Aug 2024', 'ago/2024')}<br>${by} fabio`)}
       ${cat(T('Projects', 'Projetos'))}
       ${row('destaques', 'folder+chart', T('Featured projects', 'Projetos em destaque'), T('The 6 projects with the biggest measured impact, before and after.', 'Os 6 projetos com maior impacto medido, com antes e depois.'), 6, '6', `${T('Sep 2026', 'set/2026')}<br>${by} fabio`)}
-      ${row('casos', 'folder+db', T('Case studies (STAR)', 'Estudos de caso (STAR)'), T('Four real situations, including the parts that did not go to plan.', 'Quatro situações reais, incluindo as partes que não saíram como o planejado.'), CASES.length, CASES.length, `${T('Sep 2026', 'set/2026')}<br>${by} fabio`)}
+      ${row('casos', 'folder+db', T('Case studies (STAR)', 'Estudos de caso (STAR)'), T('Five real situations, including the parts that did not go to plan.', 'Cinco situações reais, incluindo as partes que não saíram como o planejado.'), CASES.length, CASES.length, `${T('Sep 2026', 'set/2026')}<br>${by} fabio`)}
       ${row('app:projetos', 'folder+net', T('GitHub repositories', 'Repositórios no GitHub'), T('Data engineering, Deep RL, APIs, ML studies and a few games.', 'Data engineering, Deep RL, APIs, estudos de ML e uns joguinhos.'), 30, '30', `${T('Oct 2026', 'out/2026')}<br>${by} fabio`)}
       ${row('app:blog', 'doc+cone', T('Blog 🚧 under construction', 'Blog 🚧 em obras'), T('Posts and tutorials on data engineering. Coming soon, pardon the dust.', 'Posts e tutoriais de data engineering. Em breve, desculpe a poeira.'), 0, '0', T('soon', 'em breve'))}
       ${row('app:stack', 'globe+code', T('Stack blog (badges)', 'Blog da stack (emblemas)'), T('Python, PySpark, SQL, Databricks, AWS and the rest, as badges, plus my GitHub stats.', 'Python, PySpark, SQL, Databricks, AWS e o resto, em emblemas, mais meus stats do GitHub.'), 10, '68', `${T('Oct 2026', 'out/2026')}<br>${by} fabio`)}
@@ -328,7 +328,7 @@ function forumPage(page) {
         title: `${i ? 'Re: ' : ''}${esc(c.t)}`,
         date: 'Warren Investimentos',
         sig: i === CASES.length - 1,
-        html: `<dl class="star"><dt>${T('Situation', 'Situação')}</dt><dd>${esc(c.s)}</dd><dt>${T('Action', 'Ação')}</dt><dd>${esc(c.a)}</dd><dt>${T('Result', 'Resultado')}</dt><dd>${esc(c.r)}</dd></dl>`,
+        html: `<dl class="star"><dt>${T('Situation', 'Situação')}</dt><dd>${esc(c.s)}</dd>${c.k ? `<dt>${T('Task', 'Tarefa')}</dt><dd>${esc(c.k)}</dd>` : ''}<dt>${T('Action', 'Ação')}</dt><dd>${esc(c.a)}</dd><dt>${T('Result', 'Resultado')}</dt><dd>${esc(c.r)}</dd></dl>`,
       })).join('')}
       ${next('formacao')}`;
   }

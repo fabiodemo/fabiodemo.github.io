@@ -54,7 +54,7 @@ export const EXPERIENCE = [
       ['Senior Data Engineer', T('Feb 2026 - Present', 'fev/2026 - atual')],
       ['Data Engineer', T('Jul 2024 - Feb 2026', 'jul/2024 - fev/2026')],
     ],
-    resume: [0, 2, 1, 11, 12, 7, 8, 3, 9, 13],
+    resume: [0, 2, 1, 4, 11, 12, 7, 8, 3, 13],
     note: T(
       'Investment fintech, DataOps team. Promoted to Senior in Feb 2026.',
       'Fintech de investimentos, time de DataOps. Promovido a Sênior em fev/2026.',
@@ -69,8 +69,8 @@ export const EXPERIENCE = [
         'Foi um dos responsáveis pelo FinOps que levou a fatura AWS de ~US$11k para ~US$3,4k por mês (-69%, set/2025 a set/2026): quebrou pipelines pesados num padrão DMS + single node ou serverless (sistema de consolidação de carteiras: -67%, de 6 workflows para 1; sistemas de tarifação e de boletagem: -78,5% em AWS + Databricks), passou 9 tabelas DynamoDB para on-demand (US$105 → ~US$5/mês), rastreou e cortou um pico de egress de data sharing, e revisou a limpeza de storage (Glacier, buckets sem uso).'),
       T('Moved pipelines and users off the legacy Datalake to Delta Lake + Unity Catalog (a UCX assessment found 9,574 legacy table uses) and shut the old workspace down in Jun 2026 with a Terraform backup.',
         'Migrou pipelines e usuários do Datalake legado para Delta Lake + Unity Catalog (assessment UCX com 9.574 usos de tabelas legadas) e desligou o workspace antigo em jun/2026 com backup em Terraform.'),
-      T('Built the trading desks\' near-real-time cash-management feed (Projeto Ganesha): 6 sources (Sinacor, B3, TED/PIX, fixed income, funds, internal API) refreshed every 5 minutes behind a monitoring dashboard.',
-        'Construiu o feed de cash management near-real-time das mesas (Projeto Ganesha): 6 fontes (Sinacor, B3, TED/PIX, renda fixa, fundos e API interna) atualizadas a cada 5 min com dashboard de monitoramento.'),
+      T('Co-led the productization of Ganesha, an intraday cash-management platform refreshed every 10 minutes during trading hours: moved the code to standard workflows, sized a memory-optimized cluster and isolated the B3 settlement query (4+ min) that caused most failures, bringing each run to 2-3 min.',
+        'Coliderou a produtização do Ganesha, plataforma de gestão de caixa intradiária atualizada a cada 10 min durante o pregão: migrou o código para workflows padronizados, dimensionou um cluster otimizado para memória e isolou a consulta de liquidações B3 (4+ min) que causava a maioria das falhas, deixando cada execução em 2 a 3 min.'),
       T('Sped up the Sinacor (Oracle) back-office ingestion on DMS: heavy tasks from >3h to 15-16 min; historic table from 120 to 12 columns and from >3h to ~40 min; Sinacor API 66% faster.',
         'Otimizou a ingestão do Sinacor (Oracle) no DMS: tasks pesadas de >3h para 15-16 min; tabela histórica de 120 para 12 colunas, de >3h para ~40 min; API do Sinacor 66% mais rápida.'),
       T('Refactored a MongoDB pipeline to incremental JDBC upserts (4h → 5 min, 98%) and replaced pandas ingestion with distributed Spark reads in high-volume pipelines.',
@@ -440,13 +440,13 @@ export const FEATURED = [
     stack: ['UCX', 'Unity Catalog', 'Delta Lake', 'Terraform', 'GitHub Actions'],
   },
   {
-    t: T('Projeto Ganesha · cash management', 'Projeto Ganesha · cash management'),
-    big: T('6 sources, 5 min', '6 fontes, 5 min'),
+    t: T('Ganesha · intraday cash management', 'Ganesha · gestão de caixa intradiária'),
+    big: T('every 10 min, 2-3 min runs', 'a cada 10 min, em 2-3 min'),
     body: T(
-      'Treasury and the trading desks needed to see available cash, settlements and per-desk usage during the day. I joined Sinacor, B3, TED/PIX, fixed income, funds and an internal API into a near-real-time feed with an AI/BI dashboard, schema checks and retries with backoff.',
-      'Tesouraria e mesas precisavam ver caixa disponível, vencimentos e consumo por mesa durante o dia. Juntei Sinacor, B3, TED/PIX, renda fixa, fundos e uma API interna num feed near-real-time com dashboard AI/BI, schema checks e retry com backoff.',
+      'Every 10 minutes during trading hours it consolidates client account balances, B3, fund and fixed-income settlements, TED/PIX transfers and the cash needed by booked orders. Treasury and Operations watch it on a liquidity dashboard with automatic balance alerts, so the day\'s cash need shows up in time and the risk of a failed settlement drops. My part: taking it from loose notebooks to production with the tech lead, cluster sizing, splitting the slow B3 query from TED/PIX, Delta auto-optimize/auto-compact for the dashboard, and keeping it running through source changes and the OCI migration.',
+      'A cada 10 minutos durante o pregão, consolida os saldos em conta dos clientes, as liquidações em B3, fundos e renda fixa, as movimentações TED/PIX e a necessidade de caixa das operações boletadas. Tesouraria e Operações acompanham num painel de liquidez com alertas automáticos de saldo, então a necessidade de caixa do dia aparece a tempo e o risco de falha na liquidação cai. Minha parte: levar de notebooks avulsos para produção junto com o líder técnico, dimensionar o cluster, separar a consulta lenta de B3 da de TED/PIX, auto-optimize/auto-compact nas tabelas Delta do painel e manter tudo rodando com mudanças nas fontes e a migração para a OCI.',
     ),
-    stack: ['PySpark', 'Delta Lake', 'Workflows', 'AI/BI', 'UC Volumes'],
+    stack: ['PySpark', 'Delta Lake', 'Workflows', 'AI/BI', 'GitHub', 'Sinacor', 'B3'],
   },
   {
     t: 'FinOps',
@@ -531,6 +531,13 @@ export const RESUME_PROJECTS = [
 
 // Estudos de caso (STAR) para o fórum
 export const CASES = [
+  {
+    t: T('Ganesha: intraday cash that cannot stop', 'Ganesha: caixa intradiário que não pode parar'),
+    s: T('In late 2024 the Data team joined a task force to give Operations and Treasury a view of cash during the day. The first version ran on loose notebooks over unstable sources (Sinacor, the production Metabase, the Cash Flow API and the order-booking APIs), and it had to run nonstop during trading hours.', 'No fim de 2024, o time de Dados entrou numa força-tarefa para dar a Operações e à Tesouraria uma visão de caixa ao longo do dia. A primeira versão rodava em notebooks avulsos sobre fontes instáveis (Sinacor, o Metabase de produção, a API de Cash Flow e as APIs de boletagem) e precisava rodar sem parar durante o pregão.'),
+    k: T('With the tech lead, I owned the switch to production: bring the code up to the team\'s engineering standards and keep the continuous ingestion stable and cheap.', 'Dividi com o líder técnico a "virada de chave": levar o código para produção nos padrões de engenharia do time e garantir que a ingestão contínua fosse estável e com custo controlado.'),
+    a: T('Moved the notebooks to GitHub and production workflows (Cash Flow API, B3, fund and fixed-income settlement tables). Compared instance families and picked memory-optimized for the all-day recurring runs. Found the bottleneck behind most failures: the B3 settlement query took 4+ minutes and held up the rest, so I split it from the TED/PIX task (about 1 minute). Kept it alive through source changes (a table removed from Metabase, network issues with Sinacor after the OCI migration) and tuned Delta auto-optimize/auto-compact for the dashboard.', 'Migrei os notebooks para GitHub e workflows de produção (API de Cash Flow, tabelas de liquidação de B3, fundos e renda fixa). Comparei famílias de instância e escolhi a otimizada para memória, pelas execuções recorrentes o dia todo. Achei o gargalo da maioria das falhas: a consulta de liquidações B3 levava 4+ minutos e travava o resto, então separei da task de TED/PIX (cerca de 1 minuto). Mantive o fluxo de pé com mudanças nas fontes (uma tabela removida do Metabase, problemas de rede com o Sinacor depois da migração para a OCI) e ajustei auto-optimize/auto-compact nas tabelas Delta do painel.'),
+    r: T('Ganesha is a critical flow in production: every 10 minutes on every business day, runs of 2-3 minutes, and the main tool Treasury and Operations use to follow liquidity during the day, with fewer failures and less manual work.', 'O Ganesha virou um fluxo crítico em produção: roda a cada 10 minutos em todos os dias úteis, com execuções de 2 a 3 minutos, e é a principal ferramenta da Tesouraria e de Operações para acompanhar a liquidez ao longo do dia, com menos falhas e menos intervenção manual.'),
+  },
   {
     t: T('A gain that had to be won back', 'Um ganho que precisou ser reconquistado'),
     s: T('After the portfolio pipeline stopped running on weekends to save cost, one queue table grew from 10-12 minutes to 1h30.', 'Depois que o pipeline de portfólio parou de rodar no fim de semana para economizar, uma tabela de fila subiu de 10-12 minutos para 1h30.'),

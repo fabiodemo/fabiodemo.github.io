@@ -517,6 +517,8 @@ S.grass = ['................', '.......kk.......', '.....kknnkk.....', '...kknnn
 S.console = ['................', '................', '....kkkkkkkk....', '....kyyyyyyk....', '....kyrrrryk....', '.kkkkGGGGGGkkkk.', 'kggggggggggggggk', 'kgrgggggggggbggk', 'kggggggggggggggk', 'kgGGGGGGGGGGGGgk', 'kggkkggggggkkggk', 'kggggggggggggggk', '.kkkkkkkkkkkkkk.', '..kd........dk..', '..kk........kk..', '................'];
 S.memcard = ['................', '....kkkkkkkk....', '....kddddddk....', '....kdbbbbdk....', '....kdbccbdk....', '....kdbbbbdk....', '....kddddddk....', '....kddddddk....', '....kddddddk....', '....kddddddk....', '....kdGGGGdk....', '....kddddddk....', '....kyyyyyyk....', '....kykykyyk....', '....kkkkkkkk....', '................'];
 
+S.flashsite = ['................', 'kkkkkkkkkkkkkkkk', 'kBBBBBBBBBBBwrwk', 'kkkkkkkkkkkkkkkk', 'kwwwwwwwwwwwwwwk', 'kwwwwwwwwyykwwwk', 'kwwwwwwwyykwwwwk', 'kwwwwwwyykwwwwwk', 'kwwwwwyyyyyykwwk', 'kwwwwwwwwyykwwwk', 'kwwwwwwwyykwwwwk', 'kwwwwwwyykwwwwwk', 'kwwwwwykwwwwwwwk', 'kwwwwwwwwwwwwwwk', 'kkkkkkkkkkkkkkkk', '................'];
+
 // Badges 8x8 para pastas e para o Gerenciador de Dispositivos
 const B = {
   db: ['.kkkkkk.', 'kcbbbbck', 'kkccccKk', 'kbbbbbbk', 'kkbbbbkk', 'kbbbbbbk', 'kkbbbbkk', '.kkkkkk.'],

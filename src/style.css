@@ -887,3 +887,5 @@ body.no-aero .marquee span, body.no-aero .gd-bar i { animation: none; }
 .gp-top { white-space: nowrap; gap: 6px; }
 .gp-modename { max-width: 112px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .gp-menu.up { top: auto; bottom: calc(100% - 26px); }
+.lh-kind.k-plugin { background: #e8e8e8; border: 1px solid #aaa; font-size: 18px; }
+.lh-btns [hidden] { display: none; }
