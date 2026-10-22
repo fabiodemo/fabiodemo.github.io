@@ -131,6 +131,20 @@ const SOUNDS = {
     tone(58, { dur: 6, type: 'sine', vol: 0.1, to: 28, attack: 1.5 });
     tone(87, { at: 0.5, dur: 5, type: 'triangle', vol: 0.04, to: 41, attack: 1.2 });
   },
+  // explosão do buraco negro: estouro grave, ar sendo empurrado e estilhaços
+  explode() {
+    noise({ dur: 2.2, vol: 0.3, type: 'lowpass', from: 2200, to: 50, q: 0.6 });
+    noise({ at: 0.05, dur: 1.4, vol: 0.12, type: 'bandpass', from: 5000, to: 400, q: 0.8 });
+    tone(90, { dur: 1.6, type: 'sine', vol: 0.16, to: 28 });
+    for (let i = 0; i < 10; i++) noise({ at: 0.2 + i * 0.09 + Math.random() * 0.05, dur: 0.05, vol: 0.05, from: 3000 + Math.random() * 3000, to: 1500, q: 3 });
+  },
+  // fita rebobinando: chiado agudo que oscila
+  rewind() {
+    for (let i = 0; i < 12; i++) {
+      tone(900 + (i % 4) * 260, { at: i * 0.08, dur: 0.09, type: 'sawtooth', vol: 0.012, to: 1600 + (i % 3) * 400 });
+      noise({ at: i * 0.08, dur: 0.08, vol: 0.03, from: 4200, to: 2600, q: 5 });
+    }
+  },
   // assoprar a fita
   blow() { noise({ dur: 0.55, vol: 0.09, type: 'lowpass', from: 900, to: 300, q: 0.5 }); },
   // internet discada: tons de discagem, portadora e o "chiado" do handshake

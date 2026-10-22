@@ -749,19 +749,18 @@ function switchLang(l) {
   const same = l === 'auto' ? AUTO : l === LANG && !AUTO;
   if (same) { langMenu.classList.add('hidden'); return; }
   // guarda as janelas abertas para reabrir depois do reload
-  const state = [...wins.values()].map((w) => ({
+  try { sessionStorage.setItem('cv.restore', JSON.stringify(snapshotWins())); } catch { /* ok */ }
+  setLang(l);
+}
+
+function snapshotWins() {
+  return [...wins.values()].map((w) => ({
     id: w.id, x: parseFloat(w.el.style.left), y: parseFloat(w.el.style.top),
     w: w.el.offsetWidth, h: w.el.offsetHeight, max: w.max, min: w.min, arg: w.ctx.arg,
     z: +w.el.style.zIndex || 0,
   })).sort((a, b) => a.z - b.z);
-  try { sessionStorage.setItem('cv.restore', JSON.stringify(state)); } catch { /* ok */ }
-  setLang(l);
 }
-
-function restoreWindows() {
-  let list;
-  try { list = JSON.parse(sessionStorage.getItem('cv.restore') || 'null'); sessionStorage.removeItem('cv.restore'); } catch { list = null; }
-  if (!Array.isArray(list) || !list.length) return false;
+function reopenWins(list) {
   list.forEach((w) => {
     if (!w || !Object.hasOwn(APPS, w.id)) return;
     openApp(w.id, { x: w.x, y: w.y, arg: w.arg, quiet: true });
@@ -771,6 +770,12 @@ function restoreWindows() {
     if (w.max) setMax(w.id, true, false);
     if (w.min) minimize(w.id);
   });
+}
+function restoreWindows() {
+  let list;
+  try { list = JSON.parse(sessionStorage.getItem('cv.restore') || 'null'); sessionStorage.removeItem('cv.restore'); } catch { list = null; }
+  if (!Array.isArray(list) || !list.length) return false;
+  reopenWins(list);
   return true;
 }
 
@@ -922,15 +927,16 @@ addEventListener('cv-selfdestruct', () => {
   clearTimeout(ssIdle);
   import('./selfdestruct.js').then((m) => m.selfDestruct({
     closeAll: () => {
-      const n = wins.size;
+      const state = snapshotWins();
       closeStart();
       silentClose = true;
       [...wins.keys()].forEach(closeWin);
       silentClose = false;
-      return n;
+      return state;
     },
+    reopen: (state) => { silentClose = true; reopenWins(state); silentClose = false; },
     cancel: () => { sdRunning = false; armIdle(); },
-    freeze: () => scene.setFocus(true),
+    freeze: (on = true) => (on ? scene.setFocus(true) : calm()),
     ach: achievement,
   })).catch(() => { sdRunning = false; });
 });

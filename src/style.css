@@ -984,3 +984,11 @@ html.sd-glitch #taskbar { animation-duration: .13s; }
 .gd-egg:not(.open):hover { background: #e5f3fb; }
 .sd-dlg-b i.info { color: #2f7fe0; }
 @media (max-width: 760px) { .gd-n { width: 76px; white-space: normal; font-size: 11px; } .gd-n img { display: block; margin: 0 0 3px; } .gd-refs td:first-child, .gd-refs td:last-child { width: auto; } }
+.sd-fade { opacity: 0 !important; transition: opacity .4s; pointer-events: none; }
+.sd-vhs { position: fixed; inset: 0; z-index: 99998; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.14) 0 1px, transparent 1px 3px), rgba(40,70,140,.06); }
+.sd-vhs b, .sd-vhs span { position: absolute; top: 18px; font: 34px/1 var(--pix); color: #fff; text-shadow: 2px 2px 0 #000, 0 0 10px rgba(255,255,255,.4); letter-spacing: 2px; }
+.sd-vhs b { left: 22px; animation: sd-blink 1s steps(1) infinite; }
+.sd-vhs span { right: 22px; font-variant-numeric: tabular-nums; }
+.sd-vhs.play b { animation: none; }
+@keyframes sd-blink { 50% { opacity: .25; } }
+@media (max-width: 699px) { .sd-vhs b, .sd-vhs span { font-size: 24px; top: 12px; } }
