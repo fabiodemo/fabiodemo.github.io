@@ -1,17 +1,19 @@
-// Gadget de "media player" no estilo Winamp/WMP: finge que está tocando (sem áudio nenhum),
-// com visualizações que trocam a cada faixa (ou clicando nelas).
+// Gadget de "media player" no estilo Winamp/WMP. Começa pausado; no play toca o loop
+// sintetizado da faixa (music.js, carregado só nessa hora) e as visualizações passam a
+// seguir o espectro de verdade. As visualizações trocam a cada faixa (ou clicando nelas).
 import { T } from './i18n.js';
+import { isMuted } from './sfx.js';
 
 const TRACKS = [
   ['Wololo (Monk Remix)', 'DJ Aldeão', 192, 128],
   ['Dial-up Symphony in 56k', 'Modem Orchestra', 168, 96],
   ['Lorencia Nights', 'Blade Knight +7', 214, 110],
-  ['HESOYAM (Extended Mix)', 'Grove St. Allstars', 236, 100],
-  ['Bobba Groove', 'Hotel Lobby Band', 181, 118],
-  ['Eu Odeio Acordar Cedo', 'Comunidade do Orkut', 157, 140],
-  ['pipeline_green.mid', 'fabio', 143, 132],
+  ['HESOYAM (Extended Mix)', 'Grove St. Allstars', 236, 96],
+  ['Bobba Groove', 'Hotel Lobby Band', 181, 124],
+  ['Eu Odeio Acordar Cedo', 'Comunidade do Orkut', 157, 150],
+  ['pipeline_green.mid', 'fabio', 143, 104],
   ['Fire in the Hole', 'de_dust2 Sessions', 199, 150],
-  ['Blow the Cartridge', 'PolyStation 9999-in-1', 175, 124],
+  ['Blow the Cartridge', 'PolyStation 9999-in-1', 175, 132],
   ['Exura Vita', 'Temple Choir', 228, 84],
 ];
 const MODES = ['bars', 'mist', 'fire', 'scope', 'ambience', 'spiral'];
@@ -41,9 +43,9 @@ export function mountPlayer(parent) {
     <div class="gp-time"><span class="gp-cur">0:00</span><div class="gp-seek"><i></i></div><span class="gp-len"></span></div>
     <div class="gp-ctl">
       <button type="button" data-p="prev" aria-label="${T('Previous', 'Anterior')}">⏮</button>
-      <button type="button" data-p="play" class="gp-play" aria-label="${T('Play/pause', 'Tocar/pausar')}">⏸</button>
+      <button type="button" data-p="play" class="gp-play" aria-label="${T('Play/pause', 'Tocar/pausar')}" title="${T('Play (with sound)', 'Tocar (com som)')}">▶</button>
       <button type="button" data-p="next" aria-label="${T('Next', 'Próxima')}">⏭</button>
-      <span class="gp-vol" title="${T('Volume 0: meeting mode', 'Volume 0: modo reunião')}">🔇</span>
+      <span class="gp-vol" title="${T('Paused', 'Pausado')}">🔇</span>
     </div>`;
   parent.appendChild(el);
 
@@ -56,7 +58,21 @@ export function mountPlayer(parent) {
   let mode = vis !== 'auto' && MODES.includes(vis) ? MODES.indexOf(vis) : ti % MODES.length;
   const menu = el.querySelector('.gp-menu');
   let pos = 0;
-  let playing = true;
+  let playing = false;
+  let music = null;
+  const spec = new Float32Array(24);
+  let live = false;
+  el.classList.add('paused');
+  // som de verdade: carrega o sintetizador só no primeiro play
+  const sound = () => {
+    const vol = el.querySelector('.gp-vol');
+    vol.textContent = playing ? '🔊' : '🔇';
+    vol.title = playing ? T('Playing. The speaker on the taskbar mutes everything.', 'Tocando. O alto-falante da barra de tarefas silencia tudo.') : T('Paused', 'Pausado');
+    if (!playing) { music?.stop(); return; }
+    if (isMuted()) dispatchEvent(new CustomEvent('cv-unmute'));
+    const i = ti;
+    import('./music.js').then((m) => { music = m; if (playing && ti === i) m.play(ti); }).catch(() => {});
+  };
   let last = performance.now();
   let raf = 0;
   const peaks = new Float32Array(24);
@@ -68,6 +84,7 @@ export function mountPlayer(parent) {
     el.querySelector('.gp-marq').textContent = `${artist} - ${name}  ★  ${artist} - ${name}  ★  `;
     el.querySelector('.gp-len').textContent = fmt(len);
     g.clearRect(0, 0, W, H);
+    if (playing) music?.play(ti);
   }
   function setMode(m) {
     mode = (m + MODES.length) % MODES.length;
@@ -80,6 +97,7 @@ export function mountPlayer(parent) {
 
   // "sinal" de mentira: soma de senos com batida no BPM da faixa
   function level(i, t) {
+    if (live) return Math.max(0.02, Math.min(1, spec[i % 24] * 1.15 + Math.random() * 0.03));
     const bpm = TRACKS[ti][3];
     const beat = Math.max(0, Math.sin((t * bpm * Math.PI) / 60)) ** 8;
     const base = 0.35 + 0.25 * Math.sin(t * 1.3 + i * 0.7) + 0.2 * Math.sin(t * 3.1 + i * 1.9 + ti);
@@ -184,6 +202,7 @@ export function mountPlayer(parent) {
         el.querySelector('.gp-cur').textContent = fmt(pos);
         el.querySelector('.gp-seek i').style.width = `${(pos / len) * 100}%`;
       }
+      live = playing && !!music?.bands(spec);
       draw(now / 1000);
     }
     if (!document.hidden) raf = requestAnimationFrame(frame);
@@ -198,7 +217,7 @@ export function mountPlayer(parent) {
   };
   el.addEventListener('click', (e) => {
     const p = e.target.closest('[data-p]')?.dataset.p;
-    if (p === 'play') { playing = !playing; e.target.textContent = playing ? '⏸' : '▶'; el.classList.toggle('paused', !playing); }
+    if (p === 'play') { playing = !playing; e.target.textContent = playing ? '⏸' : '▶'; el.classList.toggle('paused', !playing); sound(); }
     if (p === 'next') nextTrack(1);
     if (p === 'prev') { if (pos > 3) load(ti); else nextTrack(-1); }
     if (e.target.closest('.gp-modename')) { openMenu(menu.hidden); return; }

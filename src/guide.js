@@ -37,7 +37,7 @@ const TOUR = [
     ['personalize', 0, 0, T('Wallpaper, screen saver and glass transparency. Right-clicking the desktop gets you there too.', 'Papel de parede, proteção de tela e transparência do vidro. O clique direito no desktop também leva lá.')],
     ['cmd', 0, 0, T('Terminal with CV commands. Type help. Some commands are not in the help.', 'Terminal com comandos do CV. Digite help. Alguns comandos não estão no help.')],
     ['lixeira', 0, 0, T('What was retired: 19-hour pipelines, giant clusters, unused buckets.', 'O que foi aposentado: pipelines de 19 horas, clusters gigantes, buckets sem uso.')],
-    [null, 'chart', T('Gadgets', 'Gadgets'), T('Right side of the desktop: Before × After of the pipelines, Steam and a media player with 6 visualizations.', 'Lado direito do desktop: Antes × Depois dos pipelines, Steam e um media player com 6 visualizações.')],
+    [null, 'chart', T('Gadgets', 'Gadgets'), T('Right side of the desktop: Before × After of the pipelines, Steam and a media player with 10 original tracks (press play) and 6 visualizations.', 'Lado direito do desktop: Antes × Depois dos pipelines, Steam e um media player com 10 faixas originais (é só dar play) e 6 visualizações.')],
     [null, 'computer', T('Taskbar', 'Barra de tarefas'), T('Start menu (or the Windows key), EN/PT button (auto follows the browser language), sound on/off and the clock.', 'Menu Iniciar (ou a tecla Windows), botão EN/PT (o auto segue o idioma do navegador), som liga/desliga e o relógio.')],
   ]],
 ];
@@ -69,6 +69,7 @@ const REFS = [
   [T('Dial-up internet', 'Internet discada'), T('Sound when the LAN House connects, "Dial-up Symphony in 56k" track', 'Som ao conectar a Lan House, faixa "Dial-up Symphony in 56k"'), T('56k modems', 'Modems de 56k')],
   [T('LAN houses', 'Lan houses'), T('LAN House do Seu Zé: R$1.50 an hour, 60-minute timer', 'Lan House do Seu Zé: R$1,50 a hora, timer de 60 minutos'), T('Brazil, 2000s', 'Brasil, anos 2000')],
   ['Winamp / Windows Media Player', T('Media player gadget with visualizations', 'Gadget de media player com visualizações'), 'Winamp (1997), WMP'],
+  [T('2000s music', 'Música dos anos 2000'), T('Media player tracks: eurodance, G-funk, bossa nova, emo, piano rock, nu-metal, chiptune, choir (original loops, no samples)', 'Faixas do media player: eurodance, G-funk, bossa nova, emo, rock com piano, nu-metal, chiptune, coral (loops originais, sem samples)'), T('MTV and the LAN house speakers', 'MTV e as caixinhas de som da lan house')],
   ['Tetris, Snake, Flappy Bird', T('Games folder (Flappy Birb)', 'Pasta Jogos (Flappy Birb)'), '1984, Nokia (1997), 2013'],
   [T('2000s web', 'Web dos anos 2000'), T('phpBB forum, visitor counter, guestbook ~*~, "best viewed at 1024x768", under construction sign', 'Fórum phpBB, contador de visitas, livro de visitas ~*~, "melhor visualizado em 1024x768", plaquinha de em obras'), 'Web 1.0'],
   [T('Linux memes', 'Memes de Linux'), T('Prompt: sudo, dnf, pacman ("btw, I use Arch"), neofetch', 'Prompt: sudo, dnf, pacman ("aliás, eu uso Arch"), neofetch'), 'Linux'],

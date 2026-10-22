@@ -584,6 +584,7 @@ function tick() {
 tick();
 setInterval(tick, 10000);
 
+addEventListener('cv-unmute', () => { setMuted(false); renderSound(); });
 $('#tray-sound').addEventListener('click', () => {
   setMuted(!isMuted());
   renderSound();
