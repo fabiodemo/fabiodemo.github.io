@@ -131,7 +131,7 @@ function sobre(body, ctx) {
       <h2>${T('View basic information about your computer', 'Exibir informações básicas sobre o computador')}</h2>
       <h3>${T('Edition', 'Edição')}</h3>
       <div class="cp-edition">
-        <div><b>DemOS 7 Professional</b><br>Copyright © 2016-2026 ${esc(PROFILE.name)}.<br>Service Pack: ${T('Senior (Feb 2026)', 'Sênior (fev/2026)')}</div>
+        <div><b>DemOS 7 Professional</b><br>Copyright © 2016-2026 ${esc(PROFILE.name)}.<br>Service Pack: ${T('Senior (Jan 2026)', 'Sênior (jan/2026)')}</div>
         <img src="${portraitUrl}" alt="${esc(PROFILE.name)}" class="cp-avatar photo">
       </div>
       <h3>${T('System', 'Sistema')}</h3>
@@ -189,7 +189,7 @@ function userPanel(extra = {}) {
     <span class="fp-class">${extra.cls || 'Blade Master'}</span>
     <span class="fp-stars">${`<img src="${icon('star', 1)}" alt="">`.repeat(extra.stars || 5)}</span>
     <img class="fp-ava photo" src="${avatarUrl}" alt="${T('pixel avatar', 'avatar pixelado')}" loading="lazy">
-    <span>${T('Joined', 'Registrado')}: ${extra.reg || T('Jul 2024', 'jul/2024')}</span>
+    <span>${T('Joined', 'Registrado')}: ${extra.reg || T('Jun 2024', 'jun/2024')}</span>
     <span>${T('Posts', 'Mensagens')}: ${extra.posts || T('8,302', '8.302')}</span>
     <span>${T('Location', 'Local')}: Santa Maria/RS</span>
     <span class="fp-rate" title="${T('trusty · cool · fans', 'confiável · legal · fãs')}">☺☺☺ ❄❄❄ ★${extra.fans || 3}</span>
@@ -216,7 +216,7 @@ function expPost(x) {
     sig: !x.phases,
     html: `<p class="fp-note">${esc(x.note)}</p>
       <div class="roles">${x.roles.map(([r, w]) => `<span><b>${esc(r)}</b> ${esc(w)}</span>`).join('')}</div>
-      <ul class="fp-list">${x.bullets.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>
+      ${x.periods ? '' : `<ul class="fp-list">${x.bullets.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>`}
       ${x.clients ? `<p class="fp-clients"><b>${T('Clients served', 'Clientes atendidos')}:</b> ${x.clients.map(esc).join(' · ')}</p>` : ''}
       ${tags(x.stack)}`,
   });
@@ -257,11 +257,11 @@ function forumIndex() {
     <table class="ftable">
       <tr class="f-headrow"><th colspan="2">${T('Forum', 'Fórum')}</th><th>${T('Topics', 'Tópicos')}</th><th>${T('Posts', 'Mensagens')}</th><th>${T('Last post', 'Última mensagem')}</th></tr>
       ${cat(T('Career', 'Carreira'))}
-      ${row('warren', 'folder+db', `Warren Investimentos <em>(2024 - ${T('present', 'atual')})</em>`, T('Data platform for an investment fintech: pipelines, FinOps, governance, data quality, OCI.', 'Data platform de uma fintech de investimentos: pipelines, FinOps, governança, data quality, OCI.'), 12, T('8,302', '8.302'), `${T('Sep 2026', 'set/2026')}<br>${by} fabio`)}
-      ${row('grey', 'folder+chip', 'GreyLogix Brasil <em>(2021 - 2024)</em>', T('Industrial IoT, GCP data engineering, DW/Data Lake, dashboards, low-code and edge. 4 phases, 10+ clients.', 'IoT industrial, data engineering na GCP, DW/Data Lake, dashboards, low-code e edge. 4 fases, 10+ clientes.'), 7, T('1,337', '1.337'), `${T('Aug 2024', 'ago/2024')}<br>${by} fabio`)}
+      ${row('warren', 'folder+db', `Warren Investimentos <em>(2024 - ${T('present', 'atual')})</em>`, T('Data platform and MLOps for an investment fintech, in two periods: Data Platform Engineer, then Senior. Pipelines, governance, FinOps.', 'Data platform e MLOps de uma fintech de investimentos, em dois períodos: Data Platform Engineer, depois Sênior. Pipelines, governança, FinOps.'), 2, T('8,302', '8.302'), `${T('Sep 2026', 'set/2026')}<br>${by} fabio`)}
+      ${row('grey', 'folder+chip', 'GreyLogix Brasil <em>(2021 - 2024)</em>', T('Industrial IoT, GCP data engineering, DW/Data Lake, dashboards, low-code and edge. 4 phases, 10+ clients.', 'IoT industrial, data engineering na GCP, DW/Data Lake, dashboards, low-code e edge. 4 fases, 10+ clientes.'), 7, T('1,337', '1.337'), `${T('Jun 2024', 'jun/2024')}<br>${by} fabio`)}
       ${cat(T('Projects', 'Projetos'))}
-      ${row('destaques', 'folder+chart', T('Featured projects', 'Projetos em destaque'), T('The 6 projects with the biggest measured impact, before and after.', 'Os 6 projetos com maior impacto medido, com antes e depois.'), 6, '6', `${T('Sep 2026', 'set/2026')}<br>${by} fabio`)}
-      ${row('casos', 'folder+db', T('Case studies (STAR)', 'Estudos de caso (STAR)'), T('Five real situations, including the parts that did not go to plan.', 'Cinco situações reais, incluindo as partes que não saíram como o planejado.'), CASES.length, CASES.length, `${T('Sep 2026', 'set/2026')}<br>${by} fabio`)}
+      ${row('destaques', 'folder+chart', T('Featured projects', 'Projetos em destaque'), T(`The ${FEATURED.length} projects with the biggest measured impact, before and after.`, `Os ${FEATURED.length} projetos com maior impacto medido, com antes e depois.`), FEATURED.length, FEATURED.length, `${T('Sep 2026', 'set/2026')}<br>${by} fabio`)}
+      ${row('casos', 'folder+db', T('Case studies (STAR)', 'Estudos de caso (STAR)'), T(`${CASES.length} real situations, including the parts that did not go to plan.`, `${CASES.length} situações reais, incluindo as partes que não saíram como o planejado.`), CASES.length, CASES.length, `${T('Sep 2026', 'set/2026')}<br>${by} fabio`)}
       ${row('app:projetos', 'folder+net', T('GitHub repositories', 'Repositórios no GitHub'), T('Data engineering, Deep RL, APIs, ML studies and a few games.', 'Data engineering, Deep RL, APIs, estudos de ML e uns joguinhos.'), 30, '30', `${T('Oct 2026', 'out/2026')}<br>${by} fabio`)}
       ${row('app:blog', 'doc+cone', T('Blog 🚧 under construction', 'Blog 🚧 em obras'), T('Posts and tutorials on data engineering. Coming soon, pardon the dust.', 'Posts e tutoriais de data engineering. Em breve, desculpe a poeira.'), 0, '0', T('soon', 'em breve'))}
       ${row('app:stack', 'globe+code', T('Stack blog (badges)', 'Blog da stack (emblemas)'), T('Python, PySpark, SQL, Databricks, AWS and the rest, as badges, plus my GitHub stats.', 'Python, PySpark, SQL, Databricks, AWS e o resto, em emblemas, mais meus stats do GitHub.'), 10, '68', `${T('Oct 2026', 'out/2026')}<br>${by} fabio`)}
@@ -301,6 +301,13 @@ function forumPage(page) {
       <h2 class="topic-t">[${T('Experience', 'Experiência')}] ${esc(x.company)}</h2>
       <div class="f-statsbar">${(page === 'warren' ? STATS : x.stats || []).map((s) => `<div><b>${s.k}</b><small>${s.v}</small></div>`).join('')}</div>
       ${expPost(x)}
+      ${(x.periods || []).map((pd, i) => post({
+        title: `Re: ${esc(pd.role)} · ${esc(pd.t)}`,
+        date: pd.when,
+        sig: i === x.periods.length - 1,
+        user: i ? { rank: T('Member', 'Membro'), stars: 3, cls: 'Dark Knight' } : { rank: T('Senior Member', 'Membro Sênior'), stars: 5, cls: 'Blade Master' },
+        html: `<ul class="fp-list">${pd.bullets.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>${tags(pd.stack)}`,
+      })).join('')}
       ${(x.phases || []).map((ph, i) => post({
         title: `Re: ${T('Phase', 'Fase')} ${i + 1} · ${esc(ph.t)}`,
         date: ph.when,
@@ -409,7 +416,7 @@ function forum(body, ctx) {
           <div><h1>${T('Fábio\'s Forum', 'Fórum do Fábio')}</h1><p>${T('data, platforms and a bit of robotics · since 2016', 'dados, plataforma e um pouco de robótica · desde 2016')}</p></div>
         </header>
         <nav class="f-nav"><a data-page="index">${T('Index', 'Índice')}</a><a data-page="warren">${T('Experience', 'Experiência')}</a><a data-page="destaques">${T('Featured', 'Destaques')}</a><a data-page="formacao">${T('Education', 'Formação')}</a><a data-page="pesquisa">${T('Research', 'Pesquisa')}</a><a data-page="academicos">${T('Academic', 'Acadêmicos')}</a><a data-page="app:projetos">GitHub</a><a data-page="app:stack">Stack</a><a data-page="app:blog">Blog 🚧</a><a data-page="app:jogos">${T('Games', 'Jogos')}</a><a data-page="app:guestbook">${T('Guestbook', 'Livro de visitas')}</a></nav>
-        <div class="marquee"><span>${T(`★ Welcome! ★ ${PROFILE.role} · Databricks · Lakehouse · Terraform · Governance ★ Open to talk about Data Platform ★ Read the rules before posting ★`, `★ Bem-vindo! ★ ${PROFILE.role} · Databricks · Lakehouse · Terraform · Governança ★ Aberto a conversas sobre Data Platform ★ Leia as regras antes de postar ★`)}</span></div>
+        <div class="marquee"><span>${T(`★ Welcome! ★ ${PROFILE.role} · Databricks · Lakehouse · MLOps · Terraform · Governance ★ Open to talk about Data Platform and MLOps ★ Read the rules before posting ★`, `★ Bem-vindo! ★ ${PROFILE.role} · Databricks · Lakehouse · MLOps · Terraform · Governança ★ Aberto a conversas sobre Data Platform e MLOps ★ Leia as regras antes de postar ★`)}</span></div>
         <div class="f-content"></div>
       </div>
     </div>
@@ -982,11 +989,15 @@ export function resumeHTML() {
     </header>
     ${sec(T('Summary', 'Resumo'), `<p>${esc(PROFILE.summary)}</p>`)}
     ${sec(T('Skills', 'Competências'), `<table class="rs-skills">${RESUME_SKILLS.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`).join('')}</table>`)}
-    ${sec(T('Experience', 'Experiência'), EXPERIENCE.map((x) => `<div class="rs-job">
+    ${sec(T('Experience', 'Experiência'), EXPERIENCE.map((x) => (x.periods ? `<div class="rs-job">
+        ${row(`<b>${esc(x.company)}</b>`, `<i>${esc(x.place)}</i>`)}
+        ${x.periods.map((pd) => `${row(`<i>${esc(pd.role)}</i>`, esc(pd.when), 'rs-role')}
+        ${ul(pd.resume.map((k) => pd.bullets[k]).filter(Boolean))}`).join('')}
+      </div>` : `<div class="rs-job">
         ${row(`<b>${esc(x.company)}</b>`, esc(x.when))}
         ${row(`<i>${x.roles.map(([r, w]) => `${esc(r)} (${esc(w)})`).join(' · ')}</i>`, `<i>${esc(x.place)}</i>`)}
         ${ul(x.resume ? x.resume.map((k) => x.bullets[k]).filter(Boolean) : x.bullets.slice(0, N[x.id] || 6))}
-      </div>`).join('') + `<div class="rs-job">
+      </div>`)).join('') + `<div class="rs-job">
         ${row(`<b>${esc(RESEARCH.where)} · ${esc(RESEARCH.title)}</b>`, esc(RESEARCH.when.split(' · ')[0]))}
         ${ul(RESEARCH.bullets)}
       </div>`)}
