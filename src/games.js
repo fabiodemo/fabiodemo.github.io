@@ -3,6 +3,7 @@ import { sfx } from './sfx.js';
 import { T } from './i18n.js';
 
 // Cinco jogos simples, todos em canvas ou DOM puro, sem dependências.
+// (Spider e FreeCell ficam em cards.js, o xadrez em chess.js e o pinball em pinball.js.)
 // Cada um recebe (body, ctx). ctx.isActive() diz se a janela está em foco;
 // ctx.onClose é chamado ao fechar para parar loops.
 
@@ -674,6 +675,10 @@ export const GAMES = [
   { id: 'velha', name: T('Tic-tac-toe', 'Jogo da Velha'), d: T('You vs the machine. On Impossible it uses minimax and never loses.', 'Você contra a máquina. No Impossível ela usa minimax e não perde.'), ctl: T('Mouse or touch', 'Mouse ou toque'), hi: () => T('good luck', 'boa sorte') },
   { id: 'minas', name: T('Minesweeper', 'Campo Minado'), d: T('The classic. The first click is always safe. Beginner 9x9 or Intermediate 16x16.', 'O clássico. Primeiro clique é sempre seguro. Iniciante 9x9 ou Intermediário 16x16.'), ctl: T('Click and right click', 'Clique e botão direito'), hi: () => (hiGet('minas9') ? `${hiGet('minas9')}s ${T('on 9x9', 'no 9x9')}` : T('no time yet', 'sem tempo ainda')) },
   { id: 'snake', name: 'Snake', d: T('Grab coins without hitting the wall or your own tail.', 'Colete moedas sem bater na parede nem no próprio rabo.'), ctl: T('Arrows, WASD or swipe', 'Setas, WASD ou swipe'), hi: () => `${hiGet('snake')} pts` },
+  { id: 'spider', name: T('Spider Solitaire', 'Paciência Spider'), d: T('Build K to A in the same suit to clear the table. 1, 2 or 4 suits.', 'Monte de K a A do mesmo naipe para limpar a mesa. 1, 2 ou 4 naipes.'), ctl: T('Drag, click, Ctrl+Z', 'Arrastar, clicar, Ctrl+Z'), hi: () => (hiGet('spider') ? `${hiGet('spider')} pts` : T('no win yet', 'sem vitória ainda')) },
+  { id: 'freecell', name: 'FreeCell', d: T('Four free cells and numbered deals, like the classic: game no. 1 is always the same hand.', 'Quatro células livres e mãos numeradas como no clássico: o jogo nº 1 é sempre a mesma mão.'), ctl: T('Drag, click, Ctrl+Z', 'Arrastar, clicar, Ctrl+Z'), hi: () => `${hiGet('freecell')} ${T('wins', 'vitórias')}` },
+  { id: 'chess', name: T('Chess', 'Xadrez'), d: T('Full rules against the computer (3 levels) or two players. The engine thinks in a background worker.', 'Regras completas contra o computador (3 níveis) ou a dois. O motor pensa num worker em segundo plano.'), ctl: T('Click or drag', 'Clique ou arraste'), hi: () => `${hiGet('chess')} ${T('wins', 'vitórias')}` },
+  { id: 'pinball', name: T('Orbital Pinball', 'Pinball Orbital'), d: T('Original space table: planet bumpers, targets, orbit, a black hole that holds the ball and ranks from Recruit to Admiral.', 'Mesa espacial original: bumpers de planeta, alvos, órbita, um buraco negro que segura a bola e patentes de Recruta a Almirante.'), ctl: T('Z and / (or arrows), Space', 'Z e / (ou setas), Espaço'), hi: () => `${hiGet('pinball').toLocaleString()} pts` },
   { id: 'flappy', name: 'Flappy Birb', d: T('Pixel version of the FlappyBirb I made in Unity (it is on GitHub).', 'Versão pixel do FlappyBirb que fiz em Unity (tá no GitHub).'), ctl: T('Click, tap or Space', 'Clique, toque ou Espaço'), hi: () => `${hiGet('flappy')} ${T('pipes', 'canos')}` },
 ];
 

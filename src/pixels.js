@@ -531,6 +531,12 @@ S.coolface = ['................', '.....kkkkkk.....', '...kkyyyyyykk...', '..kyy
 // Assistente da autodestruição: um disquete com olhos (personagem próprio)
 S.floppypal = ['................', '.kkkkkkkkkkkkk..', '.kbbkggggGgkbbk.', '.kbbkggggGgkbbbk', '.kbbkggggGgkbbbk', '.kbbbkkkkkkbbbbk', '.kbbbbbbbbbbbbbk', '.kbbwwbbbbwwbbbk', '.kbbwkbbbbwkbbbk', '.kbbbbbbbbbbbbbk', '.kbbbkbbbbkbbbbk', '.kbbbbkkkkbbbbbk', '.kbwwwwwwwwwwwbk', '.kbwGGGGGGGGGwbk', '.kbwwwwwwwwwwwbk', '.kkkkkkkkkkkkkkk'];
 
+// Jogos de cartas, xadrez e pinball
+S.spider = ['................', '...kkkkkkkk.....', '...kggggggk.....', '...kgkkkkkkkkk..', '...kgkwwwwwwwk..', '...kgkwkwwwkwk..', '...kgkwwkwkwwk..', '...kgkkwkkkwkk..', '...kgkwwkkkwwk..', '...kgkkwkkkwkk..', '...kkkwwkwkwwk..', '.....kwkwwwkwk..', '.....kwwwwwwwk..', '.....kwwwwwwwk..', '.....kkkkkkkkk..', '................'];
+S.freecell = ['................', '.kkkkkkk........', '.kwwwwwk........', '.kwrwrwk.kkkkkk.', '.kwrrrwk.kwwwwk.', '.kwwrwwk.kwkwwk.', '.kwwwwwk.kkkkwk.', '.kkkkkkk.kwkwwk.', '.........kwwwwk.', '..kkkkkk.kkkkkk.', '..kwwwwk........', '..kwwrwk..kkkkk.', '..kwrrrk..kwwwk.', '..kwwrwk..kwrwk.', '..kkkkkk..kkkkk.', '................'];
+S.chess = ['................', '......kk........', '.....kgk........', '....kggkk.......', '...kggggkk......', '..kgkgggggk.....', '..kggggggggk....', '...kkkkggggk....', '......kgggk.....', '.....kggggk.....', '.....kggggk.....', '....kggggggk....', '...kkkkkkkkkk...', '...kGGGGGGGGk...', '...kkkkkkkkkk...', '................'];
+S.pinball = ['................', '.........kkkk...', '........kwwggk..', '.......kwwgggGk.', '.......kwggggGk.', '.......kgggGGGk.', '........kgGGGk..', '.........kkkk...', '..b.............', '..bb............', '..pbbb..........', '..ppPbbb........', '...pPPPbbbb.....', '....ppPPPPbbb...', '......pppPPPb...', '................'];
+
 // Badges 8x8 para pastas e para o Gerenciador de Dispositivos
 const B = {
   db: ['.kkkkkk.', 'kcbbbbck', 'kkccccKk', 'kbbbbbbk', 'kkbbbbkk', 'kbbbbbbk', 'kkbbbbkk', '.kkkkkk.'],

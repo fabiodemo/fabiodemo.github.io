@@ -18,6 +18,7 @@ const lazy = (loader, name) => (body, ctx) => {
   });
 };
 const games = () => import('./games.js');
+const cardGames = () => import('./cards.js');
 import { T, LANG } from './i18n.js';
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -685,10 +686,10 @@ function cmd(body, ctx) {
     certs: () => CERTS.forEach((c) => print(`  ${c.star ? '*' : ' '} ${c.d.padEnd(9)} ${c.by.padEnd(26)} ${c.n}`)),
     contact: () => print([`GitHub   ${PROFILE.github}`, PROFILE.linkedin && `LinkedIn ${PROFILE.linkedin}`, PROFILE.email && `E-mail   ${PROFILE.email}`].filter(Boolean).join('\n')),
     open: (a) => {
-      const alias = { projects: 'projetos', trash: 'lixeira', games: 'jogos', readme: 'leiame', about: 'sobre', badges: 'stack', habbo: 'stack', guide: 'guia', mspaint: 'paint', 'paint.exe': 'paint', 'mspaint.exe': 'paint', contact: 'contato', tictactoe: 'velha', minesweeper: 'minas' };
+      const alias = { projects: 'projetos', trash: 'lixeira', games: 'jogos', readme: 'leiame', about: 'sobre', badges: 'stack', habbo: 'stack', guide: 'guia', mspaint: 'paint', 'paint.exe': 'paint', 'mspaint.exe': 'paint', contact: 'contato', tictactoe: 'velha', minesweeper: 'minas', xadrez: 'chess', paciencia: 'spider', solitaire: 'spider' };
       if (a) ctx.open(Object.hasOwn(alias, a) ? alias[a] : a); else print(T('usage: open <app>', 'uso: open <app>'));
     },
-    games: () => { print('  tetris  velha  minas  snake  flappy'); print(T('  e.g.: open tetris', '  ex.: open tetris')); },
+    games: () => { print('  tetris  velha  minas  snake  flappy  spider  freecell  chess  pinball'); print(T('  e.g.: open tetris', '  ex.: open tetris')); },
     python: (a) => {
       if (/turtle/.test(a)) { print(T('Launching TurtleBot3 simulation...', 'Iniciando simulação do TurtleBot3...')); ctx.open('turtle'); }
       else print('Python 3.12.6 (DemOS)\n>>> import this\n' + T('Beautiful is better than ugly. Also try: python turtle.py', 'Bonito é melhor que feio. Tente também: python turtle.py'));
@@ -957,6 +958,10 @@ export const APPS = {
   minas: { title: T('Minesweeper', 'Campo Minado'), label: T('Minesweeper', 'Campo Minado'), icon: 'mines', w: 440, h: 560, render: lazy(games, 'minas') },
   snake: { title: 'Snake', label: 'Snake', icon: 'snake', w: 400, h: 520, render: lazy(games, 'snake') },
   flappy: { title: 'Flappy Birb', label: 'Flappy Birb', icon: 'flappy', w: 340, h: 560, render: lazy(games, 'flappy') },
+  spider: { title: T('Spider Solitaire', 'Paciência Spider'), label: 'Spider', icon: 'spider', w: 900, h: 640, render: lazy(cardGames, 'spider') },
+  freecell: { title: 'FreeCell', label: 'FreeCell', icon: 'freecell', w: 800, h: 640, render: lazy(cardGames, 'freecell') },
+  chess: { title: T('Chess', 'Xadrez'), label: T('Chess', 'Xadrez'), icon: 'chess', w: 760, h: 660, render: lazy(() => import('./chess.js'), 'chess') },
+  pinball: { title: T('Orbital Pinball', 'Pinball Orbital'), label: 'Pinball', icon: 'pinball', w: 460, h: 820, render: lazy(() => import('./pinball.js'), 'pinball') },
 };
 
 export function searchIndex() {

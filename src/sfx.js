@@ -145,6 +145,10 @@ const SOUNDS = {
       noise({ at: i * 0.08, dur: 0.08, vol: 0.03, from: 4200, to: 2600, q: 5 });
     }
   },
+  // pinball: bumper, flipper e lançador
+  bump() { tone(1240, { dur: 0.05, vol: 0.035, to: 620 }); noise({ dur: 0.04, vol: 0.04, from: 3000, to: 1500, q: 2 }); },
+  flip() { tone(140, { dur: 0.06, type: 'triangle', vol: 0.06, to: 90 }); noise({ dur: 0.03, vol: 0.03, type: 'lowpass', from: 900, to: 300 }); },
+  launch() { noise({ dur: 0.35, vol: 0.08, from: 400, to: 2600, q: 1.5 }); tone(200, { dur: 0.3, type: 'sine', vol: 0.05, to: 600 }); },
   // assoprar a fita
   blow() { noise({ dur: 0.55, vol: 0.09, type: 'lowpass', from: 900, to: 300, q: 0.5 }); },
   // internet discada: tons de discagem, portadora e o "chiado" do handshake

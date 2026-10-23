@@ -992,3 +992,68 @@ html.sd-glitch #taskbar { animation-duration: .13s; }
 .sd-vhs.play b { animation: none; }
 @keyframes sd-blink { 50% { opacity: .25; } }
 @media (max-width: 699px) { .sd-vhs b, .sd-vhs span { font-size: 24px; top: 12px; } }
+
+/* ---------- jogos de cartas (Spider, FreeCell) */
+.cards .menubar span.on { border-color: #7da2ce; background: linear-gradient(#e6f3fd, #cfe7fa); }
+.cards .fc-num { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; }
+.cards .fc-num:hover { border-color: transparent; background: none; }
+.cards .fc-num input { width: 74px; padding: 1px 4px; font-size: 12px; border: 1px solid #a0a0a0; }
+.cards .fc-num .btn7 { padding: 1px 8px; font-size: 11px; }
+.cd-table { flex: 1; min-height: 0; position: relative; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none;
+  background: radial-gradient(ellipse at 50% 30%, #2f8f4a, #176b31 55%, #0d4a21); box-shadow: inset 0 0 60px rgba(0,0,0,.35); }
+.cd, .cd-slot { position: absolute; left: 0; top: 0; width: var(--cw); height: var(--ch); border-radius: calc(var(--cw) * .08); }
+.cd { background: linear-gradient(#fff, #f1f1ec); border: 1px solid #555; box-shadow: 0 1px 2px rgba(0,0,0,.4); cursor: grab; transition: transform .16s ease; font: 700 calc(var(--cw) * .19)/1 var(--ui); }
+.cd-table.noanim .cd, .cd.drag { transition: none; }
+.cd.drag { cursor: grabbing; box-shadow: 0 8px 18px rgba(0,0,0,.45); }
+.cd.red { color: #c4161c; } .cd.blk { color: #111; }
+.cd .tl, .cd .br { position: absolute; text-align: center; font-weight: 700; line-height: .95; }
+.cd .tl { left: 5%; top: 4%; } .cd .br { right: 5%; bottom: 4%; transform: rotate(180deg); }
+.cd .pip { position: absolute; inset: 0; display: grid; place-items: center; font-size: calc(var(--cw) * .5); font-weight: 400; }
+.cd .pip.face { font-size: calc(var(--cw) * .32); font-weight: 700; font-family: Georgia, 'Times New Roman', serif; }
+.cd.down { cursor: default; border-color: #fff; background:
+  repeating-linear-gradient(45deg, rgba(255,255,255,.18) 0 3px, transparent 3px 7px),
+  repeating-linear-gradient(-45deg, rgba(255,255,255,.12) 0 3px, transparent 3px 7px),
+  linear-gradient(#2f66c9, #183f8f); box-shadow: inset 0 0 0 3px #fff, 0 1px 2px rgba(0,0,0,.4); }
+.cd.down > * { visibility: hidden; }
+.cd-slot { border: 2px dashed rgba(255,255,255,.35); background: rgba(0,0,0,.12); display: grid; place-items: center; color: rgba(255,255,255,.45); font: 700 calc(var(--cw) * .3) var(--ui); }
+.cd-slot.stock { cursor: pointer; }
+.cd-slot.found { border-style: solid; }
+.cd-bar { flex: none; display: flex; justify-content: space-between; gap: 10px; padding: 4px 8px; font-size: 11.5px; color: #dfe; background: #0b3a1a; border-top: 1px solid #06260f; }
+.cd-bar b { color: #fff; }
+.cards .cd-win { background: rgba(0,0,0,.35); gap: 10px; }
+.cards .cd-win .btn7 { font: 13px var(--ui); justify-self: center; margin-top: 8px; }
+@media (max-width: 760px) { .cd-help { display: none; } }
+
+/* ---------- xadrez */
+.chessg { position: relative; }
+.chessg .menubar { flex-wrap: wrap; }
+.chessg .menubar span.on { border-color: #7da2ce; background: linear-gradient(#e6f3fd, #cfe7fa); }
+.chessg .ch-lv { margin-left: auto; display: inline-flex; gap: 2px; padding: 0; }
+.chessg .ch-lv:hover { border-color: transparent; background: none; }
+.ch-main { flex: 1; min-height: 0; display: flex; }
+.ch-stage { flex: 1; min-width: 0; position: relative; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 40%, #33465f, #141b26); touch-action: none; }
+.ch-board { box-shadow: 0 0 0 6px #2a2118, 0 0 0 8px #6b5a44, 0 12px 30px rgba(0,0,0,.6); border-radius: 2px; cursor: pointer; }
+.ch-side { width: 150px; flex: none; display: flex; flex-direction: column; padding: 8px; gap: 6px; background: #12151b; border-left: 1px solid #2a2f3a; font-size: 12px; color: #cfd6e2; }
+.ch-list { flex: 1; overflow: auto; margin: 0; padding: 0 0 0 26px; font: 12px/1.6 ui-monospace, Consolas, monospace; }
+.ch-list li span { display: inline-block; min-width: 54px; }
+.ch-promo { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(0,0,0,.55); }
+.ch-promo[hidden] { display: none; }
+.ch-promo button { width: 72px; height: 72px; padding: 4px; border-radius: 8px; border: 1px solid #fff; background: #ece3cf; cursor: pointer; }
+.ch-promo canvas { width: 100%; height: 100%; }
+.ch-msg { cursor: pointer; }
+.ch-bar { background: #172131; border-top-color: #0b111b; }
+@media (max-width: 760px) { .ch-side { display: none; } }
+.cards { position: relative; }
+.cards .cd-win[hidden] { display: none; }
+
+/* ---------- pinball */
+.pinball { position: relative; }
+.pinball .pb-help { margin-left: auto; color: #555; }
+.pinball .pb-help:hover { border-color: transparent; background: none; }
+.pb-panel { flex: none; display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; gap: 2px 12px; align-items: center; padding: 6px 10px; background: linear-gradient(#0d1424, #060a14); border-bottom: 1px solid #1d2a44; }
+.pb-score { grid-row: span 2; font: 28px/1 var(--pix); color: #ffb13b; text-shadow: 0 0 8px rgba(255,160,40,.6); min-width: 150px; letter-spacing: 1px; }
+.pb-info { display: flex; gap: 12px; font: 12px var(--ui); color: #9fd8ff; }
+.pb-info span:last-child { color: #ff9ad0; }
+.pb-msg { font: 15px var(--pix); color: #fff; min-height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pinball .game-stage canvas { image-rendering: auto; border: 0; box-shadow: 0 0 0 2px #1d2a44, 0 8px 24px rgba(0,0,0,.7); border-radius: 6px; }
+@media (max-width: 760px) { .pinball .pb-help { display: none; } }

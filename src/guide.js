@@ -27,7 +27,7 @@ const TOUR = [
     ['blog', 0, 0, T('Markdown blog. Under construction for now, with the About me page.', 'Blog em Markdown. Em obras por enquanto, com a página Sobre mim.')],
   ]],
   [T('Fun', 'Diversão'), [
-    ['jogos', 0, 0, T('Tetris, Tic-tac-toe, Minesweeper, Snake and Flappy Birb, all built from scratch.', 'Tetris, Jogo da Velha, Campo Minado, Snake e Flappy Birb, todos feitos do zero.')],
+    ['jogos', 0, 0, T('Tetris, Tic-tac-toe, Minesweeper, Snake, Flappy Birb, Spider Solitaire, FreeCell, chess against the computer and a space pinball, all built from scratch.', 'Tetris, Jogo da Velha, Campo Minado, Snake, Flappy Birb, Paciência Spider, FreeCell, xadrez contra o computador e um pinball espacial, todos feitos do zero.')],
     ['lanhouse', 0, 0, T('Shortcuts to 2000s classics. Each one opens a memory from back then.', 'Atalhos dos clássicos dos anos 2000. Cada um abre uma lembrança da época.')],
     ['steam', 0, 0, T('Steam activity: hours, achievements, recent games. Updates by itself every 6 hours without exposing the profile.', 'Atividade na Steam: horas, conquistas, jogos recentes. Atualiza sozinha a cada 6 horas sem expor o perfil.')],
     ['paint', 0, 0, T('Classic Paint, no antialiasing, just like the original.', 'Paint clássico, sem antialiasing, igual ao original.')],
@@ -70,6 +70,7 @@ const REFS = [
   [T('LAN houses', 'Lan houses'), T('LAN House do Seu Zé: R$1.50 an hour, 60-minute timer', 'Lan House do Seu Zé: R$1,50 a hora, timer de 60 minutos'), T('Brazil, 2000s', 'Brasil, anos 2000')],
   ['Winamp / Windows Media Player', T('Media player gadget with visualizations', 'Gadget de media player com visualizações'), 'Winamp (1997), WMP'],
   [T('2000s music', 'Música dos anos 2000'), T('Media player tracks: eurodance, G-funk, bossa nova, emo, piano rock, nu-metal, chiptune, choir (original loops, no samples)', 'Faixas do media player: eurodance, G-funk, bossa nova, emo, rock com piano, nu-metal, chiptune, coral (loops originais, sem samples)'), T('MTV and the LAN house speakers', 'MTV e as caixinhas de som da lan house')],
+  [T('Windows games', 'Jogos do Windows'), T('Games folder: Minesweeper, Spider Solitaire, FreeCell (numbered deals, game no. 1 is the classic hand), chess and a space pinball, all in original versions', 'Pasta Jogos: Campo Minado, Paciência Spider, FreeCell (mãos numeradas, o jogo nº 1 é a mão clássica), xadrez e um pinball espacial, todos em versões próprias'), 'Windows 3.1 a 7'],
   ['Tetris, Snake, Flappy Bird', T('Games folder (Flappy Birb)', 'Pasta Jogos (Flappy Birb)'), '1984, Nokia (1997), 2013'],
   [T('2000s web', 'Web dos anos 2000'), T('phpBB forum, visitor counter, guestbook ~*~, "best viewed at 1024x768", under construction sign', 'Fórum phpBB, contador de visitas, livro de visitas ~*~, "melhor visualizado em 1024x768", plaquinha de em obras'), 'Web 1.0'],
   [T('Linux memes', 'Memes de Linux'), T('Prompt: sudo, dnf, pacman ("btw, I use Arch"), neofetch', 'Prompt: sudo, dnf, pacman ("aliás, eu uso Arch"), neofetch'), 'Linux'],
