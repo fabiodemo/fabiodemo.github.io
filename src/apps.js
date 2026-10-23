@@ -653,6 +653,7 @@ function cmd(body, ctx) {
   python turtle.py   run the TurtleBot3 simulation
   games           list the games (open tetris, open snake...)
   mspaint         open Paint
+  musicpaint      compose music (Music Paint)
   desk.cpl        wallpaper and screen saver
   lanhouse        2000s classics
   open <app>      open a window: forum, blog, stack, projects, skills, certs, guestbook, trash
@@ -671,6 +672,7 @@ function cmd(body, ctx) {
   python turtle.py   roda a simulação do TurtleBot3
   jogos           lista os jogos (open tetris, open snake...)
   mspaint         abre o Paint
+  compositor      compor música (Paint Musical)
   desk.cpl        papel de parede e proteção de tela
   lanhouse        clássicos dos anos 2000
   open <app>      abre uma janela: forum, blog, stack, projetos, skills, certs, guestbook, lixeira
@@ -736,7 +738,7 @@ function cmd(body, ctx) {
   };
   Object.assign(cmds, {
     clear: cmds.cls, dir: cmds.ls, projetos: cmds.projects, contato: cmds.contact, jogos: cmds.games,
-    paper: cmds.papers, canoa: cmds.canoe, mspaint: () => ctx.open('paint'), 'desk.cpl': () => ctx.open('personalize'), wallpaper: () => ctx.open('personalize'), scrnsave: () => ctx.open('personalize', { arg: 'pz-ss' }), lanhouse: () => ctx.open('lanhouse'), guide: () => ctx.open('guia'), guia: () => ctx.open('guia'), steam: () => ctx.open('steam'), lan: () => ctx.open('lanhouse'), 'mspaint.exe': () => ctx.open('paint'), 'paint.exe': () => ctx.open('paint'), blog: () => ctx.open('blog'), 'turtle.py': () => cmds.python('turtle'), turtle: () => cmds.python('turtle'),
+    paper: cmds.papers, canoa: cmds.canoe, mspaint: () => ctx.open('paint'), 'desk.cpl': () => ctx.open('personalize'), wallpaper: () => ctx.open('personalize'), scrnsave: () => ctx.open('personalize', { arg: 'pz-ss' }), lanhouse: () => ctx.open('lanhouse'), guide: () => ctx.open('guia'), guia: () => ctx.open('guia'), musicpaint: () => ctx.open('musicpaint'), compositor: () => ctx.open('musicpaint'), composer: () => ctx.open('musicpaint'), steam: () => ctx.open('steam'), lan: () => ctx.open('lanhouse'), 'mspaint.exe': () => ctx.open('paint'), 'paint.exe': () => ctx.open('paint'), blog: () => ctx.open('blog'), 'turtle.py': () => cmds.python('turtle'), turtle: () => cmds.python('turtle'),
   });
   print(T('DemOS 7 [version 7.9.2026]\n(c) Fábio Demo da Rosa. Type "help" to start.\n', 'DemOS 7 [versão 7.9.2026]\n(c) Fábio Demo da Rosa. Digite "help" para começar.\n'));
   input.addEventListener('keydown', (e) => {
@@ -958,6 +960,7 @@ export const APPS = {
   minas: { title: T('Minesweeper', 'Campo Minado'), label: T('Minesweeper', 'Campo Minado'), icon: 'mines', w: 440, h: 560, render: lazy(games, 'minas') },
   snake: { title: 'Snake', label: 'Snake', icon: 'snake', w: 400, h: 520, render: lazy(games, 'snake') },
   flappy: { title: 'Flappy Birb', label: 'Flappy Birb', icon: 'flappy', w: 340, h: 560, render: lazy(games, 'flappy') },
+  musicpaint: { title: T('Music Paint', 'Paint Musical'), label: T('Music Paint', 'Paint Musical'), icon: 'musicpaint', w: 1020, h: 690, render: lazy(() => import('./composer.js'), 'composer') },
   spider: { title: T('Spider Solitaire', 'Paciência Spider'), label: 'Spider', icon: 'spider', w: 900, h: 640, render: lazy(cardGames, 'spider') },
   freecell: { title: 'FreeCell', label: 'FreeCell', icon: 'freecell', w: 800, h: 640, render: lazy(cardGames, 'freecell') },
   chess: { title: T('Chess', 'Xadrez'), label: T('Chess', 'Xadrez'), icon: 'chess', w: 760, h: 660, render: lazy(() => import('./chess.js'), 'chess') },

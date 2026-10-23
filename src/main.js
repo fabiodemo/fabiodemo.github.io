@@ -194,7 +194,7 @@ if (skipBoot || location.hash === '#skip') {
 $('#login-tile').addEventListener('click', login);
 
 /* ------------------------------------------------------------- desktop */
-const DESKTOP = ['sobre', 'guia', 'leiame', 'forum', 'blog', 'stack', 'projetos', 'turtle', 'figs', 'taskmgr', 'skills', 'certs', 'cmd', 'jogos', 'lanhouse', 'steam', 'paint', 'guestbook', 'contato', 'lixeira'];
+const DESKTOP = ['sobre', 'guia', 'leiame', 'forum', 'blog', 'stack', 'projetos', 'turtle', 'figs', 'taskmgr', 'skills', 'certs', 'cmd', 'jogos', 'lanhouse', 'steam', 'paint', 'musicpaint', 'guestbook', 'contato', 'lixeira'];
 
 function buildDesktop() {
   const wrap = $('#icons');
@@ -619,7 +619,7 @@ function balloon(title, text) {
 
 /* ---------------------------------------------------------- menu iniciar */
 const sm = $('#startmenu');
-const LEFT = ['guia', 'forum', 'leiame', 'blog', 'projetos', 'turtle', 'taskmgr', 'cmd', 'jogos', 'paint'];
+const LEFT = ['guia', 'forum', 'leiame', 'blog', 'projetos', 'turtle', 'taskmgr', 'cmd', 'jogos', 'paint', 'musicpaint'];
 const RIGHT = [
   ['sobre', PROFILE.short], ['leiame', T('Documents', 'Documentos')], ['projetos', T('Projects', 'Projetos')], ['sobre', T('Computer', 'Computador')],
   ['skills', T('Control Panel', 'Painel de Controle')], ['personalize', T('Personalize', 'Personalizar')], ['certs', T('Certificates', 'Certificados')], ['contato', T('Contact', 'Contato')], ['lixeira', T('Recycle Bin', 'Lixeira')],
