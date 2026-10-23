@@ -579,9 +579,9 @@ export const CASES = [
   },
   {
     t: T('A gain that had to be won back', 'Um ganho que precisou ser reconquistado'),
-    s: T('After the portfolio pipeline stopped running on weekends to save cost, one queue table grew from 10-12 minutes to 1h30.', 'Depois que o pipeline de portfólio parou de rodar no fim de semana para economizar, uma tabela de fila subiu de 10-12 minutos para 1h30.'),
-    a: T('Measured the regression instead of reverting the saving, then moved that single load to OCI Data Integration.', 'Medi a regressão em vez de desfazer a economia, e movi só aquela carga para o OCI Data Integration.'),
-    r: T('Kept the weekend savings and brought the table back down. Cost work only counts if you measure both sides.', 'Mantive a economia do fim de semana e baixei a tabela de volta. Trabalho de custo só vale se medir os dois lados.'),
+    s: T('The portfolio pipeline ran every day, weekends included, but its data was only used on business days. On my own initiative I stopped the weekend runs to save cost. Right after that, one queue table went from 10-12 minutes to 1h30.', 'O pipeline de portfólio rodava todos os dias, inclusive no fim de semana, mas os dados só eram usados em dias úteis. Por iniciativa minha, cortei as execuções de fim de semana para economizar. Logo depois, uma tabela de fila subiu de 10-12 minutos para 1h30.'),
+    a: T('Measured the regression instead of reverting the saving, then moved that single load to an OCI Data Integration data loader task.', 'Medi a regressão em vez de desfazer a economia, e movi só aquela carga para uma task de data loader do OCI Data Integration.'),
+    r: T('On the data loader the task took less than half the time and cost dropped to a third of what it was, and the weekend savings stayed. Cost work only counts if you measure both sides.', 'No data loader a task passou a levar menos da metade do tempo e o custo caiu para um terço do anterior, e a economia do fim de semana continuou. Trabalho de custo só vale se medir os dois lados.'),
   },
   {
     t: T('Switching off a workspace without breaking anyone', 'Desligar um workspace sem quebrar ninguém'),
