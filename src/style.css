@@ -1002,7 +1002,7 @@ html.sd-glitch #taskbar { animation-duration: .13s; }
 .cd-table { flex: 1; min-height: 0; position: relative; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none;
   background: radial-gradient(ellipse at 50% 30%, #2f8f4a, #176b31 55%, #0d4a21); box-shadow: inset 0 0 60px rgba(0,0,0,.35); }
 .cd, .cd-slot { position: absolute; left: 0; top: 0; width: var(--cw); height: var(--ch); border-radius: calc(var(--cw) * .08); }
-.cd { background: linear-gradient(#fff, #f1f1ec); border: 1px solid #555; box-shadow: 0 1px 2px rgba(0,0,0,.4); cursor: grab; transition: transform .16s ease; font: 700 calc(var(--cw) * .19)/1 var(--ui); }
+.cd { background: linear-gradient(#fff, #f1f1ec); border: 1px solid #555; box-shadow: 0 1px 2px rgba(0,0,0,.4); cursor: grab; font: 700 calc(var(--cw) * .19)/1 var(--ui); }
 .cd-table.noanim .cd, .cd.drag { transition: none; }
 .cd.drag { cursor: grabbing; box-shadow: 0 8px 18px rgba(0,0,0,.45); }
 .cd.red { color: #c4161c; } .cd.blk { color: #111; }
@@ -1133,3 +1133,18 @@ html.sd-glitch #taskbar { animation-duration: .13s; }
   .photov .pv-bar span:not([data-pv]) { display: none; }
   .photov .pv-bar span { white-space: nowrap; }
 }
+
+/* cartas: voo, alvo aceso, dica, cascata da vitória e o rei do FreeCell */
+.cd.fly { box-shadow: 0 6px 14px rgba(0,0,0,.45); }
+.cd.hot, .cd-slot.hot { box-shadow: 0 0 0 2px #fff6a8, 0 0 14px 3px rgba(255,240,140,.85); }
+.cd.hint, .cd-slot.hint { animation: cd-hint .3s ease-in-out 4 alternate; }
+@keyframes cd-hint { to { box-shadow: 0 0 0 3px #7fd0ff, 0 0 16px 4px rgba(90,190,255,.9); filter: brightness(1.12); } }
+.cd-fx { position: absolute; left: 0; top: 0; z-index: 5000; pointer-events: none; }
+.cards .cd-win { background: rgba(0,0,0,.12); z-index: 6000; }
+.cd-win-box { display: grid; padding: 16px 26px; border-radius: 8px; background: rgba(8,40,20,.88); border: 1px solid rgba(255,255,255,.45); box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+.fc-king { position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none; filter: drop-shadow(0 2px 2px rgba(0,0,0,.4)); }
+.fc-king canvas { display: block; width: 100%; image-rendering: pixelated; transition: transform .12s; }
+.fc-king.left canvas { transform: scaleX(-1); }
+.fc-king.happy canvas { animation: fc-hop .35s ease-in-out infinite alternate; }
+@keyframes fc-hop { to { translate: 0 -5px; } }
+@media (prefers-reduced-motion: reduce) { .cd.hint, .cd-slot.hint, .fc-king.happy canvas { animation: none; } }

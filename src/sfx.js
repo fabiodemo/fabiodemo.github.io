@@ -82,6 +82,9 @@ const SOUNDS = {
   minimize() { noise({ dur: 0.18, vol: 0.05, from: 2400, to: 380, q: 2 }); },
   restore() { noise({ dur: 0.18, vol: 0.05, from: 380, to: 2400, q: 2 }); },
   click() { tone(1500, { dur: 0.02, vol: 0.02 }); },
+  // carta batendo na mesa (estalo curto) e jogada que não vale (toque grave e baixo)
+  card() { noise({ dur: 0.045, vol: 0.07, type: 'highpass', from: 2600, to: 1600, q: 0.8 }); tone(240, { dur: 0.03, type: 'triangle', vol: 0.02 }); },
+  deny() { tone(196, { dur: 0.1, type: 'triangle', vol: 0.045, to: 165 }); },
   notify() { bell(880, 0, 0.05, 0.5); bell(1318.5, 0.09, 0.05, 0.7); },
   // exclamação: um sino só
   ding() { bell(1046.5, 0, 0.07, 1); },

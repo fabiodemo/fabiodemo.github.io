@@ -39,7 +39,7 @@ npm run preview                    # serve dist/ em http://localhost:4173
 | `src/apps.js` | conteúdo de cada janela (fórum, explorer, cmd, etc.) |
 | `src/i18n.js` | idioma (EN padrão, PT) |
 | `src/games.js` | os 5 jogos: Tetris, Jogo da Velha (minimax), Campo Minado, Snake, Flappy Birb |
-| `src/cards.js` | Paciência Spider e FreeCell (mesa de cartas com arrastar, desfazer; FreeCell com as mãos numeradas clássicas) |
+| `src/cards.js` | Paciência Spider e FreeCell (embaralhamento clássico pelo número do jogo). Cartas deslizam e viram (FLIP com Web Animations), distribuição saindo do monte, alvo aceso no arrasto, Dica (H), sequências e fundação em cascata, rei do FreeCell olhando para o mouse e a cascata de cartas quicando ao vencer |
 | `src/chess.js` + `src/chess-engine.js` + `src/chess-worker.js` | xadrez com regras completas; o motor (alfa-beta) roda num Web Worker |
 | `src/pinball.js` | Pinball Orbital: mesa espacial original com física em subpassos |
 | `src/composer.js` + `src/composer-synth.js` | Paint Musical: compositor com ferramentas do Paint, 14 instrumentos sintetizados em 4 eras (8 a 64 bits), exporta WAV e vídeo |
