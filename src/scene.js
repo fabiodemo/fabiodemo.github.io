@@ -1,6 +1,6 @@
-import { AmbientLight, BoxGeometry, Clock, DirectionalLight, Group, IcosahedronGeometry, Mesh, MeshLambertMaterial, PerspectiveCamera, PlaneGeometry, Scene, ShaderMaterial, Vector2, Vector3, WebGLRenderer } from 'three';
+import { AmbientLight, BoxGeometry, DirectionalLight, Group, IcosahedronGeometry, Mesh, MeshLambertMaterial, PerspectiveCamera, PlaneGeometry, Scene, ShaderMaterial, Vector2, Vector3, WebGLRenderer } from 'three';
 
-const THREE = { AmbientLight, BoxGeometry, Clock, DirectionalLight, Group, IcosahedronGeometry, Mesh, MeshLambertMaterial, PerspectiveCamera, PlaneGeometry, Scene, ShaderMaterial, Vector2, Vector3, WebGLRenderer };
+const THREE = { AmbientLight, BoxGeometry, DirectionalLight, Group, IcosahedronGeometry, Mesh, MeshLambertMaterial, PerspectiveCamera, PlaneGeometry, Scene, ShaderMaterial, Vector2, Vector3, WebGLRenderer };
 
 // Fundo em three.js renderizado em baixa resolução e ampliado com nearest-neighbor:
 // aurora estilo Windows 7 com dithering, bolhas do protetor de tela e blocos voxel.
@@ -211,7 +211,8 @@ export function startScene(canvas) {
   resize();
 
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const clock = new THREE.Clock();
+  // relógio próprio (THREE.Clock foi descontinuado no r183): getDelta() avança elapsedTime
+  const clock = { last: performance.now(), elapsedTime: 0, getDelta() { const n = performance.now(), d = (n - this.last) / 1000; this.last = n; this.elapsedTime += d; return d; } };
   let raf = 0, acc = 0, calm = false;
 
   function step(dt) {

@@ -12,11 +12,11 @@
   "dependencies": {
     "@fontsource/pixelify-sans": "^5.1.0",
     "@fontsource/vt323": "^5.1.0",
-    "marked": "^15.0.12",
-    "three": "^0.169.0"
+    "marked": "^18.1.1",
+    "three": "^0.186.1"
   },
   "devDependencies": {
-    "vite": "^7.3.7"
+    "vite": "^8.3.5"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
