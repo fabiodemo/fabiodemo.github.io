@@ -19,17 +19,20 @@ export function personalize(body, ctx) {
       <a data-go="pz-color">${T('Window Color', 'Cor da Janela')}</a>
       <div class="cp-see">${T('See also', 'Consulte também')}</div>
       <a data-app="sobre">${T('System', 'Sistema')}</a>
+      <a data-app="amostras">${T('Sample Pictures', 'Imagens de Exemplo')}</a>
       <a data-app="paint">Paint</a>
     </aside>
     <section class="cp-main">
       <h2>${T('Change the visuals on your computer', 'Altere os efeitos visuais do computador')}</h2>
       <p class="cp-p">${T('Click a picture to make it your desktop background. Choices are saved in this browser.', 'Clique em uma imagem para usá-la como plano de fundo. As escolhas ficam salvas neste navegador.')}</p>
       <h3 id="pz-bg">${T('Desktop Background', 'Plano de Fundo da Área de Trabalho')}</h3>
-      <div class="pz-grid">${WALLS.map((w) => `
+      ${[[T('DemOS Desktop Backgrounds', 'Planos de Fundo do DemOS'), WALLS.filter((w) => !w.sample)], [T('Sample Pictures', 'Imagens de Exemplo'), WALLS.filter((w) => w.sample)]].map(([h, list]) => `
+      <h4 class="pz-group">${h}</h4>
+      <div class="pz-grid">${list.map((w) => `
         <button type="button" class="pz-wall${w.id === wall ? ' on' : ''}" data-wall="${w.id}">
           <img src="${thumb(w.id)}" alt="" width="128" height="72"><span>${w.n}</span>
         </button>`).join('')}
-      </div>
+      </div>`).join('')}
       <h3 id="pz-color">${T('Window Color and Appearance', 'Cor e Aparência da Janela')}</h3>
       <div class="pz-color">
         <label><input type="checkbox" class="pz-aero"${document.body.classList.contains('no-aero') ? '' : ' checked'}> ${T('Enable transparency', 'Habilitar transparência')}</label>

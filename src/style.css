@@ -1121,3 +1121,15 @@ html.sd-glitch #taskbar { animation-duration: .13s; }
 @media (max-width: 760px) { .mp-status .mp-era, .mp-status .mp-len, .mp-quick { display: none; } }
 .mp-play2 { display: none; width: 30px; height: 26px; border: 1px solid #b9c7da; border-radius: 4px; background: radial-gradient(circle at 50% 30%, #fff, #dbe6f3); color: #1f7a2a; cursor: pointer; }
 @media (max-width: 760px) { .mp-play2 { display: block; margin-left: auto; } .mp-title { width: auto; flex: 1; min-width: 0; } }
+
+/* Imagens de Exemplo */
+.pz-group { margin: 10px 0 6px 14px; font-size: 12px; font-weight: 600; color: #4a5a70; }
+.samples .pv-img { image-rendering: pixelated; }
+.samples .pv-thumbs img { image-rendering: pixelated; }
+.samples .pv-bar [data-pv=wall] { margin-left: auto; }
+.sp-stars { color: #e8a317; letter-spacing: 1px; margin: 0 6px; }
+.sp-meta { color: #4a5a70; }
+@media (max-width: 760px) {
+  .photov .pv-bar span:not([data-pv]) { display: none; }
+  .photov .pv-bar span { white-space: nowrap; }
+}

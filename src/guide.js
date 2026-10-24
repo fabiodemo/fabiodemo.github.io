@@ -36,6 +36,7 @@ const TOUR = [
   ]],
   [T('System', 'Sistema'), [
     ['personalize', 0, 0, T('Wallpaper, screen saver and glass transparency. Right-clicking the desktop gets you there too.', 'Papel de parede, proteção de tela e transparência do vidro. O clique direito no desktop também leva lá.')],
+    ['amostras', 0, 0, T('The 8 Windows 7 sample pictures redrawn as pixel art, with star ratings, slideshow and a button to use one as the wallpaper.', 'As 8 imagens de exemplo do Windows 7 redesenhadas em pixel art, com estrelas, apresentação de slides e botão para virar papel de parede.')],
     ['cmd', 0, 0, T('Terminal with CV commands. Type help. Some commands are not in the help.', 'Terminal com comandos do CV. Digite help. Alguns comandos não estão no help.')],
     ['lixeira', 0, 0, T('What was retired: 19-hour pipelines, giant clusters, unused buckets.', 'O que foi aposentado: pipelines de 19 horas, clusters gigantes, buckets sem uso.')],
     [null, 'chart', T('Gadgets', 'Gadgets'), T('Right side of the desktop: Before × After of the pipelines, Steam and a media player with 10 original tracks (press play) and 6 visualizations.', 'Lado direito do desktop: Antes × Depois dos pipelines, Steam e um media player com 10 faixas originais (é só dar play) e 6 visualizações.')],
@@ -47,6 +48,7 @@ const TOUR = [
 // [referência, onde aparece no site, de onde vem, é segredo?]
 const REFS = [
   ['Windows 7 / Aero', T('The whole desktop: glass windows, Start menu, taskbar, gadgets, balloons', 'O desktop inteiro: janelas de vidro, menu Iniciar, barra de tarefas, gadgets, balões'), 'Windows 7 (2009)'],
+  [T('Sample Pictures', 'Imagens de Exemplo'), T('Pictures in the Start menu and Personalize: Chrysanthemum, Desert, Hydrangeas, Jellyfish, Koala, Lighthouse, Penguins and Tulips, original pixel art on the same themes', 'Imagens no menu Iniciar e na Personalização: Crisântemo, Deserto, Hortênsias, Água-viva, Coala, Farol, Pinguins e Tulipas, pixel art própria com os mesmos temas'), 'Windows 7 (2009)'],
   [T('Classic screen savers', 'Proteções de tela clássicas'), T('Personalize: Bubbles, Mystify, 3D Pipes, Starfield, 3D Text', 'Personalizar: Bolhas, Mystify, Canos 3D, Viagem espacial, Texto 3D'), 'Windows 95 a 7'],
   [T('Windows accessories', 'Acessórios do Windows'), T('Notepad, Paint, Photo Viewer, Device Manager, certmgr, Command Prompt, Recycle Bin', 'Bloco de Notas, Paint, Visualizador de Fotos, Gerenciador de Dispositivos, certmgr, Prompt, Lixeira'), 'Windows'],
   [T('Office assistants', 'Assistentes do Office'), T('Floppy, the assistant who offers the guide (an original character)', 'O Disquete, assistente que oferece o guia (personagem próprio)'), T('The 90s paperclip', 'O clipe dos anos 90')],

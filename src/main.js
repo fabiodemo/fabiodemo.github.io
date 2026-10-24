@@ -655,7 +655,7 @@ function balloon(title, text) {
 const sm = $('#startmenu');
 const LEFT = ['guia', 'forum', 'leiame', 'blog', 'projetos', 'turtle', 'taskmgr', 'cmd', 'jogos', 'paint', 'musicpaint'];
 const RIGHT = [
-  ['sobre', PROFILE.short], ['leiame', T('Documents', 'Documentos')], ['projetos', T('Projects', 'Projetos')], ['sobre', T('Computer', 'Computador')],
+  ['sobre', PROFILE.short], ['leiame', T('Documents', 'Documentos')], ['amostras', T('Pictures', 'Imagens')], ['projetos', T('Projects', 'Projetos')], ['sobre', T('Computer', 'Computador')],
   ['skills', T('Control Panel', 'Painel de Controle')], ['personalize', T('Personalize', 'Personalizar')], ['certs', T('Certificates', 'Certificados')], ['contato', T('Contact', 'Contato')], ['lixeira', T('Recycle Bin', 'Lixeira')],
   ['@linkedin', 'LinkedIn'], ['@github', 'GitHub'], ['@print', T('Print CV', 'Imprimir CV')],
 ];
