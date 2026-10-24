@@ -341,7 +341,7 @@ export function thumb(id, w = 128) {
   const c = document.createElement('canvas');
   c.width = w;
   c.height = Math.round((w * H) / W);
-  const g = c.getContext('2d');
+  const g = c.getContext('2d', { willReadFrequently: true });
   g.imageSmoothingEnabled = false;
   g.drawImage(render(id), 0, 0, c.width, c.height);
   return c.toDataURL();

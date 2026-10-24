@@ -105,10 +105,11 @@ const TCOL = [0x46c04a, 0xffd95a, 0x2f7fe0, 0xe5483b, 0xa66bff, 0x2bd1a6];
 export function startScene(canvas) {
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'low-power' });
+    // sem GPU de verdade, falha aqui (em vez de cair no WebGL por software) e o main.js usa a aurora estática
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'low-power', failIfMajorPerformanceCaveat: true });
   } catch (e) {
     canvas.classList.add('no-webgl');
-    return { setFocus() {} };
+    return { setFocus() {}, hold() {}, slow: true };
   }
   renderer.setPixelRatio(1);
   // WebGL por software (sem GPU) deixa tudo lento: nesse caso nem tenta, o main.js usa a versão estática

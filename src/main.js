@@ -33,6 +33,8 @@ let scene = { setFocus() {} };
 let wantCalm = false;
 let sceneLoading = false;
 const loadScene = () => {
+  // sem GPU nem tenta o three.js: vai direto para a aurora estática
+  if (noGPU) { staticAurora(); calm(); return; }
   if (sceneLoading) return;
   sceneLoading = true;
   import('./scene.js').then((m) => {
@@ -49,7 +51,9 @@ const loadScene = () => {
 const aeroPref = (() => { try { return localStorage.getItem('cv.aero'); } catch { return null; } })();
 function softwareGL() {
   try {
-    const gl = document.createElement('canvas').getContext('webgl');
+    // failIfMajorPerformanceCaveat: sem GPU o navegador devolve null em vez de cair no WebGL por
+    // software (que o Chrome marca como deprecated e avisa no console)
+    const gl = document.createElement('canvas').getContext('webgl', { failIfMajorPerformanceCaveat: true });
     if (!gl) return true;
     const d = gl.getExtension('WEBGL_debug_renderer_info');
     const name = String(gl.getParameter(d ? d.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
@@ -61,7 +65,8 @@ function setAero(on, save) {
   document.body.classList.toggle('no-aero', !on);
   if (save) { try { localStorage.setItem('cv.aero', on ? '1' : '0'); } catch { /* ok */ } }
 }
-setAero(aeroPref ? aeroPref === '1' : !softwareGL(), false);
+const noGPU = softwareGL();
+setAero(aeroPref ? aeroPref === '1' : !noGPU, false);
 addEventListener('cv-aero', (e) => setAero(!!e.detail, true));
 
 let sceneSlow = false;

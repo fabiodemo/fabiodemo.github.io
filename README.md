@@ -39,6 +39,16 @@ npm run preview                    # serve dist/ em http://localhost:4173
 | `src/apps.js` | conteúdo de cada janela (fórum, explorer, cmd, etc.) |
 | `src/i18n.js` | idioma (EN padrão, PT) |
 | `src/games.js` | os 5 jogos: Tetris, Jogo da Velha (minimax), Campo Minado, Snake, Flappy Birb |
+| `src/cards.js` | Paciência Spider e FreeCell (mesa de cartas com arrastar, desfazer; FreeCell com as mãos numeradas clássicas) |
+| `src/chess.js` + `src/chess-engine.js` + `src/chess-worker.js` | xadrez com regras completas; o motor (alfa-beta) roda num Web Worker |
+| `src/pinball.js` | Pinball Orbital: mesa espacial original com física em subpassos |
+| `src/composer.js` + `src/composer-synth.js` | Paint Musical: compositor com ferramentas do Paint, 14 instrumentos sintetizados em 4 eras (8 a 64 bits), exporta WAV e vídeo |
+| `src/player.js` + `src/music.js` | gadget de media player; as 10 faixas são loops originais sintetizados, carregados só no play |
+| `src/sfx.js` | sons do sistema sintetizados com Web Audio (respeita o botão de som) |
+| `src/steam.js` + `scripts/steam.mjs` | widget e janela da Steam; o script roda no deploy e publica só jogos, horas e conquistas (sem identificar o perfil) |
+| `src/guide.js` + `src/assistant.js` | Guia do DemOS (tour, referências, segredos) e o Disquete, que oferece o guia na primeira visita |
+| `src/selfdestruct.js` | easter egg da autodestruição no Gerenciador de Tarefas (com o "voltar no tempo") |
+| `src/recursion.js` | tela azul quando o desktop é aberto dentro dele mesmo (num iframe) |
 | `src/turtle.js` | turtle.py: TurtleBot3 com LIDAR em 6 estágios |
 | `tech.html` + `src/tech.js` + `src/tech.css` | página separada estilo blog: emblemas (shields.io) da stack, Data Engineering em destaque, github-readme-stats e a cobrinha. Abre sozinha em `/tech.html` ou como janela "Stack (blog)" no desktop |
 | `public/snake.svg` | cópia local da cobrinha (tema claro), usada se o raw.githubusercontent falhar |

@@ -17,7 +17,9 @@ export function loadSteam() {
 }
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-const header = (id) => `https://cdn.cloudflare.steamstatic.com/steam/apps/${id}/header.jpg`;
+const header = (id) => `https://cdn.cloudflare.steamstatic.com/steam/apps/${Number(id) || 0}/header.jpg`;
+// só aceita ícone vindo do CDN da Steam (o JSON é nosso, mas não custa)
+const steamImg = (u) => (/^https:\/\/([\w-]+\.)*(steamstatic\.com|steampowered\.com|steamcdn-a\.akamaihd\.net)\//.test(String(u)) ? esc(u) : '');
 const hours = (h) => `${h.toLocaleString(LANG === 'pt' ? 'pt-BR' : 'en-US')} h`;
 
 /** HTML da lista de jogos (sem link para o perfil, de propósito). */
@@ -61,7 +63,7 @@ export function linuxShare(p) {
 function achList(list, nf) {
   return `<div class="sx-achs">${list.map((a) => `
     <div class="sx-a">
-      ${a.icon ? `<img src="${esc(a.icon)}" alt="" width="48" height="48" loading="lazy" class="st-img">` : '<i class="sx-noicon">🏆</i>'}
+      ${steamImg(a.icon) ? `<img src="${steamImg(a.icon)}" alt="" width="48" height="48" loading="lazy" class="st-img">` : '<i class="sx-noicon">🏆</i>'}
       <div><b>${esc(a.name)}</b><small>${esc(a.game)}${a.desc ? ` · ${esc(a.desc)}` : ''}</small>
       ${a.pct != null ? `<span class="sx-rare${a.pct < 10 ? ' rare' : ''}">${T(`${nf(a.pct)}% of players have it`, `${nf(a.pct)}% dos jogadores têm`)}</span>` : ''}${a.date ? `<span class="sx-date">${new Date(`${a.date}T12:00:00`).toLocaleDateString(LANG === 'pt' ? 'pt-BR' : 'en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</span>` : ''}</div>
     </div>`).join('')}</div>`;
@@ -86,7 +88,7 @@ export function steamApp(body) {
       d.badges != null && [T('Badges', 'Insígnias'), nf(d.badges)],
       d.achievements && [T('Achievements', 'Conquistas'), nf(d.achievements.unlocked)],
       d.achievements && [T('100% games', 'Jogos 100%'), nf(d.achievements.perfect)],
-      d.since && [T('Member since', 'Membro desde'), d.since],
+      d.since && [T('Member since', 'Membro desde'), esc(d.since)],
     ].filter(Boolean);
     const maxTop = Math.max(1, ...(d.top || []).map((g) => g.total));
     root.innerHTML = `

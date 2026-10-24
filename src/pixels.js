@@ -623,7 +623,7 @@ export function icon(name, scale = 2) {
   if (!rows) rows = S.doc;
   const c = document.createElement('canvas');
   c.width = c.height = size * scale;
-  const ctx = c.getContext('2d');
+  const ctx = c.getContext('2d', { willReadFrequently: true });
   drawGrid(ctx, norm(rows, size), 0, 0, scale);
   if (badge && B[badge]) drawGrid(ctx, norm(B[badge], 8), 8, 8, scale);
   const url = c.toDataURL();
@@ -637,7 +637,7 @@ export function orb(size = 24, scale = 4) {
   if (cache.has(key)) return cache.get(key);
   const c = document.createElement('canvas');
   c.width = c.height = size * scale;
-  const ctx = c.getContext('2d');
+  const ctx = c.getContext('2d', { willReadFrequently: true });
   const bayer = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
   const ramp = ['#06224f', '#0d3f8a', '#1a64c4', '#2f8bf0', '#6fc0ff', '#c9ecff'];
   const r = size / 2;
