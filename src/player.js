@@ -75,6 +75,10 @@ export function mountPlayer(parent) {
   };
   let last = performance.now();
   let raf = 0;
+  // pausado, a animação roda só até assentar (rastros somem) e depois para: desktop parado não gasta CPU
+  let settleUntil = 0;
+  let onScreen = true;
+  const poke = () => { settleUntil = performance.now() + 1500; wake(); };
   const peaks = new Float32Array(24);
 
   function load(i) {
@@ -85,12 +89,14 @@ export function mountPlayer(parent) {
     el.querySelector('.gp-len').textContent = fmt(len);
     g.clearRect(0, 0, W, H);
     if (playing) music?.play(ti);
+    poke();
   }
   function setMode(m) {
     mode = (m + MODES.length) % MODES.length;
     el.querySelector('.gp-modename').textContent = `${MODE_NAMES[MODES[mode]]} ▾`;
     menu.querySelectorAll('[data-vis]').forEach((b) => b.classList.toggle('on', b.dataset.vis === (vis === 'auto' ? 'auto' : MODES[mode])));
     g.clearRect(0, 0, W, H);
+    poke();
   }
   // troca de faixa só muda a visualização no modo automático
   const nextTrack = (d) => { load(ti + d); if (vis === 'auto') setMode(mode + 1); };
@@ -205,10 +211,15 @@ export function mountPlayer(parent) {
       live = playing && !!music?.bands(spec);
       draw(now / 1000);
     }
-    if (!document.hidden) raf = requestAnimationFrame(frame);
+    if (!document.hidden && onScreen && (playing || now < settleUntil)) raf = requestAnimationFrame(frame);
   }
-  const wake = () => { if (!raf && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(frame); } };
+  function wake() { if (!raf && !document.hidden && onScreen) { last = performance.now(); raf = requestAnimationFrame(frame); } }
   document.addEventListener('visibilitychange', wake);
+  // fora da tela (ou escondido no celular) não desenha
+  if ('IntersectionObserver' in window) {
+    // o lote pode trazer várias leituras (o gadget muda de coluna); vale a última
+    new IntersectionObserver((es) => { onScreen = es[es.length - 1].isIntersecting; if (onScreen) poke(); }).observe(cv);
+  }
 
   const openMenu = (on) => {
     menu.hidden = !on;
@@ -217,7 +228,7 @@ export function mountPlayer(parent) {
   };
   el.addEventListener('click', (e) => {
     const p = e.target.closest('[data-p]')?.dataset.p;
-    if (p === 'play') { playing = !playing; e.target.textContent = playing ? '⏸' : '▶'; el.classList.toggle('paused', !playing); sound(); }
+    if (p === 'play') { playing = !playing; e.target.textContent = playing ? '⏸' : '▶'; el.classList.toggle('paused', !playing); sound(); poke(); }
     if (p === 'next') nextTrack(1);
     if (p === 'prev') { if (pos > 3) load(ti); else nextTrack(-1); }
     if (e.target.closest('.gp-modename')) { openMenu(menu.hidden); return; }
@@ -239,5 +250,5 @@ export function mountPlayer(parent) {
 
   load(ti);
   setMode(mode);
-  wake();
+  poke();
 }

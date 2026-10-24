@@ -52,13 +52,18 @@ const aeroPref = (() => { try { return localStorage.getItem('cv.aero'); } catch 
 function softwareGL() {
   try {
     // failIfMajorPerformanceCaveat: sem GPU o navegador devolve null em vez de cair no WebGL por
-    // software (que o Chrome marca como deprecated e avisa no console)
-    const gl = document.createElement('canvas').getContext('webgl', { failIfMajorPerformanceCaveat: true });
+    // software (que o Chrome marca como deprecated e avisa no console).
+    // Com a aurora ativa, o teste já abre o contexto WebGL2 no próprio #bg, com os mesmos atributos
+    // que o three.js pede: o three reaproveita esse contexto em vez de criar um segundo.
+    const aurora = (() => { try { return (localStorage.getItem('cv.wall') || 'aurora') === 'aurora'; } catch { return true; } })();
+    const canvas = aurora ? $('#bg') : document.createElement('canvas');
+    const gl = canvas.getContext('webgl2', { alpha: true, depth: true, stencil: false, antialias: false, premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: 'low-power', failIfMajorPerformanceCaveat: true });
     if (!gl) return true;
     const d = gl.getExtension('WEBGL_debug_renderer_info');
     const name = String(gl.getParameter(d ? d.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
-    gl.getExtension('WEBGL_lose_context')?.loseContext();
-    return /swiftshader|llvmpipe|softpipe|software|basic render/i.test(name);
+    const soft = /swiftshader|llvmpipe|softpipe|software|basic render/i.test(name);
+    if (soft || !aurora) gl.getExtension('WEBGL_lose_context')?.loseContext();
+    return soft;
   } catch { return true; }
 }
 function setAero(on, save) {
@@ -223,6 +228,23 @@ function buildDesktop() {
   });
   buildGadget();
   rubberBand();
+  prefetchApps();
+}
+
+// Chunks dos apps: o mouse em cima (ou foco, ou o toque) já começa a baixar, então o duplo clique
+// abre sem esperar a rede. Com o desktop parado, o resto vem um por vez no tempo ocioso.
+const warm = (e) => {
+  const id = e.target.closest?.('[data-app]')?.dataset.app;
+  if (id) APPS[id]?.render?.preload?.().catch(() => {});
+};
+['pointerover', 'pointerdown', 'focusin'].forEach((t) => document.addEventListener(t, warm, { passive: true }));
+function prefetchApps() {
+  const c = navigator.connection;
+  if (c && (c.saveData || /2g/.test(c.effectiveType || ''))) return;
+  const queue = [...new Set(Object.values(APPS).map((a) => a.render?.preload).filter(Boolean))];
+  const idle = (fn) => ('requestIdleCallback' in window ? requestIdleCallback(fn, { timeout: 4000 }) : setTimeout(fn, 300));
+  const next = () => { const f = queue.shift(); if (f) f().catch(() => {}).finally(() => idle(next)); };
+  setTimeout(() => idle(next), 5000);
 }
 
 // Gadgets na ordem: Antes × Depois, Steam, media player. Se a altura não der, o que sobra
@@ -231,12 +253,14 @@ function layoutGadgets() {
   const col = $('#gadgets');
   if (!col) return;
   const items = [...col.querySelectorAll(':scope > .gadget, :scope > .gcol > .gadget')];
-  col.querySelectorAll(':scope > .gcol').forEach((c) => c.remove());
+  // mede tudo antes de mexer no DOM: um layout só, e as alturas são as reais (fora da coluna seriam 0)
   const avail = $('#desktop').clientHeight - 36;
+  const hs = items.map((it) => it.offsetHeight || 200);
+  col.querySelectorAll(':scope > .gcol').forEach((c) => c.remove());
   let cur = null;
   let used = Infinity;
-  items.forEach((it) => {
-    const h = it.offsetHeight || 200;
+  items.forEach((it, i) => {
+    const h = hs[i];
     if (!cur || (used + h + 12 > avail && cur.childElementCount)) {
       cur = document.createElement('div');
       cur.className = 'gcol';
@@ -582,9 +606,14 @@ $('#tasks').addEventListener('click', (e) => {
 });
 
 // relógio
+// formatadores criados uma vez (toLocale*String recria o Intl a cada chamada); só mexe no DOM quando muda o minuto
+const fmtHour = new Intl.DateTimeFormat(LOCALE, { hour: '2-digit', minute: '2-digit' });
+const fmtDay = new Intl.DateTimeFormat(LOCALE);
+let clockText = '';
 function tick() {
   const d = new Date();
-  $('#clock').innerHTML = `<span>${d.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' })}</span><span>${d.toLocaleDateString(LOCALE)}</span>`;
+  const html = `<span>${fmtHour.format(d)}</span><span>${fmtDay.format(d)}</span>`;
+  if (html !== clockText) $('#clock').innerHTML = clockText = html;
 }
 tick();
 setInterval(tick, 10000);

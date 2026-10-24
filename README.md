@@ -129,3 +129,6 @@ Sem os secrets, o widget simplesmente não aparece. O GitHub pausa agendamentos 
 - JS inicial ~40 KB gzip. three.js, jogos, turtle.py e o easter egg são chunks carregados sob demanda.
 - Fundo three.js a 30 fps, em 1/3 da resolução (menos em telas grandes), congelado quando há janela maximizada ou a aba está oculta.
 - Jogos e simulação param quando a janela é minimizada e redesenham devagar quando estão em segundo plano; fechar a janela encerra os loops.
+- O media player para de desenhar quando está pausado ou fora da tela: com o desktop parado, a CPU fica praticamente zerada.
+- O chunk de cada app começa a baixar quando o mouse passa no ícone (ou no foco/toque), e o resto vem no tempo ocioso depois do login; conexões com economia de dados ou 2G ficam de fora.
+- O teste de GPU abre o contexto WebGL2 direto no `#bg`, com os mesmos atributos do three.js, que reaproveita esse contexto em vez de criar outro.

@@ -9,13 +9,20 @@ export { avatarUrl, portraitUrl };
 
 // Código pesado (jogos, simulação, easter egg) só é baixado quando a janela abre
 const canoe = () => import('./canoe.js').then((m) => m.canoe());
-const lazy = (loader, name) => (body, ctx) => {
-  body.innerHTML = `<div class="loading"><span class="spinner"></span></div>`;
-  loader().then((m) => {
-    if (ctx.closed) return;
-    body.innerHTML = '';
-    m[name](body, ctx);
-  });
+// apps em chunks separados; render.preload baixa o chunk antes do clique (hover, foco ou ocioso)
+const lazy = (loader, name) => {
+  let p = null;
+  const load = () => (p ||= loader().catch((e) => { p = null; throw e; }));
+  const render = (body, ctx) => {
+    body.innerHTML = `<div class="loading"><span class="spinner"></span></div>`;
+    load().then((m) => {
+      if (ctx.closed) return;
+      body.innerHTML = '';
+      m[name](body, ctx);
+    });
+  };
+  render.preload = load;
+  return render;
 };
 const games = () => import('./games.js');
 const cardGames = () => import('./cards.js');
