@@ -125,6 +125,17 @@ Sem os secrets, o widget simplesmente não aparece. O GitHub pausa agendamentos 
 - Alguns logos (AWS, Azure, Oracle, SQL Server, Java, Windows) saíram do simple-icons, então o shields.io mostra só o texto, igual no README do GitHub.
 - Se o shields.io cair, cada badge vira um chip colorido com o nome. Se o github-readme-stats bater rate limit, aparece um aviso no lugar do card. Para não depender da instância pública, dá pra fazer deploy do seu próprio github-readme-stats na Vercel e trocar as URLs `STATS` e `LANGS`.
 
+## Busca e IA
+
+O site é montado por JavaScript e o currículo só aparece depois do boot, então robôs que não rodam JS (a maioria dos de IA) não veriam nada. O `scripts/seo-plugin.mjs` gera no build, a partir do mesmo `data.js`:
+
+- `index.html`: JSON-LD (schema.org `ProfilePage`, `Person`, `ScholarlyArticle`) e um resumo em texto, visível só para leitores de tela e robôs
+- `cv.html` e `curriculo.html`: o currículo completo em HTML puro (o mesmo do Imprimir CV), com `hreflang` entre os dois
+- `cv.md` e `llms.txt` (formato llmstxt.org) para LLMs
+- `sitemap.xml` e `robots.txt`
+
+Nada de e-mail ou telefone entra nesses arquivos. Ao trocar o domínio, basta mudar `VITE_SITE_URL` no `.env`.
+
 ## Desempenho
 
 - JS inicial ~40 KB gzip. three.js, jogos, turtle.py e o easter egg são chunks carregados sob demanda.
